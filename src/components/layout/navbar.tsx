@@ -86,7 +86,7 @@ export function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <span className="font-heading text-xl md:text-2xl text-primary font-medium">
-              Asami Haven
+              Asami Heaven
             </span>
           </Link>
 

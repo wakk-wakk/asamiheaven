@@ -15,13 +15,13 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Asami Haven - Premium Spa & Massage",
-  description: "Experience tranquility and rejuvenation at Asami Haven. Premium massage and spa services for your ultimate relaxation.",
+  title: "Asami Heaven - Premium Spa & Massage",
+  description: "Experience tranquility and rejuvenation at Asami Heaven. Premium massage and spa services for your ultimate relaxation.",
   keywords: ["spa", "massage", "wellness", "relaxation", "massage therapy", "spa services"],
-  authors: [{ name: "Asami Haven" }],
+  authors: [{ name: "Asami Heaven" }],
   openGraph: {
-    title: "Asami Haven - Premium Spa & Massage",
-    description: "Experience tranquility and rejuvenation at Asami Haven.",
+    title: "Asami Heaven - Premium Spa & Massage",
+    description: "Experience tranquility and rejuvenation at Asami Heaven.",
     type: "website",
   },
 };

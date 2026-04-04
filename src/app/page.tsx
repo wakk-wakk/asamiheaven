@@ -260,7 +260,7 @@ export default function HomePage() {
             </div>
             
             <p className="text-lg md:text-xl text-text-secondary font-light max-w-xl leading-relaxed">
-              Experience the ultimate relaxation at Asami Haven. 
+              Experience the ultimate relaxation at Asami Heaven. 
               Our expert therapists provide premium massage and spa services 
               tailored to your wellness needs.
             </p>
@@ -313,7 +313,7 @@ export default function HomePage() {
               Why Choose <span className="text-primary">Us</span>
             </h2>
             <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
-              At Asami Haven, we combine ancient healing traditions with modern techniques 
+              At Asami Heaven, we combine ancient healing traditions with modern techniques 
               to provide you with an unparalleled wellness experience.
             </p>
           </div>

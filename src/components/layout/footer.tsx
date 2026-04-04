@@ -186,7 +186,7 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-4">
             <h3 className="font-heading text-xl text-primary font-medium">
-              Asami Haven
+              Asami Heaven
             </h3>
             <p className="text-text-secondary text-sm font-light leading-relaxed">
               Experience tranquility and rejuvenation at our premium spa. 
@@ -294,7 +294,7 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="border-t border-border mt-12 pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
           <p className="text-text-muted text-sm font-light">
-            © {new Date().getFullYear()} Asami Haven. All rights reserved.
+            © {new Date().getFullYear()} Asami Heaven. All rights reserved.
           </p>
           <div className="flex space-x-6">
             <Link href="#" className="text-text-muted hover:text-primary transition-colors text-sm font-light">
