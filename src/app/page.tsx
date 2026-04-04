@@ -448,7 +448,7 @@ export default function HomePage() {
 
               {therapists[0] && (
                 <Card className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col overflow-hidden">
-                  <div className="w-full h-[500px] overflow-hidden bg-secondary/10 relative">
+                  <div className="w-full h-[500px] min-h-full overflow-hidden bg-secondary/10 relative">
                     {therapists[0].image_url && isValidImageUrl(therapists[0].image_url) ? (
                       <img 
                         src={therapists[0].image_url} 
