@@ -1,0 +1,769 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { ArrowRight, Leaf, Clock, Heart, Image as ImageIcon, User, Star, Zap, Calendar } from 'lucide-react'
+import { createClient } from '@supabase/supabase-js'
+
+interface Service {
+  id: string
+  name: string
+  description: string
+  price: number
+  duration: number
+  image_url: string
+  is_active: boolean
+}
+
+interface Therapist {
+  id: string
+  nickname: string
+  image_url: string
+  is_active: boolean
+}
+
+interface Review {
+  id: string
+  review_type: 'image' | 'text'
+  image_url: string | null
+  review_text: string | null
+  reviewer_name: string | null
+  is_active: boolean
+}
+
+const isValidImageUrl = (url: string): boolean => {
+  if (!url) return false
+  try {
+    const parsed = new URL(url)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+interface DisplaySettings {
+  services_mode: 'static' | 'dynamic'
+  therapists_mode: 'static' | 'dynamic'
+}
+
+export default function HomePage() {
+  const [services, setServices] = useState<Service[]>([])
+  const [isLoadingServices, setIsLoadingServices] = useState(true)
+  const [therapists, setTherapists] = useState<Therapist[]>([])
+  const [isLoadingTherapists, setIsLoadingTherapists] = useState(true)
+  const [displaySettings, setDisplaySettings] = useState<DisplaySettings>({
+    services_mode: 'dynamic',
+    therapists_mode: 'dynamic'
+  })
+  const [reviews, setReviews] = useState<Review[]>([])
+  const [isLoadingReviews, setIsLoadingReviews] = useState(true)
+
+  useEffect(() => {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+    
+    if (!supabaseUrl || !supabaseAnonKey) {
+      setIsLoadingServices(false)
+      setIsLoadingTherapists(false)
+      setIsLoadingReviews(false)
+      return
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+    const fetchDisplaySettings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('display_settings')
+          .select('*')
+          .single()
+        
+        if (data && !error) {
+          setDisplaySettings({
+            services_mode: data.services_mode || 'dynamic',
+            therapists_mode: data.therapists_mode || 'dynamic'
+          })
+        }
+      } catch (error) {
+        console.error('Error fetching display settings:', error)
+      }
+    }
+
+    const fetchServices = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('services')
+          .select('*')
+          .eq('is_active', true)
+          .order('name')
+          .limit(6)
+        
+        if (data && !error) {
+          setServices(data)
+        }
+      } catch (error) {
+        console.error('Error fetching services:', error)
+      } finally {
+        setIsLoadingServices(false)
+      }
+    }
+
+    const fetchStaticServices = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('static_services')
+          .select('*')
+          .eq('is_active', true)
+          .single()
+        
+        if (data && !error) {
+          setServices([data])
+        }
+      } catch (error) {
+        console.error('Error fetching static services:', error)
+      } finally {
+        setIsLoadingServices(false)
+      }
+    }
+
+    const fetchTherapists = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('therapists')
+          .select('*')
+          .eq('is_active', true)
+          .order('nickname')
+          .limit(6)
+        
+        if (data && !error) {
+          setTherapists(data)
+        }
+      } catch (error) {
+        console.error('Error fetching therapists:', error)
+      } finally {
+        setIsLoadingTherapists(false)
+      }
+    }
+
+    const fetchStaticTherapists = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('static_therapists')
+          .select('*')
+          .eq('is_active', true)
+          .single()
+        
+        if (data && !error) {
+          setTherapists([data])
+        }
+      } catch (error) {
+        console.error('Error fetching static therapists:', error)
+      } finally {
+        setIsLoadingTherapists(false)
+      }
+    }
+
+    const fetchReviews = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('reviews')
+          .select('*')
+          .eq('is_active', true)
+          .order('display_order', { ascending: true })
+          .limit(3)
+        
+        if (data && !error) {
+          setReviews(data)
+        }
+      } catch (error) {
+        console.error('Error fetching reviews:', error)
+      } finally {
+        setIsLoadingReviews(false)
+      }
+    }
+
+    const initPage = async () => {
+      try {
+        const { data: settingsData } = await supabase
+          .from('display_settings')
+          .select('*')
+          .single()
+        
+        const servicesMode = settingsData?.services_mode || 'dynamic'
+        const therapistsMode = settingsData?.therapists_mode || 'dynamic'
+        
+        setDisplaySettings({
+          services_mode: servicesMode,
+          therapists_mode: therapistsMode
+        })
+
+        if (servicesMode === 'static') {
+          await fetchStaticServices()
+        } else {
+          await fetchServices()
+        }
+
+        if (therapistsMode === 'static') {
+          await fetchStaticTherapists()
+        } else {
+          await fetchTherapists()
+        }
+      } catch (error) {
+        console.error('Error initializing page:', error)
+        await fetchServices()
+        await fetchTherapists()
+      }
+      
+      await fetchReviews()
+    }
+
+    initPage()
+  }, [])
+
+  return (
+    <div className="animate-fade-in">
+      {/* Hero Section */}
+      <section className="relative min-h-screen flex items-center px-4 overflow-hidden">
+        <div className="absolute inset-0 z-0 w-full h-full max-h-screen overflow-hidden">
+          <img 
+            src="https://i.pinimg.com/736x/3d/ef/fd/3deffdc624ae766115fa72a308833fb5.jpg" 
+            alt="Spa background" 
+            className="w-full h-full min-w-full min-h-full max-h-screen object-cover object-[center_60%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+        </div>
+        
+        <div className="absolute inset-0 overflow-hidden z-0">
+          <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[100px] animate-pulse-glow" />
+          <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] animate-pulse-glow" style={{ animationDelay: '3s' }} />
+        </div>
+
+        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
+          <div className="space-y-8 animate-slide-up">
+            <div className="space-y-4">
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
+                <Leaf className="h-4 w-4 text-primary" />
+                <span className="text-sm text-primary font-light tracking-wide">Natural Wellness Retreat</span>
+              </div>
+              
+              <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-foreground font-medium leading-tight">
+                Find Your Inner{' '}
+                <span className="relative inline-block">
+                  <span className="relative z-10 text-primary">Peace</span>
+                  <span className="absolute inset-0 text-primary blur-lg opacity-50">Peace</span>
+                </span>
+              </h1>
+            </div>
+            
+            <p className="text-lg md:text-xl text-text-secondary font-light max-w-xl leading-relaxed">
+              Experience the ultimate relaxation at Asami Haven. 
+              Our expert therapists provide premium massage and spa services 
+              tailored to your wellness needs.
+            </p>
+
+            <div className="flex flex-col sm:flex-row gap-4 pt-4">
+              <Link href="/booking">
+                <Button size="lg" className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group">
+                  Book Appointment
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+              <Link href="/services">
+                <Button variant="outline" size="lg" className="px-8 py-6 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm">
+                  View Services
+                </Button>
+              </Link>
+            </div>
+          </div>
+
+          <div className="hidden lg:block relative">
+            <div className="relative w-full aspect-square">
+              <div className="absolute top-1/4 right-1/4 w-32 h-32 rounded-full border border-primary/20 animate-pulse" />
+              <div className="absolute top-1/3 right-1/3 w-48 h-48 rounded-full border border-primary/10 animate-pulse" style={{ animationDelay: '1s' }} />
+              <div className="absolute top-1/2 right-1/2 w-64 h-64 rounded-full border border-primary/5 animate-pulse" style={{ animationDelay: '2s' }} />
+            </div>
+          </div>
+        </div>
+
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+          <div className="w-6 h-10 rounded-full border-2 border-foreground/30 flex items-start justify-center p-2">
+            <div className="w-1 h-2 bg-foreground/50 rounded-full animate-pulse" />
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-12 md:py-16 px-4 relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-1/4 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+        </div>
+
+        <div className="max-w-7xl mx-auto relative">
+          <div className="text-center mb-16 space-y-4">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm mb-4">
+              <Star className="h-4 w-4 text-primary" />
+              <span className="text-sm text-primary font-light tracking-wide">What Sets Us Apart</span>
+            </div>
+            <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground font-medium">
+              Why Choose <span className="text-primary">Us</span>
+            </h2>
+            <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
+              At Asami Haven, we combine ancient healing traditions with modern techniques 
+              to provide you with an unparalleled wellness experience.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative glass p-8 rounded-3xl border border-border/50 hover:border-primary/30 transition-all duration-500 animate-slide-up hover:-translate-y-2 h-full flex flex-col">
+                <div className="relative flex-shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                    <Heart className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="absolute inset-0 rounded-2xl border border-primary/20 scale-110 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                </div>
+                <div className="flex-grow">
+                  <h3 className="font-heading text-2xl text-foreground font-medium mb-4">Expert Therapists</h3>
+                  <p className="text-text-secondary font-light leading-relaxed">
+                    Our certified therapists have years of experience in various massage techniques 
+                    and are dedicated to your relaxation and well-being.
+                  </p>
+                </div>
+                <div className="mt-6 h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-primary to-transparent transition-all duration-700 flex-shrink-0" />
+              </div>
+            </div>
+
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative glass p-8 rounded-3xl border border-border/50 hover:border-primary/30 transition-all duration-500 animate-slide-up hover:-translate-y-2 h-full flex flex-col" style={{ animationDelay: '0.2s' }}>
+                <div className="relative flex-shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                    <Zap className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="absolute inset-0 rounded-2xl border border-primary/20 scale-110 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                </div>
+                <div className="flex-grow">
+                  <h3 className="font-heading text-2xl text-foreground font-medium mb-4">Premium Experience</h3>
+                  <p className="text-text-secondary font-light leading-relaxed">
+                    We use only the finest organic oils and products, creating a luxurious 
+                    atmosphere that enhances your spa experience.
+                  </p>
+                </div>
+                <div className="mt-6 h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-primary to-transparent transition-all duration-700 flex-shrink-0" />
+              </div>
+            </div>
+
+            <div className="group relative">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/10 to-transparent rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative glass p-8 rounded-3xl border border-border/50 hover:border-primary/30 transition-all duration-500 animate-slide-up hover:-translate-y-2 h-full flex flex-col" style={{ animationDelay: '0.4s' }}>
+                <div className="relative flex-shrink-0">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500">
+                    <Clock className="h-8 w-8 text-primary" />
+                  </div>
+                  <div className="absolute inset-0 rounded-2xl border border-primary/20 scale-110 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                </div>
+                <div className="flex-grow">
+                  <h3 className="font-heading text-2xl text-foreground font-medium mb-4">Flexible Scheduling</h3>
+                  <p className="text-text-secondary font-light leading-relaxed">
+                    Book appointments at your convenience with our easy online booking system. 
+                    We offer extended hours to fit your busy schedule.
+                  </p>
+                </div>
+                <div className="mt-6 h-0.5 w-0 group-hover:w-full bg-gradient-to-r from-primary to-transparent transition-all duration-700 flex-shrink-0" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      {displaySettings.services_mode === 'static' && displaySettings.therapists_mode === 'static' && services.length > 0 && therapists.length > 0 ? (
+        <section className="py-16 md:py-20 px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16 space-y-4">
+              <h2 className="font-heading text-3xl md:text-4xl text-foreground">Our Team</h2>
+              <p className="text-text-secondary font-light max-w-2xl mx-auto">
+                Discover our premium service and meet our skilled therapist.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center">
+              {services[0] && (
+                <Card className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col h-full">
+                  <div className="w-full h-80 overflow-hidden bg-secondary/10 relative">
+                    {services[0].image_url && isValidImageUrl(services[0].image_url) ? (
+                      <img 
+                        src={services[0].image_url} 
+                        alt={services[0].name}
+                        className="absolute inset-0 w-full h-full object-cover object-center"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none'
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                        <ImageIcon className="h-16 w-16 text-text-muted" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-6 flex flex-col gap-4 flex-grow">
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <h3 className="font-heading text-2xl text-foreground font-medium mb-1">
+                          {services[0].name}
+                        </h3>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                          <Clock size={16} />
+                          <span>{services[0].duration} minutes</span>
+                        </div>
+                      </div>
+                      {services[0].price > 0 && (
+                        <div className="text-right">
+                          <span className="text-primary font-heading text-lg font-medium">
+                            ₱{services[0].price.toLocaleString()}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                    <p className="text-text-secondary font-light leading-relaxed line-clamp-3 flex-grow">
+                      {services[0].description}
+                    </p>
+                    <div className="mt-auto">
+                      <Link href={`/booking?service=${encodeURIComponent(services[0].name)}`}>
+                        <Button className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn">
+                          Book Now
+                          <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </div>
+                </Card>
+              )}
+
+              {therapists[0] && (
+                <Card className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col overflow-hidden">
+                  <div className="w-full h-[500px] overflow-hidden bg-secondary/10 relative">
+                    {therapists[0].image_url && isValidImageUrl(therapists[0].image_url) ? (
+                      <img 
+                        src={therapists[0].image_url} 
+                        alt={therapists[0].nickname}
+                        className="absolute inset-0 w-full h-full object-cover object-top"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).style.display = 'none'
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                        <User className="h-20 w-20 text-text-muted" />
+                      </div>
+                    )}
+                  </div>
+                  <CardContent className="p-4 text-center">
+                    <CardTitle className="font-heading text-2xl text-foreground font-medium">
+                      {therapists[0].nickname}
+                    </CardTitle>
+                    <p className="text-text-secondary font-light text-sm mt-2">Expert Therapist</p>
+                  </CardContent>
+                </Card>
+              )}
+            </div>
+          </div>
+        </section>
+      ) : (
+        <>
+          <section className="py-12 md:py-16 px-4 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+              <div className="absolute top-1/3 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+              <div className="absolute bottom-1/3 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+            </div>
+
+            <div className="max-w-7xl mx-auto relative">
+              <div className="text-center mb-16 space-y-4">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm mb-4">
+                  <Leaf className="h-4 w-4 text-primary" />
+                  <span className="text-sm text-primary font-light tracking-wide">
+                    {displaySettings.services_mode === 'static' ? 'Featured Service' : 'Our Services'}
+                  </span>
+                </div>
+                <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground font-medium">
+                  {displaySettings.services_mode === 'static' ? 'Our Featured Service' : 'Explore Our Services'}
+                </h2>
+                <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
+                  {displaySettings.services_mode === 'static' 
+                    ? 'Experience our signature treatment designed for ultimate relaxation.'
+                    : 'Discover our range of premium massage and spa services tailored to your wellness needs.'}
+                </p>
+              </div>
+
+              {isLoadingServices ? (
+                <div className="flex justify-center py-16">
+                  <div className="relative">
+                    <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                  </div>
+                </div>
+              ) : services.length === 0 ? (
+                <div className="text-center py-16 glass rounded-3xl p-12">
+                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                    <ImageIcon className="h-10 w-10 text-primary" />
+                  </div>
+                  <p className="text-text-secondary font-light text-lg">Our services will be available soon.</p>
+                </div>
+              ) : (
+                <div className={`gap-8 ${
+                  displaySettings.services_mode === 'static' 
+                    ? 'grid grid-cols-1 md:grid-cols-2 max-w-5xl mx-auto' 
+                    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+                }`}>
+                {services.slice(0, 6).map((service, index) => (
+                    <Card key={service.id} className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col h-full" style={{ animationDelay: `${index * 0.1}s` }}>
+                      <div className="w-full h-64 overflow-hidden bg-secondary/10 relative">
+                        {service.image_url && isValidImageUrl(service.image_url) ? (
+                          <img 
+                            src={service.image_url} 
+                            alt={service.name}
+                            className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none'
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                            <ImageIcon className="h-16 w-16 text-text-muted" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-6 flex flex-col gap-4 flex-grow">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1">
+                            <h3 className="font-heading text-2xl text-foreground font-medium mb-1">
+                              {service.name}
+                            </h3>
+                            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                              <Clock className="h-4 w-4 text-muted-foreground" />
+                              <span>{service.duration} min</span>
+                            </div>
+                          </div>
+                          {service.price > 0 && (
+                            <div className="text-right">
+                              <span className="text-primary font-heading text-lg font-medium">
+                                ₱{service.price.toLocaleString()}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-text-secondary font-light leading-relaxed line-clamp-3 flex-grow">
+                          {service.description}
+                        </p>
+                        <div className="mt-auto">
+                          <Link href={`/booking?service=${encodeURIComponent(service.name)}`}>
+                            <Button className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn">
+                              Book Now
+                              <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                            </Button>
+                          </Link>
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+
+          <section className="py-12 md:py-16 px-4 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+              <div className="absolute top-1/3 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+              <div className="absolute bottom-1/3 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+            </div>
+
+            <div className="max-w-7xl mx-auto relative">
+              <div className="text-center mb-16 space-y-4">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm mb-4">
+                  <Heart className="h-4 w-4 text-primary" />
+                  <span className="text-sm text-primary font-light tracking-wide">
+                    {displaySettings.therapists_mode === 'static' ? 'Featured Therapist' : 'Our Therapists'}
+                  </span>
+                </div>
+                <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground font-medium">
+                  {displaySettings.therapists_mode === 'static' ? 'Meet Our Therapist' : 'Meet Our Therapists'}
+                </h2>
+                <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
+                  {displaySettings.therapists_mode === 'static'
+                    ? 'Our skilled therapist is dedicated to your wellness and relaxation.'
+                    : 'Our team of skilled professionals is dedicated to providing you with the best wellness experience.'}
+                </p>
+              </div>
+
+              {isLoadingTherapists ? (
+                <div className="flex justify-center py-16">
+                  <div className="relative">
+                    <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                  </div>
+                </div>
+              ) : therapists.length === 0 ? (
+                <div className="text-center py-16 glass rounded-3xl p-12">
+                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                    <User className="h-10 w-10 text-primary" />
+                  </div>
+                  <p className="text-text-secondary font-light text-lg">Our therapists will be introduced soon.</p>
+                </div>
+              ) : (
+                <div className={`gap-8 ${
+                  displaySettings.therapists_mode === 'static'
+                    ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto'
+                    : 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
+                }`}>
+                  {therapists.map((therapist, index) => (
+                    <Card key={therapist.id} className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col overflow-hidden" style={{ animationDelay: `${index * 0.1}s` }}>
+                      <div className="w-full h-80 overflow-hidden bg-secondary/10 relative">
+                        {therapist.image_url && isValidImageUrl(therapist.image_url) ? (
+                          <img 
+                            src={therapist.image_url} 
+                            alt={therapist.nickname}
+                            className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none'
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                            <User className="h-20 w-20 text-text-muted" />
+                          </div>
+                        )}
+                      </div>
+                      <CardContent className="p-4 text-center">
+                        <CardTitle className="font-heading text-2xl text-foreground font-medium">
+                          {therapist.nickname}
+                        </CardTitle>
+                        <p className="text-text-secondary font-light text-sm mt-2">Expert Therapist</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+        </>
+      )}
+
+      {/* Reviews Section */}
+      {!isLoadingReviews && reviews.length > 0 && (
+        <section className="py-16 md:py-20 px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-12 space-y-4">
+              <h2 className="font-heading text-3xl md:text-4xl text-foreground">What Our Clients Say</h2>
+              <p className="text-text-secondary font-light max-w-2xl mx-auto">
+                Do not just take our word for it - hear from our satisfied clients
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+              {reviews.map((review) => (
+                <Card key={review.id} className="glass border-border">
+                  <CardContent className="p-6">
+                    {review.review_type === 'image' && review.image_url ? (
+                      <div className="rounded-lg overflow-hidden mb-4">
+                        <img 
+                          src={review.image_url} 
+                          alt="Review screenshot"
+                          className="w-full h-48 object-cover"
+                          loading="lazy"
+                        />
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <div className="text-4xl text-primary opacity-50 font-heading">&ldquo;</div>
+                        <p className="text-foreground font-light leading-relaxed">
+                          {review.review_text}
+                        </p>
+                        {review.reviewer_name && (
+                          <p className="text-text-secondary text-sm font-light">
+                            &mdash; {review.reviewer_name}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <Link href="/reviews">
+                <Button variant="outline" size="lg" className="px-8 py-6 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-full font-light backdrop-blur-sm">
+                  View All Reviews
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* CTA Section */}
+      <section className="py-16 md:py-20 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-glow" />
+          <div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '2s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] animate-pulse-glow" style={{ animationDelay: '1s' }} />
+        </div>
+
+        <div className="max-w-6xl mx-auto relative">
+          <div className="glass rounded-[2.5rem] p-8 md:p-16 text-center space-y-8 animate-slide-up relative overflow-hidden">
+            <div className="absolute inset-0 rounded-[2.5rem] border border-primary/10" />
+            
+            <div className="absolute top-8 left-8 w-16 h-16 rounded-full border border-primary/20 animate-pulse" />
+            <div className="absolute bottom-8 right-8 w-24 h-24 rounded-full border border-primary/10 animate-pulse" style={{ animationDelay: '1.5s' }} />
+            <div className="absolute top-1/2 left-4 w-8 h-8 rounded-full bg-primary/10 animate-pulse" style={{ animationDelay: '0.5s' }} />
+            <div className="absolute top-1/4 right-12 w-12 h-12 rounded-full bg-primary/10 animate-pulse" style={{ animationDelay: '2s' }} />
+
+            <div className="relative space-y-8">
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
+                <Calendar className="h-5 w-5 text-primary" />
+                <span className="text-sm text-primary font-light tracking-wide">Book Today</span>
+              </div>
+
+              <div className="space-y-4">
+                <h2 className="font-heading text-5xl md:text-6xl lg:text-7xl text-foreground font-medium">
+                  Ready to <span className="relative inline-block">
+                    <span className="relative z-10 text-primary">Relax</span>
+                    <span className="absolute inset-0 text-primary blur-lg opacity-40">Relax</span>
+                  </span>?
+                  <span className="ml-2">✨</span>
+                </h2>
+                
+                <p className="text-lg md:text-xl text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
+                  Treat yourself to a rejuvenating experience. Book your appointment today 
+                  and discover the art of true relaxation.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+                <Link href="/booking">
+                  <Button size="lg" className="px-10 py-7 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-full font-light shadow-lg hover:scale-105 group">
+                    Book Your Session
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+                <Link href="/services">
+                  <Button variant="outline" size="lg" className="px-10 py-7 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-full font-light backdrop-blur-sm">
+                    View All Services
+                  </Button>
+                </Link>
+              </div>
+
+              <p className="text-sm text-text-muted font-light pt-4">
+                For detailed pricing information, please feel free to reach out to us directly.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  )
+}
