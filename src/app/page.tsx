@@ -482,7 +482,7 @@ export default function HomePage() {
                     <CardTitle className="font-heading text-2xl text-foreground font-medium">
                       {therapists[0].nickname}
                     </CardTitle>
-                    <p className="text-text-secondary font-light text-sm mt-2">Expert Therapist</p>
+                    <p className="text-text-secondary font-light text-sm mt-2">Model</p>
                   </CardContent>
                 </Card>
               )}
@@ -493,25 +493,83 @@ export default function HomePage() {
         <>
           <section className="py-12 md:py-16 px-4 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+              <div className="absolute top-1/3 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+              <div className="absolute bottom-1/3 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+            </div>
+
+            <div className="max-w-7xl mx-auto relative">
+              <div className="text-center mb-16 space-y-4">
+                <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground font-medium">
+                  Our Models
+                </h2>
+                <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
+                  Metro Manila's most captivating top-tier models.
+                </p>
+              </div>
+
+              {isLoadingTherapists ? (
+                <div className="flex justify-center py-16">
+                  <div className="relative">
+                    <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                  </div>
+                </div>
+              ) : therapists.length === 0 ? (
+                <div className="text-center py-16 glass rounded-3xl p-12">
+                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                    <User className="h-10 w-10 text-primary" />
+                  </div>
+                  <p className="text-text-secondary font-light text-lg">Our models will be introduced soon.</p>
+                </div>
+              ) : (
+                <div className={`gap-8 ${
+                  displaySettings.therapists_mode === 'static'
+                    ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto'
+                    : 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
+                }`}>
+                  {therapists.map((therapist, index) => (
+                    <Card key={therapist.id} className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col overflow-hidden" style={{ animationDelay: `${index * 0.1}s` }}>
+                      <div className="w-full h-80 overflow-hidden bg-secondary/10 relative">
+                        {therapist.image_url && isValidImageUrl(therapist.image_url) ? (
+                          <img 
+                            src={therapist.image_url} 
+                            alt={therapist.nickname}
+                            className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none'
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                            <User className="h-20 w-20 text-text-muted" />
+                          </div>
+                        )}
+                      </div>
+                      <CardContent className="p-4 text-center">
+                        <CardTitle className="font-heading text-2xl text-foreground font-medium">
+                          {therapist.nickname}
+                        </CardTitle>
+                        <p className="text-text-secondary font-light text-sm mt-2">Model</p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              )}
+            </div>
+          </section>
+
+          <section className="py-12 md:py-16 px-4 relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
               <div className="absolute top-1/3 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
               <div className="absolute bottom-1/3 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
             </div>
 
             <div className="max-w-7xl mx-auto relative">
               <div className="text-center mb-16 space-y-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm mb-4">
-                  <Leaf className="h-4 w-4 text-primary" />
-                  <span className="text-sm text-primary font-light tracking-wide">
-                    {displaySettings.services_mode === 'static' ? 'Featured Service' : 'Our Services'}
-                  </span>
-                </div>
                 <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground font-medium">
-                  {displaySettings.services_mode === 'static' ? 'Our Featured Service' : 'Explore Our Services'}
+                  Our Services
                 </h2>
                 <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
-                  {displaySettings.services_mode === 'static' 
-                    ? 'Experience our signature treatment designed for ultimate relaxation.'
-                    : 'Discover our range of premium massage and spa services tailored to your wellness needs.'}
+                  Premium massage and spa services tailored to your wellness needs.
                 </p>
               </div>
 
@@ -583,80 +641,6 @@ export default function HomePage() {
                           </Link>
                         </div>
                       </div>
-                    </Card>
-                  ))}
-                </div>
-              )}
-            </div>
-          </section>
-
-          <section className="py-12 md:py-16 px-4 relative overflow-hidden">
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-              <div className="absolute top-1/3 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-              <div className="absolute bottom-1/3 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-            </div>
-
-            <div className="max-w-7xl mx-auto relative">
-              <div className="text-center mb-16 space-y-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm mb-4">
-                  <Heart className="h-4 w-4 text-primary" />
-                  <span className="text-sm text-primary font-light tracking-wide">
-                    {displaySettings.therapists_mode === 'static' ? 'Featured Therapist' : 'Our Therapists'}
-                  </span>
-                </div>
-                <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground font-medium">
-                  {displaySettings.therapists_mode === 'static' ? 'Meet Our Therapist' : 'Meet Our Therapists'}
-                </h2>
-                <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
-                  {displaySettings.therapists_mode === 'static'
-                    ? 'Our skilled therapist is dedicated to your wellness and relaxation.'
-                    : 'Our team of skilled professionals is dedicated to providing you with the best wellness experience.'}
-                </p>
-              </div>
-
-              {isLoadingTherapists ? (
-                <div className="flex justify-center py-16">
-                  <div className="relative">
-                    <div className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-                  </div>
-                </div>
-              ) : therapists.length === 0 ? (
-                <div className="text-center py-16 glass rounded-3xl p-12">
-                  <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                    <User className="h-10 w-10 text-primary" />
-                  </div>
-                  <p className="text-text-secondary font-light text-lg">Our therapists will be introduced soon.</p>
-                </div>
-              ) : (
-                <div className={`gap-8 ${
-                  displaySettings.therapists_mode === 'static'
-                    ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto'
-                    : 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
-                }`}>
-                  {therapists.map((therapist, index) => (
-                    <Card key={therapist.id} className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col overflow-hidden" style={{ animationDelay: `${index * 0.1}s` }}>
-                      <div className="w-full h-80 overflow-hidden bg-secondary/10 relative">
-                        {therapist.image_url && isValidImageUrl(therapist.image_url) ? (
-                          <img 
-                            src={therapist.image_url} 
-                            alt={therapist.nickname}
-                            className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).style.display = 'none'
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-secondary/20">
-                            <User className="h-20 w-20 text-text-muted" />
-                          </div>
-                        )}
-                      </div>
-                      <CardContent className="p-4 text-center">
-                        <CardTitle className="font-heading text-2xl text-foreground font-medium">
-                          {therapist.nickname}
-                        </CardTitle>
-                        <p className="text-text-secondary font-light text-sm mt-2">Expert Therapist</p>
-                      </CardContent>
                     </Card>
                   ))}
                 </div>

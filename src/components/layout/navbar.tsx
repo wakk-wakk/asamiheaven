@@ -16,7 +16,7 @@ interface NavLink {
 const publicNavLinks: NavLink[] = [
   { href: '/', label: 'Home' },
   { href: '/services', label: 'Services' },
-  { href: '/therapists', label: 'Therapists' },
+  { href: '/therapists', label: 'Models' },
   { href: '/contact', label: 'Contact' },
 ]
 
@@ -74,7 +74,7 @@ export function Navbar() {
     ? adminNavLinks 
     : publicNavLinks.filter(link => {
         if (link.label === 'Services') return showServicesLink
-        if (link.label === 'Therapists') return showTherapistsLink
+        if (link.label === 'Models') return showTherapistsLink
         return true
       })
 
