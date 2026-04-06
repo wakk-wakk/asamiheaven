@@ -317,20 +317,22 @@ export default function HomePage() {
 
             {/* About Us Content */}
             <div className="space-y-6 max-w-3xl mx-auto">
-              <div className="space-y-4 text-lg md:text-xl text-text-secondary font-light leading-relaxed">
-                <p className="text-xl md:text-2xl text-foreground font-medium">
-                  Enter a realm where elite companionship meets unparalleled sophistication.
+              <div className="space-y-4 text-lg md:text-xl text-white/90 font-light leading-relaxed">
+                <p className="text-xl md:text-2xl text-white font-normal">
+                  Step into a realm where luxury meets desire.
                 </p>
                 <p>
-                  Our exclusive collection features the most captivating companions in Metro Manila, 
-                  each chosen for their remarkable presence and grace.
+                  We present an exclusive selection of Metro Manila's most captivating, 
+                  top-tier models—chosen for their beauty, poise, and exceptional presence.
                 </p>
                 <p>
-                  Every encounter is crafted with meticulous attention to detail, 
-                  ensuring moments of pure enchantment and lasting memories.
+                  Experience a level of sophistication where every encounter is thoughtfully 
+                  curated, blending allure, discretion, and world-class service. Our distinguished 
+                  companions elevate the art of pleasure and connection, offering moments that 
+                  are as memorable as they are refined.
                 </p>
-                <p className="text-xl md:text-2xl text-primary font-heading font-medium">
-                  Excellence is not our goal &mdash; it is our foundation.
+                <p className="text-xl md:text-2xl text-white font-normal">
+                  Here, satisfaction isn't simply expected—it is effortlessly delivered as the standard.
                 </p>
               </div>
             </div>
