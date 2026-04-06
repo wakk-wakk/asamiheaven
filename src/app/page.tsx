@@ -303,7 +303,7 @@ export default function HomePage() {
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center w-full">
           <div className="space-y-10 animate-slide-up">
             {/* Brand Name */}
-            <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-foreground font-medium leading-tight">
+            <h1 className="font-heading text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] text-foreground font-medium leading-tight">
               <span className="relative inline-block">
                 <span className="relative z-10 text-primary">Asami</span>
                 <span className="absolute inset-0 text-primary blur-xl opacity-40">Asami</span>
@@ -316,7 +316,7 @@ export default function HomePage() {
             </h1>
 
             {/* About Us Content */}
-            <div className="space-y-6 max-w-3xl mx-auto">
+            <div className="space-y-6 max-w-2xl mx-auto">
               <div className="space-y-4 text-lg md:text-xl text-white/90 font-light leading-relaxed">
                 <p className="text-xl md:text-2xl text-white font-normal">
                   Step into a realm where luxury meets desire.
@@ -324,12 +324,6 @@ export default function HomePage() {
                 <p>
                   We present an exclusive selection of Metro Manila's most captivating, 
                   top-tier models—chosen for their beauty, poise, and exceptional presence.
-                </p>
-                <p>
-                  Experience a level of sophistication where every encounter is thoughtfully 
-                  curated, blending allure, discretion, and world-class service. Our distinguished 
-                  companions elevate the art of pleasure and connection, offering moments that 
-                  are as memorable as they are refined.
                 </p>
                 <p className="text-xl md:text-2xl text-white font-normal">
                   Here, satisfaction isn't simply expected—it is effortlessly delivered as the standard.
