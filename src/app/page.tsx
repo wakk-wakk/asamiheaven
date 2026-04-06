@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowRight, Leaf, Clock, Heart, Image as ImageIcon, User, Star, Zap, Calendar, MessageCircle, Copy, ExternalLink } from 'lucide-react'
+import { ArrowRight, Leaf, Clock, Heart, Image as ImageIcon, User, Star, Zap, Calendar, MessageCircle, Copy, ExternalLink, MessageSquare } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 
 interface Service {
@@ -60,6 +60,7 @@ export default function HomePage() {
   const [reviews, setReviews] = useState<Review[]>([])
   const [isLoadingReviews, setIsLoadingReviews] = useState(true)
   const [viberValue, setViberValue] = useState<string>('')
+  const [whatsappValue, setWhatsappValue] = useState<string>('')
 
   useEffect(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -189,11 +190,16 @@ export default function HomePage() {
       try {
         const { data, error } = await supabase
           .from('contact_settings')
-          .select('viber')
+          .select('viber, whatsapp')
           .single()
         
-        if (data && !error && data.viber) {
-          setViberValue(data.viber)
+        if (data && !error) {
+          if (data.viber) {
+            setViberValue(data.viber)
+          }
+          if (data.whatsapp) {
+            setWhatsappValue(data.whatsapp)
+          }
         }
       } catch (error) {
         console.error('Error fetching contact settings:', error)
@@ -256,13 +262,13 @@ export default function HomePage() {
   }
 
   // Copy to clipboard function
-  const copyToClipboard = async (text: string) => {
+  const copyToClipboard = async (text: string, label: string) => {
     try {
       await navigator.clipboard.writeText(text)
-      alert('Viber contact copied to clipboard: ' + text)
+      alert(label + ' copied to clipboard: ' + text)
     } catch (err) {
       console.error('Failed to copy:', err)
-      window.prompt('Copy Viber contact to clipboard:', text)
+      window.prompt('Copy ' + label + ' to clipboard:', text)
     }
   }
 
@@ -276,12 +282,40 @@ export default function HomePage() {
       window.open(url, '_blank', 'noopener,noreferrer')
     } else {
       // Copy to clipboard
-      copyToClipboard(viberValue)
+      copyToClipboard(viberValue, 'Viber contact')
+    }
+  }
+
+  // Handle WhatsApp click
+  const handleWhatsappClick = () => {
+    if (!whatsappValue) return
+    
+    if (isUrl(whatsappValue)) {
+      // Open URL in new tab
+      const url = formatUrl(whatsappValue)
+      window.open(url, '_blank', 'noopener,noreferrer')
+    } else {
+      // Copy to clipboard
+      copyToClipboard(whatsappValue, 'WhatsApp contact')
     }
   }
 
   return (
     <div className="animate-fade-in">
+      {/* Floating WhatsApp Button */}
+      {whatsappValue && (
+        <button
+          onClick={handleWhatsappClick}
+          className="fixed bottom-6 right-6 z-50 p-4 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 group"
+          aria-label="Contact us on WhatsApp"
+        >
+          <MessageSquare className="h-6 w-6" />
+          <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-foreground text-text-secondary text-sm rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            Contact us
+          </span>
+        </button>
+      )}
+
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center px-4 overflow-hidden">
         <div className="absolute inset-0 z-0 w-full h-full max-h-screen overflow-hidden">
