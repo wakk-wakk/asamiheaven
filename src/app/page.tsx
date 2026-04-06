@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowRight, Leaf, Clock, Heart, Image as ImageIcon, User, Star, Zap, Calendar } from 'lucide-react'
+import { ArrowRight, Leaf, Clock, Heart, Image as ImageIcon, User, Star, Zap, Calendar, MessageCircle, Copy, ExternalLink } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 
 interface Service {
@@ -59,6 +59,7 @@ export default function HomePage() {
   })
   const [reviews, setReviews] = useState<Review[]>([])
   const [isLoadingReviews, setIsLoadingReviews] = useState(true)
+  const [viberValue, setViberValue] = useState<string>('')
 
   useEffect(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -184,6 +185,21 @@ export default function HomePage() {
       }
     }
 
+    const fetchContactSettings = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('contact_settings')
+          .select('viber')
+          .single()
+        
+        if (data && !error && data.viber) {
+          setViberValue(data.viber)
+        }
+      } catch (error) {
+        console.error('Error fetching contact settings:', error)
+      }
+    }
+
     const initPage = async () => {
       try {
         const { data: settingsData } = await supabase
@@ -220,7 +236,49 @@ export default function HomePage() {
     }
 
     initPage()
+    fetchContactSettings()
   }, [])
+
+  // Helper function to check if a value is a URL
+  const isUrl = (value: string): boolean => {
+    return value.startsWith('http://') || value.startsWith('https://') || value.startsWith('www.')
+  }
+
+  // Helper function to format URL if it doesn't have protocol
+  const formatUrl = (value: string): string => {
+    if (value.startsWith('http://') || value.startsWith('https://')) {
+      return value
+    }
+    if (value.startsWith('www.')) {
+      return `https://${value}`
+    }
+    return `https://${value}`
+  }
+
+  // Copy to clipboard function
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text)
+      alert('Viber contact copied to clipboard: ' + text)
+    } catch (err) {
+      console.error('Failed to copy:', err)
+      window.prompt('Copy Viber contact to clipboard:', text)
+    }
+  }
+
+  // Handle Viber click
+  const handleViberClick = () => {
+    if (!viberValue) return
+    
+    if (isUrl(viberValue)) {
+      // Open URL in new tab
+      const url = formatUrl(viberValue)
+      window.open(url, '_blank', 'noopener,noreferrer')
+    } else {
+      // Copy to clipboard
+      copyToClipboard(viberValue)
+    }
+  }
 
   return (
     <div className="animate-fade-in">
@@ -243,42 +301,48 @@ export default function HomePage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
-          <div className="space-y-8 animate-slide-up">
-            <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
-                <Leaf className="h-4 w-4 text-primary" />
-                <span className="text-sm text-primary font-light tracking-wide">Natural Wellness Retreat</span>
+            <div className="space-y-8 animate-slide-up">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
+                  <Heart className="h-4 w-4 text-primary" />
+                  <span className="text-sm text-primary font-light tracking-wide">About Asami Heaven</span>
+                </div>
+                
+                <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-foreground font-medium leading-tight">
+                  Find Your Inner{' '}
+                  <span className="relative inline-block">
+                    <span className="relative z-10 text-primary">Peace</span>
+                    <span className="absolute inset-0 text-primary blur-lg opacity-50">Peace</span>
+                  </span>
+                </h1>
               </div>
               
-              <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-foreground font-medium leading-tight">
-                Find Your Inner{' '}
-                <span className="relative inline-block">
-                  <span className="relative z-10 text-primary">Peace</span>
-                  <span className="absolute inset-0 text-primary blur-lg opacity-50">Peace</span>
-                </span>
-              </h1>
-            </div>
-            
-            <p className="text-lg md:text-xl text-text-secondary font-light max-w-xl leading-relaxed">
-              Experience the ultimate relaxation at Asami Heaven. 
-              Our expert therapists provide premium massage and spa services 
-              tailored to your wellness needs.
-            </p>
+              <p className="text-lg md:text-xl text-text-secondary font-light max-w-xl leading-relaxed">
+                Asami Heaven is your sanctuary for relaxation and rejuvenation. 
+                Our expert therapists provide premium massage and spa services 
+                tailored to your wellness needs, helping you discover true tranquility.
+              </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 pt-4">
-              <Link href="/booking">
-                <Button size="lg" className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group">
-                  Book Appointment
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
-              <Link href="/services">
-                <Button variant="outline" size="lg" className="px-8 py-6 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm">
-                  View Services
-                </Button>
-              </Link>
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                <Link href="/booking">
+                  <Button size="lg" className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group">
+                    Book Appointment
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+                {viberValue && (
+                  <Button 
+                    onClick={handleViberClick}
+                    variant="outline" 
+                    size="lg" 
+                    className="px-8 py-6 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
+                  >
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    Message us on Viber
+                  </Button>
+                )}
+              </div>
             </div>
-          </div>
 
           <div className="hidden lg:block relative">
             <div className="relative w-full aspect-square">
