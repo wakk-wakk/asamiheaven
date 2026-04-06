@@ -587,13 +587,9 @@ export default function HomePage() {
                   <p className="text-text-secondary font-light text-lg">Our services will be available soon.</p>
                 </div>
               ) : (
-                <div className={`gap-8 ${
-                  displaySettings.services_mode === 'static' 
-                    ? 'grid grid-cols-1 md:grid-cols-2 max-w-5xl mx-auto' 
-                    : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
-                }`}>
+                <div className="flex flex-wrap justify-center gap-8">
                 {services.slice(0, 6).map((service, index) => (
-                    <Card key={service.id} className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col h-full" style={{ animationDelay: `${index * 0.1}s` }}>
+                    <Card key={service.id} className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col h-full w-full sm:w-[380px] max-w-[420px]" style={{ animationDelay: `${index * 0.1}s` }}>
                       <div className="w-full h-64 overflow-hidden bg-secondary/10 relative">
                         {service.image_url && isValidImageUrl(service.image_url) ? (
                           <img 
