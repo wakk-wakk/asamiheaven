@@ -300,55 +300,74 @@ export default function HomePage() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] animate-pulse-glow" style={{ animationDelay: '3s' }} />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center w-full">
-            <div className="space-y-8 animate-slide-up">
-              <div className="space-y-4">
-                <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
-                  <Heart className="h-4 w-4 text-primary" />
-                  <span className="text-sm text-primary font-light tracking-wide">About Asami Heaven</span>
-                </div>
-                
-                <h1 className="font-heading text-5xl md:text-6xl lg:text-7xl xl:text-8xl text-foreground font-medium leading-tight">
-                  Find Your Inner{' '}
-                  <span className="relative inline-block">
-                    <span className="relative z-10 text-primary">Peace</span>
-                    <span className="absolute inset-0 text-primary blur-lg opacity-50">Peace</span>
-                  </span>
-                </h1>
+        <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center w-full">
+          <div className="space-y-10 animate-slide-up">
+            {/* Logo and Brand Name */}
+            <div className="flex flex-col items-center gap-6">
+              <div className="relative">
+                <img 
+                  src="/iconwoutline.png" 
+                  alt="Asami Heaven" 
+                  className="h-20 md:h-28 w-auto object-contain"
+                />
+              </div>
+              <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-foreground font-medium leading-tight">
+                <span className="relative inline-block">
+                  <span className="relative z-10 text-primary">Asami</span>
+                  <span className="absolute inset-0 text-primary blur-xl opacity-40">Asami</span>
+                </span>
+                {' '}
+                <span className="relative inline-block">
+                  <span className="relative z-10 text-primary">Heaven</span>
+                  <span className="absolute inset-0 text-primary blur-xl opacity-40">Heaven</span>
+                </span>
+              </h1>
+            </div>
+
+            {/* About Us Content */}
+            <div className="space-y-6 max-w-3xl mx-auto">
+              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
+                <Heart className="h-5 w-5 text-primary" />
+                <span className="text-base text-primary font-light tracking-wide">About Us</span>
               </div>
               
-              <p className="text-lg md:text-xl text-text-secondary font-light max-w-xl leading-relaxed">
-                Asami Heaven is your sanctuary for relaxation and rejuvenation. 
-                Our expert therapists provide premium massage and spa services 
-                tailored to your wellness needs, helping you discover true tranquility.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Link href="/booking">
-                  <Button size="lg" className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group">
-                    Book Appointment
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                {viberValue && (
-                  <Button 
-                    onClick={handleViberClick}
-                    variant="outline" 
-                    size="lg" 
-                    className="px-8 py-6 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
-                  >
-                    <MessageCircle className="mr-2 h-5 w-5" />
-                    Message us on Viber
-                  </Button>
-                )}
+              <div className="space-y-4 text-lg md:text-xl text-text-secondary font-light leading-relaxed">
+                <p className="text-xl md:text-2xl text-foreground font-medium">
+                  Step into a world of elite pleasure.
+                </p>
+                <p>
+                  We feature only the hottest, high-class AA+ models in Metro Manila. 
+                  Indulge in sophistication, beauty, and unforgettable moments.
+                </p>
+                <p>
+                  Our handpicked Class AA+ therapists redefine pleasure and companionship 
+                  with elegance, discretion, and world class service.
+                </p>
+                <p className="text-xl md:text-2xl text-primary font-heading font-medium">
+                  Satisfaction is not an option &mdash; it is our standard.
+                </p>
               </div>
             </div>
 
-          <div className="hidden lg:block relative">
-            <div className="relative w-full aspect-square">
-              <div className="absolute top-1/4 right-1/4 w-32 h-32 rounded-full border border-primary/20 animate-pulse" />
-              <div className="absolute top-1/3 right-1/3 w-48 h-48 rounded-full border border-primary/10 animate-pulse" style={{ animationDelay: '1s' }} />
-              <div className="absolute top-1/2 right-1/2 w-64 h-64 rounded-full border border-primary/5 animate-pulse" style={{ animationDelay: '2s' }} />
+            {/* Action Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+              <Link href="/booking">
+                <Button size="lg" className="px-10 py-7 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group">
+                  Book Appointment
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+              {viberValue && (
+                <Button 
+                  onClick={handleViberClick}
+                  variant="outline" 
+                  size="lg" 
+                  className="px-10 py-7 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
+                >
+                  <MessageCircle className="mr-2 h-5 w-5" />
+                  Message us on Viber
+                </Button>
+              )}
             </div>
           </div>
         </div>
