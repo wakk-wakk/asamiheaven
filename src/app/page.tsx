@@ -337,7 +337,7 @@ export default function HomePage() {
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center w-full">
           <div className="space-y-10 animate-slide-up">
             {/* Brand Name */}
-            <h1 className="font-heading text-7xl md:text-8xl lg:text-9xl xl:text-[10rem] text-foreground font-medium leading-tight">
+            <h1 className="font-heading text-[10rem] md:text-[14rem] lg:text-[18rem] xl:text-[20rem] text-foreground font-medium leading-tight">
               <span className="relative inline-block">
                 <span className="relative z-10 text-primary">Asami</span>
                 <span className="absolute inset-0 text-primary blur-xl opacity-40">Asami</span>
@@ -350,19 +350,10 @@ export default function HomePage() {
             </h1>
 
             {/* About Us Content */}
-            <div className="space-y-6 max-w-2xl mx-auto">
-              <div className="space-y-4 text-lg md:text-xl text-white/90 font-light leading-relaxed">
-                <p className="text-xl md:text-2xl text-white font-normal">
-                  Step into a realm where luxury meets desire.
-                </p>
-                <p>
-                  We present an exclusive selection of Metro Manila's most captivating, 
-                  top-tier models—chosen for their beauty, poise, and exceptional presence.
-                </p>
-                <p className="text-xl md:text-2xl text-white font-normal">
-                  Here, satisfaction isn't simply expected—it is effortlessly delivered as the standard.
-                </p>
-              </div>
+            <div className="max-w-2xl mx-auto">
+              <p className="text-lg md:text-xl text-white/90 font-light leading-relaxed">
+                Step into a realm where luxury meets desire. We present an exclusive selection of Metro Manila's most captivating, top-tier models—chosen for their beauty, poise, and exceptional presence. Here, satisfaction isn't simply expected—it is effortlessly delivered as the standard.
+              </p>
             </div>
 
             {/* Action Buttons */}
@@ -378,7 +369,7 @@ export default function HomePage() {
                   onClick={handleViberClick}
                   variant="outline" 
                   size="lg" 
-                  className="px-10 py-7 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
+                  className="px-6 py-4 sm:px-10 sm:py-7 text-base sm:text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer w-full sm:w-auto"
                 >
                   <MessageCircle className="mr-2 h-5 w-5" />
                   Message us on Viber
