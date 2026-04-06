@@ -17,7 +17,6 @@ const publicNavLinks: NavLink[] = [
   { href: '/', label: 'Home' },
   { href: '/services', label: 'Services' },
   { href: '/therapists', label: 'Therapists' },
-  { href: '/booking', label: 'Book Now' },
   { href: '/contact', label: 'Contact' },
 ]
 
@@ -84,10 +83,8 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="font-heading text-xl md:text-2xl text-primary font-medium">
-              Asami Heaven
-            </span>
+          <Link href="/" className="flex items-center">
+            <img src="/iconwoutline.png" alt="Asami Heaven" className="h-10 w-auto" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -116,14 +113,6 @@ export function Navbar() {
                 </Link>
               )
             })}
-            {!isAdminPage && (
-              <Link
-                href="/booking"
-                className="px-6 py-2.5 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all duration-300 text-sm font-light"
-              >
-                Book Appointment
-              </Link>
-            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -152,15 +141,6 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            {!isAdminPage && (
-              <Link
-                href="/booking"
-                className="block w-full text-center px-6 py-3 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all duration-300 font-light"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Book Appointment
-              </Link>
-            )}
           </div>
         </div>
       )}
