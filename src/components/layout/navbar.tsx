@@ -84,7 +84,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <img src="/iconwoutline.png" alt="Asami Heaven" className="h-6 md:h-8 w-auto object-contain" />
+            <img src="/iconwoutline.png" alt="Asami Heaven" className="!h-6 md:!h-8 w-auto object-contain max-h-full" />
           </Link>
 
           {/* Desktop Navigation */}
