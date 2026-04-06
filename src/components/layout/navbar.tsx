@@ -18,6 +18,7 @@ const publicNavLinks: NavLink[] = [
   { href: '/services', label: 'Services' },
   { href: '/therapists', label: 'Therapists' },
   { href: '/contact', label: 'Contact' },
+  { href: '/booking', label: 'Book Now' },
 ]
 
 const adminNavLinks: NavLink[] = [
@@ -84,7 +85,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <img src="/iconwoutline.png" alt="Asami Heaven" className="h-10 w-auto" />
+            <img src="/iconwoutline.png" alt="Asami Heaven" className="h-8 md:h-10 w-auto object-contain" />
           </Link>
 
           {/* Desktop Navigation */}
@@ -113,6 +114,14 @@ export function Navbar() {
                 </Link>
               )
             })}
+            {!isAdminPage && (
+              <Link
+                href="/booking"
+                className="px-6 py-2.5 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all duration-300 text-sm font-light whitespace-nowrap"
+              >
+                Book Now
+              </Link>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -141,6 +150,15 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
+            {!isAdminPage && (
+              <Link
+                href="/booking"
+                className="block w-full text-center px-6 py-3 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all duration-300 font-light"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Book Now
+              </Link>
+            )}
           </div>
         </div>
       )}
