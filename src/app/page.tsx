@@ -302,49 +302,35 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center w-full">
           <div className="space-y-10 animate-slide-up">
-            {/* Logo and Brand Name */}
-            <div className="flex flex-col items-center gap-6">
-              <div className="relative">
-                <img 
-                  src="/iconwoutline.png" 
-                  alt="Asami Heaven" 
-                  className="h-20 md:h-28 w-auto object-contain"
-                />
-              </div>
-              <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-foreground font-medium leading-tight">
-                <span className="relative inline-block">
-                  <span className="relative z-10 text-primary">Asami</span>
-                  <span className="absolute inset-0 text-primary blur-xl opacity-40">Asami</span>
-                </span>
-                {' '}
-                <span className="relative inline-block">
-                  <span className="relative z-10 text-primary">Heaven</span>
-                  <span className="absolute inset-0 text-primary blur-xl opacity-40">Heaven</span>
-                </span>
-              </h1>
-            </div>
+            {/* Brand Name */}
+            <h1 className="font-heading text-6xl md:text-7xl lg:text-8xl xl:text-9xl text-foreground font-medium leading-tight">
+              <span className="relative inline-block">
+                <span className="relative z-10 text-primary">Asami</span>
+                <span className="absolute inset-0 text-primary blur-xl opacity-40">Asami</span>
+              </span>
+              {' '}
+              <span className="relative inline-block">
+                <span className="relative z-10 text-primary">Heaven</span>
+                <span className="absolute inset-0 text-primary blur-xl opacity-40">Heaven</span>
+              </span>
+            </h1>
 
             {/* About Us Content */}
             <div className="space-y-6 max-w-3xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
-                <Heart className="h-5 w-5 text-primary" />
-                <span className="text-base text-primary font-light tracking-wide">About Us</span>
-              </div>
-              
               <div className="space-y-4 text-lg md:text-xl text-text-secondary font-light leading-relaxed">
                 <p className="text-xl md:text-2xl text-foreground font-medium">
-                  Step into a world of elite pleasure.
+                  Enter a realm where elite companionship meets unparalleled sophistication.
                 </p>
                 <p>
-                  We feature only the hottest, high-class AA+ models in Metro Manila. 
-                  Indulge in sophistication, beauty, and unforgettable moments.
+                  Our exclusive collection features the most captivating companions in Metro Manila, 
+                  each chosen for their remarkable presence and grace.
                 </p>
                 <p>
-                  Our handpicked Class AA+ therapists redefine pleasure and companionship 
-                  with elegance, discretion, and world class service.
+                  Every encounter is crafted with meticulous attention to detail, 
+                  ensuring moments of pure enchantment and lasting memories.
                 </p>
                 <p className="text-xl md:text-2xl text-primary font-heading font-medium">
-                  Satisfaction is not an option &mdash; it is our standard.
+                  Excellence is not our goal &mdash; it is our foundation.
                 </p>
               </div>
             </div>
