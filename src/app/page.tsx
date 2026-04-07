@@ -716,7 +716,8 @@ export default function HomePage() {
             
             {/* Horizontal scrolling container with auto-scroll */}
             <div className="relative overflow-hidden">
-              <div className="flex gap-6 pb-8 animate-scroll-reviews">
+              <div className="flex gap-6 pb-8 w-max animate-scroll-reviews">
+                {/* First set of reviews */}
                 {reviews.map((review) => {
                   // Get the image URL from Supabase Storage if image_path exists
                   const getReviewImageUrl = (): string | null => {
@@ -738,6 +739,55 @@ export default function HomePage() {
 
                   return (
                     <Card key={review.id} className="glass border-border flex-shrink-0 w-[320px] md:w-[380px] snap-center">
+                      <CardContent className="p-6">
+                        {review.review_type === 'image' && reviewImageUrl ? (
+                          <div className="rounded-lg overflow-hidden mb-4">
+                            <img 
+                              src={reviewImageUrl} 
+                              alt="Review screenshot"
+                              className="w-full h-48 object-cover"
+                              loading="lazy"
+                            />
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            <div className="text-4xl text-primary opacity-50 font-heading">&ldquo;</div>
+                            <p className="text-foreground font-light leading-relaxed">
+                              {review.review_text}
+                            </p>
+                            {review.reviewer_name && (
+                              <p className="text-text-secondary text-sm font-light">
+                                &mdash; {review.reviewer_name}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+                {/* Duplicate set of reviews for seamless infinite scroll */}
+                {reviews.map((review) => {
+                  // Get the image URL from Supabase Storage if image_path exists
+                  const getReviewImageUrl = (): string | null => {
+                    if (review.image_path) {
+                      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+                      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+                      
+                      if (supabaseUrl && supabaseAnonKey) {
+                        const supabase = createClient(supabaseUrl, supabaseAnonKey)
+                        const { data } = supabase.storage
+                          .from('reviews-images')
+                          .getPublicUrl(review.image_path)
+                        return data?.publicUrl || null
+                      }
+                    }
+                    return review.image_url
+                  }
+                  const reviewImageUrl = getReviewImageUrl()
+
+                  return (
+                    <Card key={`duplicate-${review.id}`} className="glass border-border flex-shrink-0 w-[320px] md:w-[380px] snap-center">
                       <CardContent className="p-6">
                         {review.review_type === 'image' && reviewImageUrl ? (
                           <div className="rounded-lg overflow-hidden mb-4">
