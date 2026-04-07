@@ -350,13 +350,11 @@ export default function HomePage() {
       {whatsappValue && (
         <button
           onClick={handleWhatsappClick}
-          className="fixed bottom-6 right-6 z-50 p-4 bg-primary hover:bg-primary-hover text-background rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 group"
+          className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-4 bg-primary hover:bg-primary-hover text-background rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group"
           aria-label="Contact us on WhatsApp"
         >
-          <MessageSquare className="h-6 w-6" />
-          <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1.5 bg-foreground text-text-secondary text-sm rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-            Contact us
-          </span>
+          <MessageSquare className="h-5 w-5" />
+          <span className="text-sm font-light">Contact Us</span>
         </button>
       )}
 
@@ -635,10 +633,10 @@ export default function HomePage() {
             <div className="max-w-7xl mx-auto relative">
               <div className="text-center mb-16 space-y-4">
                 <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground font-medium">
-                  Our Services
+                  Our Packages
                 </h2>
                 <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
-                  Premium massage and spa services tailored to your wellness needs.
+                  Premium massage and spa packages tailored to your wellness needs.
                 </p>
               </div>
 
