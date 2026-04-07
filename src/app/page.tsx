@@ -523,7 +523,7 @@ export default function HomePage() {
                   Our Models
                 </h2>
                 <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
-                  Metro Manila's most captivating top-tier models.
+                  Metro Manila&apos;s most captivating top-tier models.
                 </p>
               </div>
 
