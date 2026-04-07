@@ -225,3 +225,23 @@ img {
     padding-bottom: env(safe-area-inset-bottom);
   }
 }
+
+/* Auto-scrolling reviews carousel */
+@keyframes scroll-reviews {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-reviews {
+  display: flex;
+  width: max-content;
+  animation: scroll-reviews 30s linear infinite;
+}
+
+.animate-scroll-reviews:hover {
+  animation-play-state: paused;
+}

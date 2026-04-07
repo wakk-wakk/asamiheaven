@@ -711,15 +711,12 @@ export default function HomePage() {
         <section className="py-16 md:py-20 px-4 overflow-hidden">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12 space-y-4">
-              <h2 className="font-heading text-3xl md:text-4xl text-foreground">What Our Clients Say</h2>
-              <p className="text-text-secondary font-light max-w-2xl mx-auto">
-                Do not just take our word for it - hear from our satisfied clients
-              </p>
+              <h2 className="font-heading text-3xl md:text-4xl text-foreground">Client Reviews</h2>
             </div>
             
-            {/* Horizontal scrolling container */}
+            {/* Horizontal scrolling container with auto-scroll */}
             <div className="relative">
-              <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+              <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 animate-scroll-reviews">
                 {reviews.map((review) => {
                   // Get the image URL from Supabase Storage if image_path exists
                   const getReviewImageUrl = (): string | null => {
