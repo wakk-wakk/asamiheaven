@@ -347,11 +347,11 @@ export default function HomePage() {
 
   return (
     <div className="animate-fade-in">
-      {/* Floating WhatsApp Button */}
+      {/* Floating WhatsApp Button - Hidden on mobile */}
       {whatsappValue && (
         <button
           onClick={handleWhatsappClick}
-          className="fixed bottom-6 right-6 z-50 p-4 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 group"
+          className="hidden md:block fixed bottom-6 right-6 z-50 p-4 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 group"
           aria-label="Contact us on WhatsApp"
         >
           <MessageSquare className="h-6 w-6" />
@@ -414,8 +414,8 @@ export default function HomePage() {
                   size="lg" 
                   className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
                 >
-                  <MessageCircle className="mr-2 h-5 w-5" />
-                  Message us on Viber
+                  <MessageSquare className="mr-2 h-5 w-5" />
+                  Contact us
                 </Button>
               )}
               <Link href="/contact" className="w-full sm:w-auto">
