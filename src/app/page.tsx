@@ -715,8 +715,8 @@ export default function HomePage() {
             </div>
             
             {/* Horizontal scrolling container with auto-scroll */}
-            <div className="relative">
-              <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0 animate-scroll-reviews">
+            <div className="relative overflow-hidden">
+              <div className="flex gap-6 pb-8 animate-scroll-reviews">
                 {reviews.map((review) => {
                   // Get the image URL from Supabase Storage if image_path exists
                   const getReviewImageUrl = (): string | null => {
