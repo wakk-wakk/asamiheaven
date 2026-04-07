@@ -545,10 +545,10 @@ export default function HomePage() {
         </section>
       ) : (
         <>
-          <section className="py-12 md:py-16 px-4 relative overflow-hidden">
+          <section className="py-16 md:py-20 px-4 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-              <div className="absolute top-1/3 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-              <div className="absolute bottom-1/3 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+              <div className="absolute top-1/3 -right-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-glow" />
+              <div className="absolute bottom-1/3 -left-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '2s' }} />
             </div>
 
             <div className="max-w-7xl mx-auto relative">
@@ -557,7 +557,7 @@ export default function HomePage() {
                   Featuring
                 </h2>
                 <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
-                  Metro Manila&apos;s most captivating top-tier models.
+                  Metro Manila's most captivating top-tier models.
                 </p>
               </div>
 
@@ -575,7 +575,7 @@ export default function HomePage() {
                   <p className="text-text-secondary font-light text-lg">Our models will be introduced soon.</p>
                 </div>
               ) : (
-                <div className={`gap-8 ${
+                <div className={`gap-6 md:gap-8 ${
                   displaySettings.therapists_mode === 'static'
                     ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto'
                     : 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
@@ -583,13 +583,17 @@ export default function HomePage() {
                   {therapists.map((therapist, index) => {
                     const therapistImageUrl = getTherapistImageUrl(therapist);
                     return (
-                      <Card key={therapist.id} className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col overflow-hidden" style={{ animationDelay: `${index * 0.1}s` }}>
+                      <Card 
+                        key={therapist.id} 
+                        className="group glass border-border hover:border-primary/50 transition-all duration-500 animate-slide-up flex flex-col overflow-hidden hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2" 
+                        style={{ animationDelay: `${index * 0.12}s` }}
+                      >
                         <div className="w-full h-80 overflow-hidden bg-secondary/10 relative">
                           {therapistImageUrl ? (
                             <img 
                               src={therapistImageUrl} 
                               alt={therapist.nickname}
-                              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
+                              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover transition-transform duration-700 group-hover:scale-110"
                               onError={(e) => {
                                 (e.target as HTMLImageElement).style.display = 'none'
                               }}
@@ -599,12 +603,20 @@ export default function HomePage() {
                               <User className="h-20 w-20 text-text-muted" />
                             </div>
                           )}
+                          {/* Gradient overlay on hover */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+                          {/* Shimmer effect */}
+                          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                          </div>
                         </div>
-                        <CardContent className="p-4 text-center">
-                          <CardTitle className="font-heading text-2xl text-foreground font-medium">
+                        <CardContent className="p-4 text-center relative">
+                          <CardTitle className="font-heading text-2xl text-foreground font-medium transition-colors duration-300 group-hover:text-primary">
                             {therapist.nickname}
                           </CardTitle>
-                          <p className="text-text-secondary font-light text-sm mt-2">Model</p>
+                          <p className="text-text-secondary font-light text-sm mt-2 uppercase tracking-wider">Model</p>
+                          {/* Decorative line */}
+                          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary group-hover:w-3/4 transition-all duration-500" />
                         </CardContent>
                       </Card>
                     );
