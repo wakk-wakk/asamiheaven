@@ -30,6 +30,7 @@ interface Review {
   id: string
   review_type: 'image' | 'text'
   image_url: string | null
+  image_path: string | null
   review_text: string | null
   reviewer_name: string | null
   is_active: boolean
@@ -361,7 +362,7 @@ export default function HomePage() {
       )}
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center px-4 pt-20 overflow-hidden">
+      <section className="relative min-h-screen flex items-center px-4 pt-16 overflow-hidden">
         <div className="absolute inset-0 z-0 w-full h-full max-h-screen overflow-hidden">
           <img 
             src="https://i.pinimg.com/736x/3d/ef/fd/3deffdc624ae766115fa72a308833fb5.jpg" 
@@ -713,34 +714,54 @@ export default function HomePage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              {reviews.map((review) => (
-                <Card key={review.id} className="glass border-border">
-                  <CardContent className="p-6">
-                    {review.review_type === 'image' && review.image_url ? (
-                      <div className="rounded-lg overflow-hidden mb-4">
-                        <img 
-                          src={review.image_url} 
-                          alt="Review screenshot"
-                          className="w-full h-48 object-cover"
-                          loading="lazy"
-                        />
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        <div className="text-4xl text-primary opacity-50 font-heading">&ldquo;</div>
-                        <p className="text-foreground font-light leading-relaxed">
-                          {review.review_text}
-                        </p>
-                        {review.reviewer_name && (
-                          <p className="text-text-secondary text-sm font-light">
-                            &mdash; {review.reviewer_name}
+              {reviews.map((review) => {
+                // Get the image URL from Supabase Storage if image_path exists
+                const getReviewImageUrl = (): string | null => {
+                  if (review.image_path) {
+                    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+                    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+                    
+                    if (supabaseUrl && supabaseAnonKey) {
+                      const supabase = createClient(supabaseUrl, supabaseAnonKey)
+                      const { data } = supabase.storage
+                        .from('reviews-images')
+                        .getPublicUrl(review.image_path)
+                      return data?.publicUrl || null
+                    }
+                  }
+                  return review.image_url
+                }
+                const reviewImageUrl = getReviewImageUrl()
+
+                return (
+                  <Card key={review.id} className="glass border-border">
+                    <CardContent className="p-6">
+                      {review.review_type === 'image' && reviewImageUrl ? (
+                        <div className="rounded-lg overflow-hidden mb-4">
+                          <img 
+                            src={reviewImageUrl} 
+                            alt="Review screenshot"
+                            className="w-full h-48 object-cover"
+                            loading="lazy"
+                          />
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          <div className="text-4xl text-primary opacity-50 font-heading">&ldquo;</div>
+                          <p className="text-foreground font-light leading-relaxed">
+                            {review.review_text}
                           </p>
-                        )}
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              ))}
+                          {review.reviewer_name && (
+                            <p className="text-text-secondary text-sm font-light">
+                              &mdash; {review.reviewer_name}
+                            </p>
+                          )}
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                )
+              })}
             </div>
 
             <div className="text-center">
