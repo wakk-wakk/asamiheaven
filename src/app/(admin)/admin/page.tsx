@@ -397,7 +397,23 @@ export default function AdminDashboardPage() {
               <h1 className="font-heading text-3xl md:text-4xl text-foreground">Admin Dashboard</h1>
               <p className="text-text-secondary font-light mt-2">Manage your spa bookings and contact info</p>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-wrap">
+              <Button
+                variant="outline"
+                onClick={() => router.push('/admin/services')}
+                className="border-border hover:border-primary/50 hover:text-primary"
+              >
+                <LayoutGrid className="h-4 w-4 mr-2" />
+                Manage Services
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => router.push('/admin/therapists')}
+                className="border-border hover:border-primary/50 hover:text-primary"
+              >
+                <User className="h-4 w-4 mr-2" />
+                Manage Models
+              </Button>
               <Dialog open={showContactEditor} onOpenChange={setShowContactEditor}>
                 <DialogTrigger asChild>
                   <Button
