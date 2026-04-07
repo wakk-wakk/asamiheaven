@@ -14,6 +14,7 @@ interface Service {
   price: number
   duration: number
   image_url: string
+  image_path: string
   is_active: boolean
 }
 
@@ -286,6 +287,27 @@ export default function HomePage() {
     }
   }
 
+  // Get the display image URL for a service (Supabase Storage or external URL)
+  const getServiceImageUrl = (service: Service): string | null => {
+    // Priority: image_path (Supabase Storage) > image_url (external)
+    if (service.image_path) {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      
+      if (supabaseUrl && supabaseAnonKey) {
+        const supabase = createClient(supabaseUrl, supabaseAnonKey)
+        const { data } = supabase.storage
+          .from('services-images')
+          .getPublicUrl(service.image_path)
+        return data?.publicUrl || null
+      }
+    }
+    if (service.image_url && isValidImageUrl(service.image_url)) {
+      return service.image_url
+    }
+    return null
+  }
+
   // Handle WhatsApp click
   const handleWhatsappClick = () => {
     if (!whatsappValue) return
@@ -401,53 +423,60 @@ export default function HomePage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center">
               {services[0] && (
                 <Card className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col h-full">
-                  <div className="w-full h-80 overflow-hidden bg-secondary/10 relative">
-                    {services[0].image_url && isValidImageUrl(services[0].image_url) ? (
-                      <img 
-                        src={services[0].image_url} 
-                        alt={services[0].name}
-                        className="absolute inset-0 w-full h-full object-cover object-center"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none'
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-secondary/20">
-                        <ImageIcon className="h-16 w-16 text-text-muted" />
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-6 flex flex-col gap-4 flex-grow">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="font-heading text-2xl text-foreground font-medium mb-1">
-                          {services[0].name}
-                        </h3>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                          <Clock size={16} />
-                          <span>{services[0].duration} minutes</span>
+                  {(() => {
+                    const imageUrl = getServiceImageUrl(services[0]);
+                    return (
+                      <>
+                        <div className="w-full h-80 overflow-hidden bg-secondary/10 relative">
+                          {imageUrl ? (
+                            <img 
+                              src={imageUrl} 
+                              alt={services[0].name}
+                              className="absolute inset-0 w-full h-full object-cover object-center"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none'
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                              <ImageIcon className="h-16 w-16 text-text-muted" />
+                            </div>
+                          )}
                         </div>
-                      </div>
-                      {services[0].price > 0 && (
-                        <div className="text-right">
-                          <span className="text-primary font-heading text-lg font-medium">
-                            ₱{services[0].price.toLocaleString()}
-                          </span>
+                        <div className="p-6 flex flex-col gap-4 flex-grow">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <h3 className="font-heading text-2xl text-foreground font-medium mb-1">
+                                {services[0].name}
+                              </h3>
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                                <Clock size={16} />
+                                <span>{services[0].duration} minutes</span>
+                              </div>
+                            </div>
+                            {services[0].price > 0 && (
+                              <div className="text-right">
+                                <span className="text-primary font-heading text-lg font-medium">
+                                  ₱{services[0].price.toLocaleString()}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                          <p className="text-text-secondary font-light leading-relaxed line-clamp-3 flex-grow">
+                            {services[0].description}
+                          </p>
+                          <div className="mt-auto">
+                            <Link href={`/booking?service=${encodeURIComponent(services[0].name)}`}>
+                              <Button className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn">
+                                Book Now
+                                <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                              </Button>
+                            </Link>
+                          </div>
                         </div>
-                      )}
-                    </div>
-                    <p className="text-text-secondary font-light leading-relaxed line-clamp-3 flex-grow">
-                      {services[0].description}
-                    </p>
-                    <div className="mt-auto">
-                      <Link href={`/booking?service=${encodeURIComponent(services[0].name)}`}>
-                        <Button className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn">
-                          Book Now
-                          <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
+                      </>
+                    );
+                  })()}
                 </Card>
               )}
 
@@ -579,12 +608,14 @@ export default function HomePage() {
                 </div>
               ) : (
                 <div className="flex flex-wrap justify-center gap-8">
-                {services.slice(0, 6).map((service, index) => (
+                {services.slice(0, 6).map((service, index) => {
+                  const serviceImageUrl = getServiceImageUrl(service);
+                  return (
                     <Card key={service.id} className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col h-full w-full sm:w-[380px] max-w-[420px]" style={{ animationDelay: `${index * 0.1}s` }}>
                       <div className="w-full h-64 overflow-hidden bg-secondary/10 relative">
-                        {service.image_url && isValidImageUrl(service.image_url) ? (
+                        {serviceImageUrl ? (
                           <img 
-                            src={service.image_url} 
+                            src={serviceImageUrl} 
                             alt={service.name}
                             className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
                             onError={(e) => {
@@ -629,7 +660,8 @@ export default function HomePage() {
                         </div>
                       </div>
                     </Card>
-                  ))}
+                  );
+                })}
                 </div>
               )}
             </div>

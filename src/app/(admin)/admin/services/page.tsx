@@ -1,9 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef, ChangeEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -16,6 +16,8 @@ import {
   Loader2,
   Clock,
   Image as ImageIcon,
+  Upload,
+  X,
   AlertCircle
 } from 'lucide-react'
 
@@ -26,6 +28,7 @@ interface Service {
   price: number
   duration: number
   image_url: string
+  image_path: string
   is_active: boolean
   created_at: string
 }
@@ -41,6 +44,10 @@ const isValidImageUrl = (url: string): boolean => {
   }
 }
 
+// Constants for file upload
+const MAX_FILE_SIZE = 5 * 1024 * 1024 // 5MB
+const ALLOWED_FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+
 export default function AdminServicesPage() {
   const [services, setServices] = useState<Service[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -52,8 +59,17 @@ export default function AdminServicesPage() {
     description: '',
     price: '',
     duration: '',
-    image_url: ''
+    image_url: '',
+    image_path: ''
   })
+  
+  // Upload state
+  const [uploadingImage, setUploadingImage] = useState(false)
+  const [uploadProgress, setUploadProgress] = useState(0)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
+  const [uploadError, setUploadError] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  
   const router = useRouter()
 
   useEffect(() => {
@@ -84,13 +100,108 @@ export default function AdminServicesPage() {
     }
   }
 
+  // Get the display image URL for a service
+  const getServiceImageUrl = (service: Service): string | null => {
+    // Priority: image_path (Supabase Storage) > image_url (external)
+    if (service.image_path) {
+      const { data } = supabase.storage
+        .from('services-images')
+        .getPublicUrl(service.image_path)
+      return data?.publicUrl || null
+    }
+    if (service.image_url && isValidImageUrl(service.image_url)) {
+      return service.image_url
+    }
+    return null
+  }
+
+  // Handle file selection and upload
+  const handleFileSelect = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file type
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
+      setUploadError('Please select a valid image file (JPEG, PNG, or WebP)')
+      return
+    }
+
+    // Validate file size
+    if (file.size > MAX_FILE_SIZE) {
+      setUploadError('File size must be less than 5MB')
+      return
+    }
+
+    // Create preview
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      setPreviewUrl(e.target?.result as string)
+    }
+    reader.readAsDataURL(file)
+
+    // Upload to Supabase Storage
+    setUploadingImage(true)
+    setUploadError(null)
+    setUploadProgress(0)
+
+    try {
+      // Generate unique filename
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.${fileExt}`
+      const filePath = `services/${fileName}`
+
+      // Upload file
+      const { data, error } = await supabase.storage
+        .from('services-images')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false,
+          duplex: undefined // Fix for TypeScript error
+        })
+
+      if (error) throw error
+
+      // Update form data with the new path
+      setFormData(prev => ({ ...prev, image_path: filePath, image_url: '' }))
+      setUploadProgress(100)
+    } catch (error) {
+      console.error('Upload error:', error)
+      const errorMessage = error instanceof Error ? error.message : 'Failed to upload image'
+      setUploadError(errorMessage)
+    } finally {
+      setUploadingImage(false)
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
+  }
+
+  // Remove uploaded image
+  const removeImage = async () => {
+    // If there's an existing image_path, delete it from storage
+    if (formData.image_path) {
+      try {
+        await supabase.storage
+          .from('services-images')
+          .remove([formData.image_path])
+      } catch (error) {
+        console.error('Error deleting image from storage:', error)
+      }
+    }
+
+    setFormData(prev => ({ ...prev, image_path: '', image_url: '' }))
+    setPreviewUrl(null)
+    setUploadError(null)
+  }
+
   const handleSave = async () => {
     if (!formData.name || !formData.duration) {
       alert('Please fill in name and duration')
       return
     }
 
-    // Validate image URL if provided
+    // Validate image URL if provided (for external URLs)
     if (formData.image_url && !isValidImageUrl(formData.image_url)) {
       alert('Please enter a valid image URL (must start with http:// or https://)')
       return
@@ -103,6 +214,7 @@ export default function AdminServicesPage() {
         description: string
         duration: number
         image_url: string
+        image_path: string
         is_active: boolean
         price?: number
       } = {
@@ -110,6 +222,7 @@ export default function AdminServicesPage() {
         description: formData.description,
         duration: parseInt(formData.duration),
         image_url: formData.image_url,
+        image_path: formData.image_path,
         is_active: true
       }
       
@@ -117,6 +230,17 @@ export default function AdminServicesPage() {
       serviceData.price = formData.price ? parseFloat(formData.price) : 0
 
       if (editingService) {
+        // If replacing image, delete old image from storage
+        if (editingService.image_path && formData.image_path !== editingService.image_path) {
+          try {
+            await supabase.storage
+              .from('services-images')
+              .remove([editingService.image_path])
+          } catch (error) {
+            console.error('Error deleting old image:', error)
+          }
+        }
+
         const { error } = await supabase
           .from('services')
           .update(serviceData)
@@ -144,12 +268,22 @@ export default function AdminServicesPage() {
 
   const handleEdit = (service: Service) => {
     setEditingService(service)
+    
+    // Get the current image for preview
+    const currentImageUrl = getServiceImageUrl(service)
+    if (currentImageUrl) {
+      setPreviewUrl(currentImageUrl)
+    } else {
+      setPreviewUrl(null)
+    }
+    
     setFormData({
       name: service.name,
       description: service.description,
       price: service.price.toString(),
       duration: service.duration.toString(),
-      image_url: service.image_url || ''
+      image_url: service.image_url || '',
+      image_path: service.image_path || ''
     })
     setShowDialog(true)
   }
@@ -158,6 +292,18 @@ export default function AdminServicesPage() {
     if (!confirm('Are you sure you want to delete this service?')) return
 
     try {
+      // Find the service to delete its image from storage
+      const service = services.find(s => s.id === id)
+      if (service?.image_path) {
+        try {
+          await supabase.storage
+            .from('services-images')
+            .remove([service.image_path])
+        } catch (error) {
+          console.error('Error deleting image from storage:', error)
+        }
+      }
+
       const { error } = await supabase
         .from('services')
         .delete()
@@ -177,9 +323,12 @@ export default function AdminServicesPage() {
       description: '',
       price: '',
       duration: '',
-      image_url: ''
+      image_url: '',
+      image_path: ''
     })
     setEditingService(null)
+    setPreviewUrl(null)
+    setUploadError(null)
   }
 
   if (isLoading) {
@@ -278,19 +427,89 @@ export default function AdminServicesPage() {
                       </div>
                     </div>
 
+                    {/* Image Upload Section */}
                     <div className="space-y-2">
-                      <Label htmlFor="image_url">Image URL</Label>
-                      <div className="relative">
-                        <ImageIcon className="absolute left-3 top-2.5 h-4 w-4 text-text-muted" />
-                        <Input
-                          id="image_url"
-                          value={formData.image_url}
-                          onChange={(e) => setFormData(prev => ({ ...prev, image_url: e.target.value }))}
-                          placeholder="https://example.com/image.jpg"
-                          className="pl-9"
-                        />
+                      <Label>Service Image</Label>
+                      <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-primary/50 transition-colors">
+                        {previewUrl ? (
+                          <div className="relative inline-block">
+                            <img
+                              src={previewUrl}
+                              alt="Preview"
+                              className="max-h-48 rounded-lg object-contain mx-auto"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0"
+                              onClick={removeImage}
+                              disabled={uploadingImage}
+                            >
+                              <X className="h-3 w-3" />
+                            </Button>
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            <Upload className="h-12 w-12 text-text-muted mx-auto" />
+                            <div className="space-y-2">
+                              <p className="text-sm text-text-secondary">
+                                Drag and drop an image, or click to browse
+                              </p>
+                              <p className="text-xs text-text-muted">
+                                JPEG, PNG, or WebP (max 5MB)
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {!previewUrl && (
+                          <Input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp"
+                            onChange={handleFileSelect}
+                            className="hidden"
+                            id="image-upload"
+                          />
+                        )}
+                        
+                        {!previewUrl && (
+                          <Label
+                            htmlFor="image-upload"
+                            className="cursor-pointer"
+                          >
+                            <div className="mt-4">
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className="pointer-events-none"
+                              >
+                                Choose Image
+                              </Button>
+                            </div>
+                          </Label>
+                        )}
+
+                        {uploadingImage && (
+                          <div className="mt-4">
+                            <div className="w-full bg-secondary rounded-full h-2">
+                              <div
+                                className="bg-primary h-2 rounded-full transition-all duration-300"
+                                style={{ width: `${uploadProgress}%` }}
+                              />
+                            </div>
+                            <p className="text-xs text-text-muted mt-2">Uploading...</p>
+                          </div>
+                        )}
+
+                        {uploadError && (
+                          <div className="mt-4 flex items-center gap-2 text-error text-sm">
+                            <AlertCircle className="h-4 w-4" />
+                            {uploadError}
+                          </div>
+                        )}
                       </div>
-                      <p className="text-xs text-text-muted">Enter a URL for the service image</p>
                     </div>
                   </div>
                   <DialogFooter>
@@ -299,7 +518,7 @@ export default function AdminServicesPage() {
                     </Button>
                     <Button 
                       onClick={handleSave} 
-                      disabled={isSaving}
+                      disabled={isSaving || uploadingImage}
                       className="bg-primary hover:bg-primary-hover"
                     >
                       {isSaving ? (
@@ -330,69 +549,71 @@ export default function AdminServicesPage() {
             </Card>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map((service) => (
-                <Card key={service.id} className="glass border-border">
-                  {service.image_url && isValidImageUrl(service.image_url) ? (
-                    <div className="h-48 overflow-hidden rounded-t-lg flex items-center justify-center bg-secondary/20">
-                      <img 
-                        src={service.image_url} 
-                        alt={service.name}
-                        className="w-full h-full object-contain"
-                        onError={(e) => {
-                          // Hide image on error instead of showing placeholder to prevent loops
-                          (e.target as HTMLImageElement).style.display = 'none'
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="h-48 rounded-t-lg flex items-center justify-center bg-secondary/20">
-                      <ImageIcon className="h-12 w-12 text-text-muted" />
-                    </div>
-                  )}
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <CardTitle className="font-heading text-xl text-foreground">
-                          {service.name}
-                        </CardTitle>
-                        <div className="flex items-center gap-4 mt-2 text-sm text-text-secondary">
-                          {service.price && service.price > 0 && (
-                            <span>₱{service.price.toLocaleString()}</span>
-                          )}
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-4 w-4" />
-                            {service.duration} min
-                          </span>
+              {services.map((service) => {
+                const imageUrl = getServiceImageUrl(service)
+                return (
+                  <Card key={service.id} className="glass border-border">
+                    {imageUrl ? (
+                      <div className="h-48 overflow-hidden rounded-t-lg flex items-center justify-center bg-secondary/20">
+                        <img 
+                          src={imageUrl} 
+                          alt={service.name}
+                          className="w-full h-full object-contain"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none'
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-48 rounded-t-lg flex items-center justify-center bg-secondary/20">
+                        <ImageIcon className="h-12 w-12 text-text-muted" />
+                      </div>
+                    )}
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <CardTitle className="font-heading text-xl text-foreground">
+                            {service.name}
+                          </CardTitle>
+                          <div className="flex items-center gap-4 mt-2 text-sm text-text-secondary">
+                            {service.price && service.price > 0 && (
+                              <span>₱{service.price.toLocaleString()}</span>
+                            )}
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              {service.duration} min
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-text-secondary text-sm font-light line-clamp-3">
-                      {service.description}
-                    </p>
-                    <div className="flex gap-2 mt-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleEdit(service)}
-                        className="flex-1"
-                      >
-                        <Edit3 className="h-4 w-4 mr-2" />
-                        Edit
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDelete(service.id)}
-                        className="text-error hover:text-error hover:border-error/50"
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-text-secondary text-sm font-light line-clamp-3">
+                        {service.description}
+                      </p>
+                      <div className="flex gap-2 mt-4">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleEdit(service)}
+                          className="flex-1"
+                        >
+                          <Edit3 className="h-4 w-4 mr-2" />
+                          Edit
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleDelete(service.id)}
+                          className="text-error hover:text-error hover:border-error/50"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )
+              })}
             </div>
           )}
         </div>

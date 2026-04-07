@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Clock, ArrowRight, Image as ImageIcon, Loader2, ArrowLeft } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 
@@ -14,6 +14,7 @@ interface Service {
   price: number
   duration: number
   image_url: string
+  image_path: string
   is_active: boolean
 }
 
@@ -60,6 +61,27 @@ export default function ServicesPage() {
     fetchServices()
   }, [])
 
+  // Get the display image URL for a service
+  const getServiceImageUrl = (service: Service): string | null => {
+    // Priority: image_path (Supabase Storage) > image_url (external)
+    if (service.image_path) {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      
+      if (supabaseUrl && supabaseAnonKey) {
+        const supabase = createClient(supabaseUrl, supabaseAnonKey)
+        const { data } = supabase.storage
+          .from('services-images')
+          .getPublicUrl(service.image_path)
+        return data?.publicUrl || null
+      }
+    }
+    if (service.image_url && isValidImageUrl(service.image_url)) {
+      return service.image_url
+    }
+    return null
+  }
+
   if (isLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
@@ -99,64 +121,67 @@ export default function ServicesPage() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-              {services.map((service, index) => (
-                <Card 
-                  key={service.id} 
-                  className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col h-full"
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  {service.image_url && isValidImageUrl(service.image_url) ? (
-                    <div className="w-full h-64 overflow-hidden rounded-t-lg bg-secondary/20 relative">
-                      <img 
-                        src={service.image_url} 
-                        alt={service.name}
-                        className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none'
-                        }}
-                      />
-                    </div>
-                  ) : (
-                    <div className="h-64 rounded-t-lg flex items-center justify-center bg-secondary/20">
-                      <ImageIcon className="h-12 w-12 text-text-muted" />
-                    </div>
-                  )}
-                  <div className="p-6 flex flex-col gap-4 flex-grow">
-                    <div className="flex justify-between items-start">
-                      <div className="flex-1">
-                        <h3 className="font-heading text-xl text-foreground font-medium mb-1">
-                          {service.name}
-                        </h3>
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                          <Clock size={14} />
-                          <span>{service.duration} minutes</span>
-                        </div>
+              {services.map((service, index) => {
+                const imageUrl = getServiceImageUrl(service)
+                return (
+                  <Card 
+                    key={service.id} 
+                    className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col h-full"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    {imageUrl ? (
+                      <div className="w-full h-64 overflow-hidden rounded-t-lg bg-secondary/20 relative">
+                        <img 
+                          src={imageUrl} 
+                          alt={service.name}
+                          className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none'
+                          }}
+                        />
                       </div>
-                      {service.price && service.price > 0 && (
-                        <div className="text-right">
-                          <span className="text-primary font-heading text-lg font-medium">
-                            ₱{service.price.toLocaleString()}
-                          </span>
+                    ) : (
+                      <div className="h-64 rounded-t-lg flex items-center justify-center bg-secondary/20">
+                        <ImageIcon className="h-12 w-12 text-text-muted" />
+                      </div>
+                    )}
+                    <div className="p-6 flex flex-col gap-4 flex-grow">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h3 className="font-heading text-xl text-foreground font-medium mb-1">
+                            {service.name}
+                          </h3>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                            <Clock size={14} />
+                            <span>{service.duration} minutes</span>
+                          </div>
                         </div>
-                      )}
+                        {service.price && service.price > 0 && (
+                          <div className="text-right">
+                            <span className="text-primary font-heading text-lg font-medium">
+                              ₱{service.price.toLocaleString()}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-text-secondary font-light text-sm leading-relaxed flex-grow">
+                        {service.description}
+                      </p>
+                      <div className="mt-auto">
+                        <Link href={`/booking?service=${encodeURIComponent(service.name)}`}>
+                          <Button 
+                            variant="outline" 
+                            className="w-full border-border hover:border-primary/50 hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-lg font-light"
+                          >
+                            Book Now
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
-                    <p className="text-text-secondary font-light text-sm leading-relaxed flex-grow">
-                      {service.description}
-                    </p>
-                    <div className="mt-auto">
-                      <Link href={`/booking?service=${encodeURIComponent(service.name)}`}>
-                        <Button 
-                          variant="outline" 
-                          className="w-full border-border hover:border-primary/50 hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-lg font-light"
-                        >
-                          Book Now
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                </Card>
-              ))}
+                  </Card>
+                )
+              })}
             </div>
           )}
         </div>
