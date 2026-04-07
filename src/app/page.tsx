@@ -177,7 +177,6 @@ export default function HomePage() {
           .select('*')
           .eq('is_active', true)
           .order('display_order', { ascending: true })
-          .limit(3)
         
         if (data && !error) {
           setReviews(data)
@@ -414,8 +413,8 @@ export default function HomePage() {
                   size="lg" 
                   className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
                 >
-                  <MessageSquare className="mr-2 h-5 w-5" />
-                  Contact us
+                  <MessageCircle className="mr-2 h-5 w-5" />
+                  Message us on Viber
                 </Button>
               )}
               <Link href="/contact" className="w-full sm:w-auto">
@@ -707,9 +706,9 @@ export default function HomePage() {
         </>
       )}
 
-      {/* Reviews Section */}
+      {/* Reviews Section - Horizontal Scrolling Carousel */}
       {!isLoadingReviews && reviews.length > 0 && (
-        <section className="py-16 md:py-20 px-4">
+        <section className="py-16 md:py-20 px-4 overflow-hidden">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-12 space-y-4">
               <h2 className="font-heading text-3xl md:text-4xl text-foreground">What Our Clients Say</h2>
@@ -718,63 +717,62 @@ export default function HomePage() {
               </p>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-              {reviews.map((review) => {
-                // Get the image URL from Supabase Storage if image_path exists
-                const getReviewImageUrl = (): string | null => {
-                  if (review.image_path) {
-                    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-                    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-                    
-                    if (supabaseUrl && supabaseAnonKey) {
-                      const supabase = createClient(supabaseUrl, supabaseAnonKey)
-                      const { data } = supabase.storage
-                        .from('reviews-images')
-                        .getPublicUrl(review.image_path)
-                      return data?.publicUrl || null
+            {/* Horizontal scrolling container */}
+            <div className="relative">
+              <div className="flex overflow-x-auto gap-6 pb-8 snap-x snap-mandatory scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+                {reviews.map((review) => {
+                  // Get the image URL from Supabase Storage if image_path exists
+                  const getReviewImageUrl = (): string | null => {
+                    if (review.image_path) {
+                      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+                      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+                      
+                      if (supabaseUrl && supabaseAnonKey) {
+                        const supabase = createClient(supabaseUrl, supabaseAnonKey)
+                        const { data } = supabase.storage
+                          .from('reviews-images')
+                          .getPublicUrl(review.image_path)
+                        return data?.publicUrl || null
+                      }
                     }
+                    return review.image_url
                   }
-                  return review.image_url
-                }
-                const reviewImageUrl = getReviewImageUrl()
+                  const reviewImageUrl = getReviewImageUrl()
 
-                return (
-                  <Card key={review.id} className="glass border-border">
-                    <CardContent className="p-6">
-                      {review.review_type === 'image' && reviewImageUrl ? (
-                        <div className="rounded-lg overflow-hidden mb-4">
-                          <img 
-                            src={reviewImageUrl} 
-                            alt="Review screenshot"
-                            className="w-full h-48 object-cover"
-                            loading="lazy"
-                          />
-                        </div>
-                      ) : (
-                        <div className="space-y-4">
-                          <div className="text-4xl text-primary opacity-50 font-heading">&ldquo;</div>
-                          <p className="text-foreground font-light leading-relaxed">
-                            {review.review_text}
-                          </p>
-                          {review.reviewer_name && (
-                            <p className="text-text-secondary text-sm font-light">
-                              &mdash; {review.reviewer_name}
+                  return (
+                    <Card key={review.id} className="glass border-border flex-shrink-0 w-[320px] md:w-[380px] snap-center">
+                      <CardContent className="p-6">
+                        {review.review_type === 'image' && reviewImageUrl ? (
+                          <div className="rounded-lg overflow-hidden mb-4">
+                            <img 
+                              src={reviewImageUrl} 
+                              alt="Review screenshot"
+                              className="w-full h-48 object-cover"
+                              loading="lazy"
+                            />
+                          </div>
+                        ) : (
+                          <div className="space-y-4">
+                            <div className="text-4xl text-primary opacity-50 font-heading">&ldquo;</div>
+                            <p className="text-foreground font-light leading-relaxed">
+                              {review.review_text}
                             </p>
-                          )}
-                        </div>
-                      )}
-                    </CardContent>
-                  </Card>
-                )
-              })}
-            </div>
-
-            <div className="text-center">
-              <Link href="/reviews">
-                <Button variant="outline" size="lg" className="px-8 py-6 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-full font-light backdrop-blur-sm">
-                  View All Reviews
-                </Button>
-              </Link>
+                            {review.reviewer_name && (
+                              <p className="text-text-secondary text-sm font-light">
+                                &mdash; {review.reviewer_name}
+                              </p>
+                            )}
+                          </div>
+                        )}
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+              
+              {/* Gradient fade on right edge */}
+              <div className="absolute right-0 top-0 w-16 h-full bg-gradient-to-l from-background to-transparent pointer-events-none hidden md:block" />
+              <div className="absolute left-0 top-0 w-16 h-full bg-gradient-to-r from-background to-transparent pointer-events-none hidden md:block" />
             </div>
           </div>
         </section>
