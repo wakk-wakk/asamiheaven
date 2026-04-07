@@ -87,6 +87,7 @@ interface Review {
   id: string
   review_type: 'image' | 'text'
   image_url: string | null
+  image_path: string | null
   review_text: string | null
   reviewer_name: string | null
   is_active: boolean
@@ -227,6 +228,7 @@ export default function AdminDashboardPage() {
   const handleSaveReview = async (reviewData: {
     review_type: 'image' | 'text'
     image_url: string
+    image_path: string
     review_text: string
     reviewer_name: string
     is_active: boolean
@@ -234,7 +236,8 @@ export default function AdminDashboardPage() {
     try {
       const dataToSave = {
         review_type: reviewData.review_type,
-        image_url: reviewData.review_type === 'image' ? reviewData.image_url : null,
+        image_url: null,
+        image_path: reviewData.image_path,
         review_text: reviewData.review_type === 'text' ? reviewData.review_text : null,
         reviewer_name: reviewData.reviewer_name || null,
         is_active: reviewData.is_active,
@@ -704,66 +707,65 @@ export default function AdminDashboardPage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {reviews.map((review) => (
-                    <Card key={review.id} className="glass border-border">
-                      <CardContent className="p-4">
-                        <div className="flex items-start justify-between mb-3">
-                          <span className={`px-2 py-1 rounded text-xs font-light border ${
-                            review.review_type === 'image' 
-                              ? 'text-info bg-info/10 border-info/20' 
-                              : 'text-success bg-success/10 border-success/20'
-                          }`}>
-                            {review.review_type === 'image' ? 'Image' : 'Text'}
-                          </span>
-                          <span className={`px-2 py-1 rounded text-xs font-light border ${
-                            review.is_active 
-                              ? 'text-success bg-success/10 border-success/20' 
-                              : 'text-text-secondary bg-secondary border-border'
-                          }`}>
-                            {review.is_active ? 'Active' : 'Hidden'}
-                          </span>
-                        </div>
-                        
-                        {review.review_type === 'image' && review.image_url ? (
-                          <div className="h-40 rounded-lg overflow-hidden mb-3 bg-secondary/10">
-                            <img 
-                              src={review.image_url} 
-                              alt="Review screenshot"
-                              className="w-full h-full object-cover"
-                            />
+                  {reviews.map((review) => {
+                    // Get the image URL from Supabase Storage if image_path exists
+                    const getImageUrl = () => {
+                      if (review.image_path) {
+                        const { data } = supabase.storage
+                          .from('reviews-images')
+                          .getPublicUrl(review.image_path)
+                        return data?.publicUrl
+                      }
+                      return review.image_url
+                    }
+                    const imageUrl = getImageUrl()
+
+                    return (
+                      <Card key={review.id} className="glass border-border flex flex-col">
+                        <CardContent className="p-4 flex flex-col flex-grow">
+                          {review.review_type === 'image' && imageUrl ? (
+                            <div className="flex-grow min-h-0">
+                              <div className="h-40 rounded-lg overflow-hidden bg-secondary/10">
+                                <img 
+                                  src={imageUrl} 
+                                  alt="Review screenshot"
+                                  className="w-full h-full object-cover"
+                                />
+                              </div>
+                            </div>
+                          ) : (
+                            <div className="flex-grow">
+                              <p className="text-foreground font-light line-clamp-3">
+                                {review.review_text}
+                              </p>
+                              {review.reviewer_name && (
+                                <p className="text-text-secondary text-sm mt-2">— {review.reviewer_name}</p>
+                              )}
+                            </div>
+                          )}
+                          
+                          <div className="flex gap-2 mt-auto pt-4">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => toggleReviewActive(review.id, review.is_active)}
+                              className="flex-1"
+                            >
+                              {review.is_active ? 'Hide' : 'Show'}
+                            </Button>
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => deleteReview(review.id)}
+                              className="text-error hover:text-error"
+                            >
+                              Delete
+                            </Button>
                           </div>
-                        ) : (
-                          <div className="mb-3">
-                            <p className="text-foreground font-light line-clamp-3">
-                              {review.review_text}
-                            </p>
-                            {review.reviewer_name && (
-                              <p className="text-text-secondary text-sm mt-2">— {review.reviewer_name}</p>
-                            )}
-                          </div>
-                        )}
-                        
-                        <div className="flex gap-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => toggleReviewActive(review.id, review.is_active)}
-                            className="flex-1"
-                          >
-                            {review.is_active ? 'Hide' : 'Show'}
-                          </Button>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => deleteReview(review.id)}
-                            className="text-error hover:text-error"
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
+                        </CardContent>
+                      </Card>
+                    )
+                  })}
                 </div>
               )}
             </CardContent>
