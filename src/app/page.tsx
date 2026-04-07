@@ -351,7 +351,7 @@ export default function HomePage() {
       {whatsappValue && (
         <button
           onClick={handleWhatsappClick}
-          className="fixed bottom-6 right-6 z-50 p-4 bg-[#25D366] text-white rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 group"
+          className="fixed bottom-6 right-6 z-50 p-4 bg-primary hover:bg-primary-hover text-background rounded-full shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 group"
           aria-label="Contact us on WhatsApp"
         >
           <MessageSquare className="h-6 w-6" />
@@ -781,60 +781,33 @@ export default function HomePage() {
       )}
 
       {/* CTA Section */}
-      <section className="py-16 md:py-20 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          <div className="absolute top-1/4 -left-32 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-glow" />
-          <div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-primary/10 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '2s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] animate-pulse-glow" style={{ animationDelay: '1s' }} />
-        </div>
-
-        <div className="max-w-6xl mx-auto relative">
-          <div className="glass rounded-[2.5rem] p-8 md:p-16 text-center space-y-8 animate-slide-up relative overflow-hidden">
-            <div className="absolute inset-0 rounded-[2.5rem] border border-primary/10" />
+      <section className="py-12 px-4 relative overflow-hidden">
+        <div className="max-w-4xl mx-auto relative">
+          <div className="glass rounded-3xl p-8 md:p-12 text-center animate-slide-up relative overflow-hidden">
+            <div className="absolute inset-0 rounded-3xl border border-primary/10" />
             
-            <div className="absolute top-8 left-8 w-16 h-16 rounded-full border border-primary/20 animate-pulse" />
-            <div className="absolute bottom-8 right-8 w-24 h-24 rounded-full border border-primary/10 animate-pulse" style={{ animationDelay: '1.5s' }} />
-            <div className="absolute top-1/2 left-4 w-8 h-8 rounded-full bg-primary/10 animate-pulse" style={{ animationDelay: '0.5s' }} />
-            <div className="absolute top-1/4 right-12 w-12 h-12 rounded-full bg-primary/10 animate-pulse" style={{ animationDelay: '2s' }} />
+            <div className="relative space-y-6">
+              <h2 className="font-heading text-3xl md:text-5xl text-foreground font-medium">
+                Ready to <span className="text-primary">Relax</span>?
+              </h2>
+              
+              <p className="text-base md:text-lg text-text-secondary font-light max-w-xl mx-auto">
+                Contact us today and discover the art of true relaxation.
+              </p>
 
-            <div className="relative space-y-8">
-              <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
-                <Calendar className="h-5 w-5 text-primary" />
-                <span className="text-sm text-primary font-light tracking-wide">Contact Us Today</span>
-              </div>
-
-              <div className="space-y-4">
-                <h2 className="font-heading text-5xl md:text-6xl lg:text-7xl text-foreground font-medium">
-                  Ready to <span className="relative inline-block">
-                    <span className="relative z-10 text-primary">Relax</span>
-                    <span className="absolute inset-0 text-primary blur-lg opacity-40">Relax</span>
-                  </span>?
-                  <span className="ml-2">✨</span>
-                </h2>
-                
-                <p className="text-lg md:text-xl text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
-                  Treat yourself to a rejuvenating experience. Contact us today 
-                  and discover the art of true relaxation.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
                 <Link href="/contact">
-                  <Button size="lg" className="px-10 py-7 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-full font-light shadow-lg hover:scale-105 group">
+                  <Button size="lg" className="px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-full font-light shadow-lg hover:scale-105 group">
                     Contact Us
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
                 <Link href="/services">
-                  <Button variant="outline" size="lg" className="px-10 py-7 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-full font-light backdrop-blur-sm">
-                    View All Services
+                  <Button variant="outline" size="lg" className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-full font-light backdrop-blur-sm">
+                    View Services
                   </Button>
                 </Link>
               </div>
-
-              <p className="text-sm text-text-muted font-light pt-4">
-                For detailed pricing information, please feel free to reach out to us directly.
-              </p>
             </div>
           </div>
         </div>
