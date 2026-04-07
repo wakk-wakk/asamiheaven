@@ -333,8 +333,8 @@ export default function AdminTherapistsPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
-              <h1 className="font-heading text-3xl md:text-4xl text-foreground">Manage Therapists</h1>
-              <p className="text-text-secondary font-light mt-2">Add, edit, and remove spa therapists</p>
+              <h1 className="font-heading text-3xl md:text-4xl text-foreground">Manage Models</h1>
+              <p className="text-text-secondary font-light mt-2">Add, edit, and remove models</p>
             </div>
             <div className="flex items-center gap-4">
               <Button
@@ -351,14 +351,14 @@ export default function AdminTherapistsPage() {
                 <DialogTrigger asChild>
                   <Button className="bg-primary hover:bg-primary-hover">
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Therapist
+                    Add Model
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                   <DialogHeader>
-                    <DialogTitle>{editingTherapist ? 'Edit Therapist' : 'Add New Therapist'}</DialogTitle>
+                    <DialogTitle>{editingTherapist ? 'Edit Model' : 'Add New Model'}</DialogTitle>
                     <DialogDescription>
-                      {editingTherapist ? 'Update therapist details' : 'Add a new therapist to your team'}
+                      {editingTherapist ? 'Update model details' : 'Add a new model to your team'}
                     </DialogDescription>
                   </DialogHeader>
                   <div className="grid gap-6 py-4">
@@ -472,7 +472,7 @@ export default function AdminTherapistsPage() {
                           Saving...
                         </>
                       ) : (
-                        'Save Therapist'
+                        'Save Model'
                       )}
                     </Button>
                   </DialogFooter>
@@ -489,7 +489,7 @@ export default function AdminTherapistsPage() {
           {therapists.length === 0 ? (
             <Card className="glass border-border">
               <CardContent className="p-12 text-center">
-                <p className="text-text-secondary font-light">No therapists found. Add your first therapist!</p>
+                <p className="text-text-secondary font-light">No models found. Add your first model!</p>
               </CardContent>
             </Card>
           ) : (

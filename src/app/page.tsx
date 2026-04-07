@@ -549,7 +549,7 @@ export default function HomePage() {
             <div className="max-w-7xl mx-auto relative">
               <div className="text-center mb-16 space-y-4">
                 <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl text-foreground font-medium">
-                  Our Models
+                  Featuring
                 </h2>
                 <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
                   Metro Manila&apos;s most captivating top-tier models.
