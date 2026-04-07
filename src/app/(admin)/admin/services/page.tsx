@@ -554,11 +554,11 @@ export default function AdminServicesPage() {
                 return (
                   <Card key={service.id} className="glass border-border">
                     {imageUrl ? (
-                      <div className="h-48 overflow-hidden rounded-t-lg relative bg-secondary/20">
+                      <div className="h-48 overflow-hidden rounded-t-lg flex items-center justify-center bg-secondary/20">
                         <img 
                           src={imageUrl} 
                           alt={service.name}
-                          className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
+                          className="w-full h-full object-contain"
                           onError={(e) => {
                             (e.target as HTMLImageElement).style.display = 'none'
                           }}
