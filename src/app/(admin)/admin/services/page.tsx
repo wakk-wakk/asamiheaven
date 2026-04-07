@@ -289,27 +289,38 @@ export default function AdminServicesPage() {
   }
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this service?')) return
-
     try {
-      // Find the service to delete its image from storage
-      const service = services.find(s => s.id === id)
-      if (service?.image_path) {
-        try {
-          await supabase.storage
-            .from('services-images')
-            .remove([service.image_path])
-        } catch (error) {
-          console.error('Error deleting image from storage:', error)
-        }
-      }
-
-      const { error } = await supabase
-        .from('services')
-        .delete()
-        .eq('id', id)
+      // Check if service has associated bookings
+      const { data: bookings, error: bookingsError } = await supabase
+        .from('bookings')
+        .select('id')
+        .eq('service_id', id)
+        .limit(1)
       
-      if (error) throw error
+      if (bookingsError) throw bookingsError
+
+      if (bookings && bookings.length > 0) {
+        // Has bookings - soft delete (deactivate)
+        if (!confirm('This service has associated bookings. Deactivating will hide it from customers but preserve booking history. Continue?')) return
+
+        const { error } = await supabase
+          .from('services')
+          .update({ is_active: false })
+          .eq('id', id)
+        
+        if (error) throw error
+      } else {
+        // No bookings - hard delete
+        if (!confirm('Are you sure you want to permanently delete this service? This action cannot be undone.')) return
+
+        const { error } = await supabase
+          .from('services')
+          .delete()
+          .eq('id', id)
+        
+        if (error) throw error
+      }
+      
       fetchServices()
     } catch (error) {
       console.error('Error deleting service:', error)
@@ -513,7 +524,7 @@ export default function AdminServicesPage() {
                     </div>
                   </div>
                   <DialogFooter>
-                    <Button variant="outline" onClick={() => setShowDialog(false)}>
+                    <Button variant="outline" onClick={() => { resetForm(); setShowDialog(false); }}>
                       Cancel
                     </Button>
                     <Button 
@@ -552,13 +563,13 @@ export default function AdminServicesPage() {
               {services.map((service) => {
                 const imageUrl = getServiceImageUrl(service)
                 return (
-                  <Card key={service.id} className="glass border-border">
+                  <Card key={service.id} className="glass border-border flex flex-col">
                     {imageUrl ? (
-                      <div className="h-48 overflow-hidden rounded-t-lg relative bg-secondary/20">
+                      <div className="h-48 w-full overflow-hidden rounded-t-lg flex items-center justify-center bg-secondary/20">
                         <img 
                           src={imageUrl} 
                           alt={service.name}
-                          className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
+                          className="min-w-full min-h-full object-cover"
                           onError={(e) => {
                             (e.target as HTMLImageElement).style.display = 'none'
                           }}
@@ -571,10 +582,15 @@ export default function AdminServicesPage() {
                     )}
                     <CardHeader>
                       <div className="flex items-start justify-between">
-                        <div>
-                          <CardTitle className="font-heading text-xl text-foreground">
-                            {service.name}
-                          </CardTitle>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2">
+                            <CardTitle className="font-heading text-xl text-foreground">
+                              {service.name}
+                            </CardTitle>
+                            <span className={`text-xs px-2 py-0.5 rounded-full ${service.is_active ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
+                              {service.is_active ? 'Active' : 'Inactive'}
+                            </span>
+                          </div>
                           <div className="flex items-center gap-4 mt-2 text-sm text-text-secondary">
                             {service.price && service.price > 0 && (
                               <span>₱{service.price.toLocaleString()}</span>
@@ -587,8 +603,8 @@ export default function AdminServicesPage() {
                         </div>
                       </div>
                     </CardHeader>
-                    <CardContent>
-                      <p className="text-text-secondary text-sm font-light line-clamp-3">
+                    <CardContent className="flex flex-col flex-grow">
+                      <p className="text-text-secondary text-sm font-light line-clamp-3 flex-grow">
                         {service.description}
                       </p>
                       <div className="flex gap-2 mt-4">
