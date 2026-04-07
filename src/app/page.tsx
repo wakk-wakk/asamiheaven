@@ -247,6 +247,28 @@ export default function HomePage() {
     fetchContactSettings()
   }, [])
 
+  // Clean phone number - remove all non-numeric characters except +
+  const cleanPhoneNumber = (phone: string): string => {
+    // If it's a URL, return as is
+    if (isUrl(phone)) {
+      return phone
+    }
+    // Remove all non-numeric characters except +
+    let cleaned = phone.replace(/[^\d+]/g, '')
+    // If it doesn't start with +, add the country code (Philippines +63)
+    if (!cleaned.startsWith('+')) {
+      if (cleaned.startsWith('0')) {
+        // Replace leading 0 with +63 (Philippines country code)
+        cleaned = '+63' + cleaned.substring(1)
+      } else if (!cleaned.startsWith('63')) {
+        cleaned = '+63' + cleaned
+      } else {
+        cleaned = '+' + cleaned
+      }
+    }
+    return cleaned
+  }
+
   // Helper function to check if a value is a URL
   const isUrl = (value: string): boolean => {
     return value.startsWith('http://') || value.startsWith('https://') || value.startsWith('www.')
@@ -274,17 +296,32 @@ export default function HomePage() {
     }
   }
 
-  // Handle Viber click
+  // Handle Viber click - open Viber app with initiation message
   const handleViberClick = () => {
     if (!viberValue) return
     
     if (isUrl(viberValue)) {
-      // Open URL in new tab
+      // If it's already a URL, open it directly
       const url = formatUrl(viberValue)
       window.open(url, '_blank', 'noopener,noreferrer')
     } else {
-      // Copy to clipboard
-      copyToClipboard(viberValue, 'Viber contact')
+      // Clean the phone number and open Viber
+      const phoneNumber = cleanPhoneNumber(viberValue)
+      const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
+      
+      // Try Viber's URI scheme first (works on mobile)
+      const viberUrl = `viber://chat?number=${encodeURIComponent(phoneNumber)}&text=${message}`
+      
+      // Fallback to web version if Viber app is not available
+      const webViberUrl = `https://pa.viber.com/?pa=${phoneNumber}&text=${message}`
+      
+      // Try to open Viber app, fallback to web
+      window.location.href = viberUrl
+      
+      // If the app doesn't open within 2 seconds, redirect to web
+      setTimeout(() => {
+        window.open(webViberUrl, '_blank', 'noopener,noreferrer')
+      }, 2000)
     }
   }
 
@@ -330,17 +367,25 @@ export default function HomePage() {
     return null
   }
 
-  // Handle WhatsApp click
+  // Handle WhatsApp click - open WhatsApp app with initiation message
   const handleWhatsappClick = () => {
     if (!whatsappValue) return
     
     if (isUrl(whatsappValue)) {
-      // Open URL in new tab
+      // If it's already a URL, open it directly
       const url = formatUrl(whatsappValue)
       window.open(url, '_blank', 'noopener,noreferrer')
     } else {
-      // Copy to clipboard
-      copyToClipboard(whatsappValue, 'WhatsApp contact')
+      // Clean the phone number
+      const phoneNumber = cleanPhoneNumber(whatsappValue)
+      const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
+      
+      // Use WhatsApp's official click-to-chat URL
+      // Remove the + from phone number for wa.me URL
+      const cleanNumber = phoneNumber.replace('+', '')
+      const whatsappUrl = `https://wa.me/${cleanNumber}?text=${message}`
+      
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
     }
   }
 
