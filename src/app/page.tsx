@@ -364,13 +364,17 @@ export default function HomePage() {
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center px-4 pt-16 overflow-hidden">
         <div className="absolute inset-0 z-0 w-full h-full max-h-screen overflow-hidden">
-          <img 
-            src="https://i.pinimg.com/736x/3d/ef/fd/3deffdc624ae766115fa72a308833fb5.jpg" 
-            alt="Spa background" 
-            className="w-full h-full min-w-full min-h-full max-h-screen object-cover object-[center_60%]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/70 to-background/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
+          <video 
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="w-full h-full min-w-full min-h-full max-h-screen object-cover object-center"
+          >
+            <source src="/bg.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/60 to-background/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
         </div>
         
         <div className="absolute inset-0 overflow-hidden z-0">
