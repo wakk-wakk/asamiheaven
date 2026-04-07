@@ -22,6 +22,7 @@ interface Therapist {
   id: string
   nickname: string
   image_url: string
+  image_path: string
   is_active: boolean
 }
 
@@ -308,6 +309,27 @@ export default function HomePage() {
     return null
   }
 
+  // Get the display image URL for a therapist (Supabase Storage or external URL)
+  const getTherapistImageUrl = (therapist: Therapist): string | null => {
+    // Priority: image_path (Supabase Storage) > image_url (external)
+    if (therapist.image_path) {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      
+      if (supabaseUrl && supabaseAnonKey) {
+        const supabase = createClient(supabaseUrl, supabaseAnonKey)
+        const { data } = supabase.storage
+          .from('therapists-images')
+          .getPublicUrl(therapist.image_path)
+        return data?.publicUrl || null
+      }
+    }
+    if (therapist.image_url && isValidImageUrl(therapist.image_url)) {
+      return therapist.image_url
+    }
+    return null
+  }
+
   // Handle WhatsApp click
   const handleWhatsappClick = () => {
     if (!whatsappValue) return
@@ -482,28 +504,35 @@ export default function HomePage() {
 
               {therapists[0] && (
                 <Card className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col overflow-hidden">
-                  <div className="w-full h-[500px] overflow-hidden bg-secondary/10 relative">
-                    {therapists[0].image_url && isValidImageUrl(therapists[0].image_url) ? (
-                      <img 
-                        src={therapists[0].image_url} 
-                        alt={therapists[0].nickname}
-                        className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover object-top"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none'
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-secondary/20">
-                        <User className="h-20 w-20 text-text-muted" />
-                      </div>
-                    )}
-                  </div>
-                  <CardContent className="p-4 text-center">
-                    <CardTitle className="font-heading text-2xl text-foreground font-medium">
-                      {therapists[0].nickname}
-                    </CardTitle>
-                    <p className="text-text-secondary font-light text-sm mt-2">Model</p>
-                  </CardContent>
+                  {(() => {
+                    const therapistImageUrl = getTherapistImageUrl(therapists[0]);
+                    return (
+                      <>
+                        <div className="w-full h-[500px] overflow-hidden bg-secondary/10 relative">
+                          {therapistImageUrl ? (
+                            <img 
+                              src={therapistImageUrl} 
+                              alt={therapists[0].nickname}
+                              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover object-top"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none'
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                              <User className="h-20 w-20 text-text-muted" />
+                            </div>
+                          )}
+                        </div>
+                        <CardContent className="p-4 text-center">
+                          <CardTitle className="font-heading text-2xl text-foreground font-medium">
+                            {therapists[0].nickname}
+                          </CardTitle>
+                          <p className="text-text-secondary font-light text-sm mt-2">Model</p>
+                        </CardContent>
+                      </>
+                    );
+                  })()}
                 </Card>
               )}
             </div>
@@ -546,32 +575,35 @@ export default function HomePage() {
                     ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto'
                     : 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
                 }`}>
-                  {therapists.map((therapist, index) => (
-                    <Card key={therapist.id} className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col overflow-hidden" style={{ animationDelay: `${index * 0.1}s` }}>
-                      <div className="w-full h-80 overflow-hidden bg-secondary/10 relative">
-                        {therapist.image_url && isValidImageUrl(therapist.image_url) ? (
-                          <img 
-                            src={therapist.image_url} 
-                            alt={therapist.nickname}
-                            className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).style.display = 'none'
-                            }}
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-secondary/20">
-                            <User className="h-20 w-20 text-text-muted" />
-                          </div>
-                        )}
-                      </div>
-                      <CardContent className="p-4 text-center">
-                        <CardTitle className="font-heading text-2xl text-foreground font-medium">
-                          {therapist.nickname}
-                        </CardTitle>
-                        <p className="text-text-secondary font-light text-sm mt-2">Model</p>
-                      </CardContent>
-                    </Card>
-                  ))}
+                  {therapists.map((therapist, index) => {
+                    const therapistImageUrl = getTherapistImageUrl(therapist);
+                    return (
+                      <Card key={therapist.id} className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col overflow-hidden" style={{ animationDelay: `${index * 0.1}s` }}>
+                        <div className="w-full h-80 overflow-hidden bg-secondary/10 relative">
+                          {therapistImageUrl ? (
+                            <img 
+                              src={therapistImageUrl} 
+                              alt={therapist.nickname}
+                              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none'
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                              <User className="h-20 w-20 text-text-muted" />
+                            </div>
+                          )}
+                        </div>
+                        <CardContent className="p-4 text-center">
+                          <CardTitle className="font-heading text-2xl text-foreground font-medium">
+                            {therapist.nickname}
+                          </CardTitle>
+                          <p className="text-text-secondary font-light text-sm mt-2">Model</p>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
                 </div>
               )}
             </div>
