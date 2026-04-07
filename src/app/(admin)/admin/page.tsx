@@ -558,14 +558,6 @@ export default function AdminDashboardPage() {
                 </DialogContent>
               </Dialog>
 
-              <Button
-                variant="outline"
-                onClick={fetchBookings}
-                className="border-border hover:border-primary/50 hover:text-primary"
-              >
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
-              </Button>
             </div>
           </div>
         </div>
@@ -751,7 +743,7 @@ export default function AdminDashboardPage() {
                               onClick={() => toggleReviewActive(review.id, review.is_active)}
                               className="flex-1"
                             >
-                              {review.is_active ? 'Hide' : 'Show'}
+                              {review.is_active ? 'Hide' : 'Unhide'}
                             </Button>
                             <Button
                               variant="outline"
