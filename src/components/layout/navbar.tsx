@@ -113,14 +113,6 @@ export function Navbar() {
                 </Link>
               )
             })}
-            {!isAdminPage && (
-              <Link
-                href="/booking"
-                className="px-6 py-2.5 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all duration-300 text-sm font-light whitespace-nowrap"
-              >
-                Book Now
-              </Link>
-            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -149,15 +141,6 @@ export function Navbar() {
                 {link.label}
               </Link>
             ))}
-            {!isAdminPage && (
-              <Link
-                href="/booking"
-                className="block w-full text-center px-6 py-3 bg-primary/10 text-primary rounded-lg hover:bg-primary/20 transition-all duration-300 font-light"
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                Book Now
-              </Link>
-            )}
           </div>
         </div>
       )}

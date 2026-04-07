@@ -402,12 +402,6 @@ export default function HomePage() {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-              <Link href="/booking">
-                <Button size="lg" className="px-10 py-7 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group">
-                  Book Appointment
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
               {viberValue && (
                 <Button 
                   onClick={handleViberClick}
@@ -419,6 +413,12 @@ export default function HomePage() {
                   Message us on Viber
                 </Button>
               )}
+              <Link href="/contact">
+                <Button size="lg" className="px-10 py-7 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group">
+                  Contact Us
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -487,14 +487,14 @@ export default function HomePage() {
                           <p className="text-text-secondary font-light leading-relaxed line-clamp-3 flex-grow">
                             {services[0].description}
                           </p>
-                          <div className="mt-auto">
-                            <Link href={`/booking?service=${encodeURIComponent(services[0].name)}`}>
-                              <Button className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn">
-                                Book Now
-                                <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                              </Button>
-                            </Link>
-                          </div>
+                        <div className="mt-auto">
+                          <Link href="/contact">
+                            <Button className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn">
+                              Inquire Now
+                              <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                            </Button>
+                          </Link>
+                        </div>
                         </div>
                       </>
                     );
@@ -683,9 +683,9 @@ export default function HomePage() {
                           {service.description}
                         </p>
                         <div className="mt-auto">
-                          <Link href={`/booking?service=${encodeURIComponent(service.name)}`}>
+                          <Link href="/contact">
                             <Button className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn">
-                              Book Now
+                              Inquire Now
                               <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                             </Button>
                           </Link>
@@ -774,7 +774,7 @@ export default function HomePage() {
             <div className="relative space-y-8">
               <div className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-primary/10 border border-primary/20 backdrop-blur-sm">
                 <Calendar className="h-5 w-5 text-primary" />
-                <span className="text-sm text-primary font-light tracking-wide">Book Today</span>
+                <span className="text-sm text-primary font-light tracking-wide">Contact Us Today</span>
               </div>
 
               <div className="space-y-4">
@@ -787,15 +787,15 @@ export default function HomePage() {
                 </h2>
                 
                 <p className="text-lg md:text-xl text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
-                  Treat yourself to a rejuvenating experience. Book your appointment today 
+                  Treat yourself to a rejuvenating experience. Contact us today 
                   and discover the art of true relaxation.
                 </p>
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-                <Link href="/booking">
+                <Link href="/contact">
                   <Button size="lg" className="px-10 py-7 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-full font-light shadow-lg hover:scale-105 group">
-                    Book Your Session
+                    Contact Us
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
