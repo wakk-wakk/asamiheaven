@@ -317,7 +317,7 @@ export default function HomePage() {
       )}
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center px-4 overflow-hidden">
+      <section className="relative min-h-screen flex items-center px-4 pt-20 overflow-hidden">
         <div className="absolute inset-0 z-0 w-full h-full max-h-screen overflow-hidden">
           <img 
             src="https://i.pinimg.com/736x/3d/ef/fd/3deffdc624ae766115fa72a308833fb5.jpg" 
