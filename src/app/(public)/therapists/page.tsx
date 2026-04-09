@@ -112,7 +112,7 @@ export default function TherapistsPage() {
       <div className="min-h-[80vh] flex items-center justify-center">
         <div className="text-center space-y-4">
           <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-          <p className="text-text-secondary font-light">Loading therapists...</p>
+          <p className="text-text-secondary font-light">Loading models...</p>
         </div>
       </div>
     )
@@ -129,11 +129,11 @@ export default function TherapistsPage() {
           
           <div className="text-center mb-16 space-y-4">
             <h1 className="font-heading text-4xl md:text-5xl text-foreground">
-              {displaySettings.therapists_mode === 'static' ? 'Our Therapist' : 'Meet Our Therapists'}
+              {displaySettings.therapists_mode === 'static' ? 'Our Model' : 'Meet Our Models'}
             </h1>
             <p className="text-text-secondary font-light max-w-2xl mx-auto">
               {displaySettings.therapists_mode === 'static' 
-                ? 'Meet our skilled therapist dedicated to your wellness.'
+                ? 'Meet our skilled model dedicated to your wellness.'
                 : 'Our team of skilled professionals is dedicated to providing you with the best wellness experience.'}
             </p>
           </div>
@@ -141,7 +141,7 @@ export default function TherapistsPage() {
           {therapists.length === 0 ? (
             <div className="text-center py-16">
               <User className="h-16 w-16 text-text-muted mx-auto mb-4" />
-              <p className="text-text-secondary font-light">Our therapists will be introduced soon.</p>
+              <p className="text-text-secondary font-light">Our models will be introduced soon.</p>
             </div>
           ) : (
             <div className={`grid gap-8 justify-center ${
@@ -177,7 +177,6 @@ export default function TherapistsPage() {
                       <CardTitle className="font-heading text-lg text-foreground">
                         {therapist.nickname}
                       </CardTitle>
-                      <p className="text-text-secondary font-light text-sm">Expert Therapist</p>
                     </CardHeader>
                   </Card>
                 )
