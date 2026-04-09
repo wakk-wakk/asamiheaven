@@ -5,18 +5,24 @@
 :root {
   /* Background Colors */
   --background: #0a0a0a;
+  --background-alt: #121212;
   --foreground: #f5f5f5;
-  --card: #141414;
-  --card-hover: #1a1a1a;
+  --card: #161210;
+  --card-hover: #1d1a17;
   
   /* Primary Colors - Warm Gold/Bronze */
-  --primary: #d4a574;
-  --primary-hover: #c49564;
-  --primary-glow: rgba(212, 165, 116, 0.3);
+  --primary: #c9a227;
+  --primary-hover: #d4b02a;
+  --primary-glow: rgba(201, 162, 39, 0.4);
+  --primary-subtle: rgba(201, 162, 39, 0.1);
   
   /* Secondary Colors */
   --secondary: #2d2d2d;
   --accent: #8b7355;
+  
+  /* Highlight Colors */
+  --champagne: #f7e7ce;
+  --rose-gold: #b76e79;
   
   /* Semantic Colors */
   --success: #4ade80;
@@ -30,7 +36,7 @@
   --text-muted: #737373;
   
   /* Border Colors */
-  --border: rgba(255, 255, 255, 0.1);
+  --border: rgba(212, 165, 116, 0.1);
   --border-hover: rgba(212, 165, 116, 0.3);
   
   /* Shadow */
@@ -39,16 +45,22 @@
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
   --shadow-glow: 0 0 20px var(--primary-glow);
+  --shadow-glow-layered: 0 0 30px rgba(201, 162, 39, 0.2), 0 0 60px rgba(212, 165, 116, 0.1);
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-background-alt: var(--background-alt);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
+  --color-primary-glow: var(--primary-glow);
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
+  --color-champagne: var(--champagne);
+  --color-rose-gold: var(--rose-gold);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-error: var(--error);
@@ -114,7 +126,7 @@ a:hover {
 
 /* Glassmorphism Effect */
 .glass {
-  background: rgba(20, 20, 20, 0.8);
+  background: rgba(22, 18, 16, 0.85);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--border);
@@ -122,12 +134,25 @@ a:hover {
 
 /* Gradient Background */
 .gradient-bg {
-  background: linear-gradient(135deg, #141414 0%, #0a0a0a 100%);
+  background: linear-gradient(135deg, #161210 0%, #0a0a0a 100%);
 }
 
 /* Subtle Glow */
 .glow {
   box-shadow: var(--shadow-glow);
+}
+
+/* Noise texture overlay for richness */
+.noise-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.03;
+  z-index: 9999;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }
 
 /* Animation Keyframes */
@@ -155,10 +180,10 @@ a:hover {
 
 @keyframes pulse-glow {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(212, 165, 116, 0.1);
+    box-shadow: 0 0 20px rgba(201, 162, 39, 0.15);
   }
   50% {
-    box-shadow: 0 0 30px rgba(212, 165, 116, 0.3);
+    box-shadow: 0 0 40px rgba(201, 162, 39, 0.35), 0 0 60px rgba(212, 165, 116, 0.15);
   }
 }
 
@@ -200,16 +225,54 @@ a:hover {
   background: var(--accent);
 }
 
+/* Metallic shimmer effect for hover states */
+@keyframes metallic-shimmer {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.metallic-shimmer:hover {
+  background: linear-gradient(
+    90deg,
+    var(--primary) 0%,
+    #f7e7ce 25%,
+    var(--primary) 50%,
+    #f7e7ce 75%,
+    var(--primary) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: metallic-shimmer 3s linear infinite;
+}
+
 /* Selection */
 ::selection {
   background: var(--primary);
-  color: var(--background);
+  color: #0a0a0a;
 }
 
 /* Focus States */
 *:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
+}
+
+/* Vignette effect for hero sections */
+.vignette {
+  position: relative;
+}
+
+.vignette::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 0%, rgba(10, 10, 10, 0.4) 100%);
+  pointer-events: none;
 }
 
 /* Responsive Images */
