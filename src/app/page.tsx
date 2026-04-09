@@ -492,7 +492,7 @@ export default function HomePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center">
               {services[0] && (
-                <Card className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col h-full">
+                <Card className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full">
                   {(() => {
                     const imageUrl = getServiceImageUrl(services[0]);
                     return (
@@ -502,7 +502,7 @@ export default function HomePage() {
                             <img 
                               src={imageUrl} 
                               alt={services[0].name}
-                              className="absolute inset-0 w-full h-full object-cover object-center"
+                              className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                               onError={(e) => {
                                 (e.target as HTMLImageElement).style.display = 'none'
                               }}
@@ -551,7 +551,7 @@ export default function HomePage() {
               )}
 
               {therapists[0] && (
-                <Card className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col overflow-hidden">
+                <Card className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden group">
                   {(() => {
                     const therapistImageUrl = getTherapistImageUrl(therapists[0]);
                     return (
@@ -561,7 +561,7 @@ export default function HomePage() {
                             <img 
                               src={therapistImageUrl} 
                               alt={therapists[0].nickname}
-                              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover object-top"
+                              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover object-top transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                               onError={(e) => {
                                 (e.target as HTMLImageElement).style.display = 'none'
                               }}
@@ -627,7 +627,7 @@ export default function HomePage() {
                     return (
                       <Card 
                         key={therapist.id} 
-                        className="group glass border-border hover:border-primary/50 transition-all duration-500 animate-slide-up flex flex-col overflow-hidden hover:shadow-2xl hover:shadow-primary/10 hover:-translate-y-2" 
+                        className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden" 
                         style={{ animationDelay: `${index * 0.12}s` }}
                       >
                         <div className="w-full h-80 overflow-hidden bg-secondary/10 relative">
@@ -635,7 +635,7 @@ export default function HomePage() {
                             <img 
                               src={therapistImageUrl} 
                               alt={therapist.nickname}
-                              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                               onError={(e) => {
                                 (e.target as HTMLImageElement).style.display = 'none'
                               }}
@@ -701,13 +701,13 @@ export default function HomePage() {
                 {services.slice(0, 6).map((service, index) => {
                   const serviceImageUrl = getServiceImageUrl(service);
                   return (
-                    <Card key={service.id} className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col h-full w-full sm:w-[380px] max-w-[420px]" style={{ animationDelay: `${index * 0.1}s` }}>
+                    <Card key={service.id} className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full w-full sm:w-[380px] max-w-[420px]" style={{ animationDelay: `${index * 0.1}s` }}>
                       <div className="w-full h-64 overflow-hidden bg-secondary/10 relative">
                         {serviceImageUrl ? (
                           <img 
                             src={serviceImageUrl} 
                             alt={service.name}
-                            className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
+                            className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                             onError={(e) => {
                               (e.target as HTMLImageElement).style.display = 'none'
                             }}
