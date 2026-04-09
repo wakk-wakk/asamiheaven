@@ -278,7 +278,7 @@ export default function ContactPage() {
       {/* Header */}
       <section className="py-12 md:py-20 px-4">
         <div className="max-w-4xl mx-auto">
-          <Link href="/" className="inline-flex items-center gap-2 text-text-secondary hover:text-primary mb-8">
+          <Link href="/" className="flex items-center gap-2 text-text-secondary hover:text-primary mb-8">
             <ArrowLeft className="h-4 w-4" />
             Back to Home
           </Link>
