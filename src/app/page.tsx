@@ -456,7 +456,7 @@ export default function HomePage() {
             <source src="/bg.mp4" type="video/mp4" />
           </video>
           <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/60 to-background/30" />
-          <div className="absolute inset-0 bottom-[-5px] bg-gradient-to-t from-background via-background/20 to-transparent" />
+          <div className="absolute inset-0 bottom-[-10px] bg-gradient-to-t from-background via-background/20 to-transparent" />
         </div>
         
         <div className="absolute inset-0 overflow-hidden z-0">
@@ -687,7 +687,7 @@ export default function HomePage() {
                             </div>
                           )}
                           {/* Gradient overlay on hover - extended below to cover image edges */}
-                          <div className="absolute inset-0 bottom-[-5px] bg-gradient-to-t from-background via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+                          <div className="absolute inset-0 bottom-[-10px] bg-gradient-to-t from-background via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
                           {/* Shimmer effect */}
                           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
                             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
