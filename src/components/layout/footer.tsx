@@ -13,6 +13,8 @@ interface ContactSettings {
   instagram: string
   facebook: string
   twitter: string
+  youtube: string
+  telegram: string
   website: string
 }
 
@@ -47,6 +49,18 @@ const WhatsAppIcon = () => (
   </svg>
 )
 
+const TelegramIcon = () => (
+  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-1.07.495-1.532.474z"/>
+  </svg>
+)
+
+const YoutubeIcon = () => (
+  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+  </svg>
+)
+
 const defaultContact: ContactSettings = {
   phone: '+1 (555) 123-4567',
   email: 'hello@asamihaven.com',
@@ -56,6 +70,8 @@ const defaultContact: ContactSettings = {
   instagram: '',
   facebook: '',
   twitter: '',
+  youtube: '',
+  telegram: '',
   website: ''
 }
 
@@ -63,6 +79,7 @@ export function Footer() {
   const [contact, setContact] = useState<ContactSettings>(defaultContact)
   const [whatsappValue, setWhatsappValue] = useState<string>('')
   const [viberValue, setViberValue] = useState<string>('')
+  const [telegramValue, setTelegramValue] = useState<string>('')
 
   const loadContact = async () => {
     try {
@@ -85,6 +102,7 @@ export function Footer() {
           setContact(data)
           setWhatsappValue(data.whatsapp || '')
           setViberValue(data.viber || '')
+          setTelegramValue(data.telegram || '')
           console.log('Contact settings loaded:', data)
         } else {
           console.log('Error loading contact settings:', error)
@@ -134,6 +152,8 @@ export function Footer() {
   const socialLinks = [
     { href: contact.viber, icon: ViberIcon, label: 'Viber' },
     { href: contact.whatsapp, icon: WhatsAppIcon, label: 'WhatsApp' },
+    { href: contact.telegram, icon: TelegramIcon, label: 'Telegram' },
+    { href: contact.youtube, icon: YoutubeIcon, label: 'YouTube' },
     { href: contact.instagram, icon: InstagramIcon, label: 'Instagram' },
     { href: contact.facebook, icon: FacebookIcon, label: 'Facebook' },
     { href: contact.twitter, icon: TwitterIcon, label: 'Twitter' },
@@ -189,6 +209,20 @@ export function Footer() {
       const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
       const webViberUrl = `https://pa.viber.com/?pa=${phoneNumber}&text=${message}`
       window.open(webViberUrl, '_blank', 'noopener,noreferrer')
+    }
+  }
+
+  // Handle Telegram click - open Telegram chat
+  const handleTelegramClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!telegramValue) return
+    
+    if (isUrl(telegramValue)) {
+      window.open(formatUrl(telegramValue), '_blank', 'noopener,noreferrer')
+    } else {
+      // If it's not a URL, treat it as a username
+      const telegramUrl = `https://t.me/${telegramValue.replace('@', '')}`
+      window.open(telegramUrl, '_blank', 'noopener,noreferrer')
     }
   }
 
@@ -324,6 +358,30 @@ export function Footer() {
                 >
                   <ViberIcon />
                   <span className="text-sm font-light">Viber</span>
+                </button>
+              )}
+              {/* Telegram */}
+              {contact.telegram && (
+                <button
+                  onClick={handleTelegramClick}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary group"
+                  title={`Telegram: ${contact.telegram}`}
+                  aria-label="Contact via Telegram"
+                >
+                  <TelegramIcon />
+                  <span className="text-sm font-light">Telegram</span>
+                </button>
+              )}
+              {/* YouTube */}
+              {contact.youtube && (
+                <button
+                  onClick={(e) => handleSocialClick(contact.youtube, 'YouTube', e)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary group"
+                  title={`YouTube: ${contact.youtube}`}
+                  aria-label="View YouTube"
+                >
+                  <YoutubeIcon />
+                  <span className="text-sm font-light">YouTube</span>
                 </button>
               )}
               {/* Other social links - Instagram */}
