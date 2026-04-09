@@ -61,6 +61,8 @@ const defaultContact: ContactSettings = {
 
 export function Footer() {
   const [contact, setContact] = useState<ContactSettings>(defaultContact)
+  const [whatsappValue, setWhatsappValue] = useState<string>('')
+  const [viberValue, setViberValue] = useState<string>('')
 
   const loadContact = async () => {
     try {
@@ -81,6 +83,8 @@ export function Footer() {
         
         if (data && !error) {
           setContact(data)
+          setWhatsappValue(data.whatsapp || '')
+          setViberValue(data.viber || '')
           console.log('Contact settings loaded:', data)
         } else {
           console.log('Error loading contact settings:', error)
@@ -150,6 +154,48 @@ export function Footer() {
       return `https://${value}`
     }
     return `https://${value}`
+  }
+
+  // Clean phone number for messaging apps
+  const cleanPhoneNumber = (phone: string): string => {
+    return phone.replace(/[^0-9+]/g, '')
+  }
+
+  // Handle WhatsApp click - open WhatsApp app or web
+  const handleWhatsAppClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!whatsappValue) return
+    
+    const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
+    
+    if (isUrl(whatsappValue)) {
+      window.open(formatUrl(whatsappValue), '_blank', 'noopener,noreferrer')
+    } else {
+      const phoneNumber = cleanPhoneNumber(whatsappValue)
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+    }
+  }
+
+  // Handle Viber click - open Viber app or web
+  const handleViberClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!viberValue) return
+    
+    const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
+    
+    if (isUrl(viberValue)) {
+      window.open(formatUrl(viberValue), '_blank', 'noopener,noreferrer')
+    } else {
+      const phoneNumber = cleanPhoneNumber(viberValue)
+      const viberUrl = `viber://chat?number=${phoneNumber}&text=${message}`
+      const webViberUrl = `https://pa.viber.com/?pa=${phoneNumber}&text=${message}`
+      
+      window.location.href = viberUrl
+      setTimeout(() => {
+        window.open(webViberUrl, '_blank', 'noopener,noreferrer')
+      }, 2000)
+    }
   }
 
   // Copy to clipboard function
@@ -262,18 +308,66 @@ export function Footer() {
               Follow Us
             </h4>
             <div className="flex flex-wrap gap-3">
-              {socialLinks.map((link, index) => (
+              {/* WhatsApp */}
+              {contact.whatsapp && (
                 <button
-                  key={index}
-                  onClick={(e) => handleSocialClick(link.href, link.label, e)}
+                  onClick={handleWhatsAppClick}
                   className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary group"
-                  title={`${link.label}: ${link.href}`}
-                  aria-label={`Contact via ${link.label}`}
+                  title={`WhatsApp: ${contact.whatsapp}`}
+                  aria-label="Contact via WhatsApp"
                 >
-                  <link.icon />
-                  <span className="text-sm font-light">{link.label}</span>
+                  <WhatsAppIcon />
+                  <span className="text-sm font-light">WhatsApp</span>
                 </button>
-              ))}
+              )}
+              {/* Viber */}
+              {contact.viber && (
+                <button
+                  onClick={handleViberClick}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary group"
+                  title={`Viber: ${contact.viber}`}
+                  aria-label="Contact via Viber"
+                >
+                  <ViberIcon />
+                  <span className="text-sm font-light">Viber</span>
+                </button>
+              )}
+              {/* Other social links - Instagram */}
+              {contact.instagram && (
+                <button
+                  onClick={(e) => handleSocialClick(contact.instagram, 'Instagram', e)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary group"
+                  title={`Instagram: ${contact.instagram}`}
+                  aria-label="View Instagram"
+                >
+                  <InstagramIcon />
+                  <span className="text-sm font-light">Instagram</span>
+                </button>
+              )}
+              {/* Facebook */}
+              {contact.facebook && (
+                <button
+                  onClick={(e) => handleSocialClick(contact.facebook, 'Facebook', e)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary group"
+                  title={`Facebook: ${contact.facebook}`}
+                  aria-label="View Facebook"
+                >
+                  <FacebookIcon />
+                  <span className="text-sm font-light">Facebook</span>
+                </button>
+              )}
+              {/* Twitter */}
+              {contact.twitter && (
+                <button
+                  onClick={(e) => handleSocialClick(contact.twitter, 'Twitter', e)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary group"
+                  title={`Twitter: ${contact.twitter}`}
+                  aria-label="View Twitter"
+                >
+                  <TwitterIcon />
+                  <span className="text-sm font-light">Twitter</span>
+                </button>
+              )}
             </div>
           </div>
         </div>
