@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { Phone, Mail, Clock, ArrowLeft, CheckCircle, AlertCircle, Loader2, Copy, ExternalLink } from 'lucide-react'
+import { Phone, Mail, Clock, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 
 interface ContactSettings {
@@ -464,24 +464,12 @@ export default function ContactPage() {
                         <button
                           key={index}
                           onClick={(e) => handleSocialClick(link.href, link.label, e)}
-                          className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-all duration-300 text-primary group relative"
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
                           title={`${link.label}: ${link.href}`}
                           aria-label={`Contact via ${link.label}`}
                         >
                           <link.icon />
-                          <span className="absolute -top-8 left-1/2 -translate-x-1/2 px-2 py-1 bg-foreground text-background text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none">
-                            {isUrl(link.href) ? (
-                              <span className="flex items-center gap-1">
-                                <ExternalLink className="h-3 w-3" />
-                                Open link
-                              </span>
-                            ) : (
-                              <span className="flex items-center gap-1">
-                                <Copy className="h-3 w-3" />
-                                Copy {link.label}
-                              </span>
-                            )}
-                          </span>
+                          <span className="text-sm font-light">{link.label}</span>
                         </button>
                       ))}
                     </div>
