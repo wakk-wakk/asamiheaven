@@ -15,14 +15,57 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Asami Heaven - Premium Spa & Massage",
-  description: "Experience tranquility and rejuvenation at Asami Heaven. Premium massage and spa services for your ultimate relaxation.",
-  keywords: ["spa", "massage", "wellness", "relaxation", "massage therapy", "spa services"],
+  metadataBase: new URL("https://asamiheaven.vercel.app"),
+  title: {
+    default: "Asami Heaven - Premium Spa & Massage",
+    template: "%s | Asami Heaven",
+  },
+  description: "Experience tranquility and rejuvenation at Asami Heaven. Premium massage and spa services for your ultimate relaxation in Metro Manila.",
+  keywords: ["spa", "massage", "wellness", "relaxation", "massage therapy", "spa services", "Metro Manila spa", "Japanese massage", "premium spa"],
   authors: [{ name: "Asami Heaven" }],
+  creator: "Asami Heaven",
+  publisher: "Asami Heaven",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   openGraph: {
-    title: "Asami Heaven - Premium Spa & Massage",
-    description: "Experience tranquility and rejuvenation at Asami Heaven.",
     type: "website",
+    locale: "en_PH",
+    url: "https://asamiheaven.vercel.app",
+    siteName: "Asami Heaven",
+    title: "Asami Heaven - Premium Spa & Massage",
+    description: "Experience tranquility and rejuvenation at Asami Heaven. Premium massage and spa services for your ultimate relaxation.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Asami Heaven - Premium Spa & Massage",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Asami Heaven - Premium Spa & Massage",
+    description: "Experience tranquility and rejuvenation at Asami Heaven. Premium massage and spa services.",
+    images: ["/og-image.jpg"],
+    creator: "@asamiheaven",
+  },
+  verification: {
+    google: "your-google-site-verification-code",
   },
 };
 

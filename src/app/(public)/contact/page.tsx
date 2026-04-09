@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,6 +10,12 @@ import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { Phone, Mail, Clock, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
+
+export const metadata: Metadata = {
+  title: 'Contact Us',
+  description: 'Get in touch with Asami Heaven. Contact us for bookings, inquiries, or any questions about our spa services.',
+  keywords: ['contact spa', 'spa inquiry', 'book appointment', 'spa contact', 'Asami Heaven contact'],
+}
 
 interface ContactSettings {
   phone: string

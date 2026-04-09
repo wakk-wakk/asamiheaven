@@ -1,11 +1,18 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { Metadata } from 'next'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Clock, ArrowRight, Image as ImageIcon, Loader2, ArrowLeft } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
+
+export const metadata: Metadata = {
+  title: 'Our Services',
+  description: 'Discover our range of premium massage and spa services in Metro Manila. Each designed to rejuvenate your body and calm your mind.',
+  keywords: ['spa services', 'massage services', 'body massage', 'spa treatment', 'wellness services'],
+}
 
 interface Service {
   id: string
