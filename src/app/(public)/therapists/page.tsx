@@ -36,7 +36,7 @@ export default function TherapistsPage() {
   const [displaySettings, setDisplaySettings] = useState<DisplaySettings>({
     therapists_mode: 'dynamic'
   })
-  const [supabase, setSupabase] = useState<any>(null)
+  const [supabase, setSupabase] = useState<ReturnType<typeof createClient> | null>(null)
 
   useEffect(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -146,8 +146,8 @@ export default function TherapistsPage() {
                     {(() => {
                       let imageUrl = null
                       if (therapist.image_path && supabase) {
-                        const { data } = supabase.storage.from('therapists').getPublicUrl(therapist.image_path)
-                        imageUrl = data.publicUrl
+                        const { data } = supabase.storage.from('therapists-images').getPublicUrl(therapist.image_path)
+                        imageUrl = data?.publicUrl || null
                       } else if (therapist.image_url && isValidImageUrl(therapist.image_url)) {
                         imageUrl = therapist.image_url
                       }
