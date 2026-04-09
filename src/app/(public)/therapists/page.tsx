@@ -11,6 +11,7 @@ interface Therapist {
   id: string
   nickname: string
   image_url: string
+  image_path: string
   is_active: boolean
 }
 
@@ -35,6 +36,7 @@ export default function TherapistsPage() {
   const [displaySettings, setDisplaySettings] = useState<DisplaySettings>({
     therapists_mode: 'dynamic'
   })
+  const [supabase, setSupabase] = useState<ReturnType<typeof createClient> | null>(null)
 
   useEffect(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -45,12 +47,13 @@ export default function TherapistsPage() {
       return
     }
 
-    const supabase = createClient(supabaseUrl, supabaseAnonKey)
+    const supabaseClient = createClient(supabaseUrl, supabaseAnonKey)
+    setSupabase(supabaseClient)
 
     const initPage = async () => {
       try {
         // Fetch display settings
-        const { data: settingsData } = await supabase
+        const { data: settingsData } = await supabaseClient
           .from('display_settings')
           .select('therapists_mode')
           .single()
@@ -60,7 +63,7 @@ export default function TherapistsPage() {
 
         // Fetch therapists based on mode
         if (therapistsMode === 'static') {
-          const { data, error } = await supabase
+          const { data, error } = await supabaseClient
             .from('static_therapists')
             .select('*')
             .eq('is_active', true)
@@ -70,7 +73,7 @@ export default function TherapistsPage() {
             setTherapists([data])
           }
         } else {
-          const { data, error } = await supabase
+          const { data, error } = await supabaseClient
             .from('therapists')
             .select('*')
             .eq('is_active', true)
@@ -140,20 +143,32 @@ export default function TherapistsPage() {
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="aspect-square overflow-hidden">
-                    {therapist.image_url && isValidImageUrl(therapist.image_url) ? (
-                      <img 
-                        src={therapist.image_url} 
-                        alt={therapist.nickname}
-                        className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).style.display = 'none'
-                        }}
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-secondary/20">
-                        <User className="h-16 w-16 text-text-muted" />
-                      </div>
-                    )}
+                    {(() => {
+                      let imageUrl = null
+                      if (therapist.image_path && supabase) {
+                        const { data } = supabase.storage.from('therapists').getPublicUrl(therapist.image_path)
+                        imageUrl = data.publicUrl
+                      } else if (therapist.image_url && isValidImageUrl(therapist.image_url)) {
+                        imageUrl = therapist.image_url
+                      }
+                      if (imageUrl) {
+                        return (
+                          <img 
+                            src={imageUrl} 
+                            alt={therapist.nickname}
+                            className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none'
+                            }}
+                          />
+                        )
+                      }
+                      return (
+                        <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                          <User className="h-16 w-16 text-text-muted" />
+                        </div>
+                      )
+                    })()}
                   </div>
                   <CardHeader className="pb-2 text-center">
                     <CardTitle className="font-heading text-lg text-foreground">
