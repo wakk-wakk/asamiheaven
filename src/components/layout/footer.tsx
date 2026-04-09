@@ -188,7 +188,7 @@ export function Footer() {
       window.open(formatUrl(viberValue), '_blank', 'noopener,noreferrer')
     } else {
       const phoneNumber = cleanPhoneNumber(viberValue)
-      const viberUrl = `viber://chat?number=${phoneNumber}&text=${message}`
+      const viberUrl = `viber://chat?number=${encodeURIComponent(phoneNumber)}&text=${message}`
       const webViberUrl = `https://pa.viber.com/?pa=${phoneNumber}&text=${message}`
       
       window.location.href = viberUrl

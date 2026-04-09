@@ -75,6 +75,8 @@ const defaultContact: ContactSettings = {
 export default function ContactPage() {
   const [contact, setContact] = useState<ContactSettings>(defaultContact)
   const [isLoading, setIsLoading] = useState(true)
+  const [whatsappValue, setWhatsappValue] = useState<string>('')
+  const [viberValue, setViberValue] = useState<string>('')
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -100,6 +102,8 @@ export default function ContactPage() {
           
           if (data && !error) {
             setContact(data)
+            setWhatsappValue(data.whatsapp || '')
+            setViberValue(data.viber || '')
           }
         }
       } catch (error) {
@@ -155,6 +159,48 @@ export default function ContactPage() {
       return `https://${value}`
     }
     return `https://${value}`
+  }
+
+  // Clean phone number for messaging apps
+  const cleanPhoneNumber = (phone: string): string => {
+    return phone.replace(/[^0-9+]/g, '')
+  }
+
+  // Handle WhatsApp click
+  const handleWhatsAppClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!whatsappValue) return
+    
+    const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
+    
+    if (isUrl(whatsappValue)) {
+      window.open(formatUrl(whatsappValue), '_blank', 'noopener,noreferrer')
+    } else {
+      const phoneNumber = cleanPhoneNumber(whatsappValue)
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`
+      window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+    }
+  }
+
+  // Handle Viber click
+  const handleViberClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!viberValue) return
+    
+    const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
+    
+    if (isUrl(viberValue)) {
+      window.open(formatUrl(viberValue), '_blank', 'noopener,noreferrer')
+    } else {
+      const phoneNumber = cleanPhoneNumber(viberValue)
+      const viberUrl = `viber://chat?number=${encodeURIComponent(phoneNumber)}&text=${message}`
+      const webViberUrl = `https://pa.viber.com/?pa=${phoneNumber}&text=${message}`
+      
+      window.location.href = viberUrl
+      setTimeout(() => {
+        window.open(webViberUrl, '_blank', 'noopener,noreferrer')
+      }, 2000)
+    }
   }
 
   // Copy to clipboard function
@@ -452,7 +498,7 @@ export default function ContactPage() {
               </Card>
 
               {/* Social Media */}
-              {socialLinks.length > 0 && (
+              {(contact.whatsapp || contact.viber || contact.instagram || contact.facebook || contact.twitter) && (
                 <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.2s' }}>
                   <CardHeader>
                     <CardTitle className="font-heading text-2xl text-foreground">Follow Us</CardTitle>
@@ -462,18 +508,66 @@ export default function ContactPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-3">
-                      {socialLinks.map((link, index) => (
+                      {/* WhatsApp */}
+                      {contact.whatsapp && (
                         <button
-                          key={index}
-                          onClick={(e) => handleSocialClick(link.href, link.label, e)}
+                          onClick={handleWhatsAppClick}
                           className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`${link.label}: ${link.href}`}
-                          aria-label={`Contact via ${link.label}`}
+                          title={`WhatsApp: ${contact.whatsapp}`}
+                          aria-label="Contact via WhatsApp"
                         >
-                          <link.icon />
-                          <span className="text-sm font-light">{link.label}</span>
+                          <WhatsAppIcon />
+                          <span className="text-sm font-light">WhatsApp</span>
                         </button>
-                      ))}
+                      )}
+                      {/* Viber */}
+                      {contact.viber && (
+                        <button
+                          onClick={handleViberClick}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`Viber: ${contact.viber}`}
+                          aria-label="Contact via Viber"
+                        >
+                          <ViberIcon />
+                          <span className="text-sm font-light">Viber</span>
+                        </button>
+                      )}
+                      {/* Instagram */}
+                      {contact.instagram && (
+                        <button
+                          onClick={(e) => handleSocialClick(contact.instagram, 'Instagram', e)}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`Instagram: ${contact.instagram}`}
+                          aria-label="View Instagram"
+                        >
+                          <InstagramIcon />
+                          <span className="text-sm font-light">Instagram</span>
+                        </button>
+                      )}
+                      {/* Facebook */}
+                      {contact.facebook && (
+                        <button
+                          onClick={(e) => handleSocialClick(contact.facebook, 'Facebook', e)}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`Facebook: ${contact.facebook}`}
+                          aria-label="View Facebook"
+                        >
+                          <FacebookIcon />
+                          <span className="text-sm font-light">Facebook</span>
+                        </button>
+                      )}
+                      {/* Twitter */}
+                      {contact.twitter && (
+                        <button
+                          onClick={(e) => handleSocialClick(contact.twitter, 'Twitter', e)}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`Twitter: ${contact.twitter}`}
+                          aria-label="View Twitter"
+                        >
+                          <TwitterIcon />
+                          <span className="text-sm font-light">Twitter</span>
+                        </button>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
