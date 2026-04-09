@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Metadata } from 'next'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -10,12 +9,6 @@ import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { supabase } from '@/lib/supabase/client'
 import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
-
-export const metadata: Metadata = {
-  title: 'Book Now',
-  description: 'Book your spa appointment at Asami Heaven. Easy online booking for premium massage and spa services in Metro Manila.',
-  keywords: ['book spa', 'spa booking', 'appointment booking', 'online booking', 'reserve spa'],
-}
 
 interface DisplaySettings {
   services_mode: 'static' | 'dynamic'

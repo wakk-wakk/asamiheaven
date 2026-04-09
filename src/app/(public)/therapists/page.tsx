@@ -1,18 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Metadata } from 'next'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { ArrowLeft, User, Loader2 } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
-
-export const metadata: Metadata = {
-  title: 'Our Models',
-  description: 'Meet our team of skilled professionals at Asami Heaven. Metro Manilas most captivating top-tier models.',
-  keywords: ['spa models', 'therapists', 'massage therapists', 'spa staff', 'professional models'],
-}
 
 interface Therapist {
   id: string

@@ -67,7 +67,29 @@ export const metadata: Metadata = {
   verification: {
     google: "google2c781e3ff6fd1b88",
   },
-};
+  other: {
+    "robots": "index, follow",
+  },
+}
+
+const paths = {
+  '/services': {
+    title: 'Our Services',
+    description: 'Discover our range of premium massage and spa services in Metro Manila. Each designed to rejuvenate your body and calm your mind.',
+  },
+  '/therapists': {
+    title: 'Our Models',
+    description: 'Meet our team of skilled professionals at Asami Heaven. Metro Manilas most captivating top-tier models.',
+  },
+  '/booking': {
+    title: 'Book Now',
+    description: 'Book your spa appointment at Asami Heaven. Easy online booking for premium massage and spa services in Metro Manila.',
+  },
+  '/contact': {
+    title: 'Contact Us',
+    description: 'Get in touch with Asami Heaven. Contact us for bookings, inquiries, or any questions about our spa services.',
+  },
+}
 
 export default function RootLayout({
   children,
