@@ -142,6 +142,11 @@ a:hover {
   box-shadow: var(--shadow-glow);
 }
 
+/* Card hover glow */
+.shadow-glow-card {
+  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3), 0 0 20px rgba(201, 162, 39, 0.15);
+}
+
 /* Noise texture overlay for richness */
 .noise-overlay {
   position: fixed;

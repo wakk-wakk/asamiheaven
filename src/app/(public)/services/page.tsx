@@ -126,7 +126,7 @@ export default function ServicesPage() {
                 return (
                   <Card 
                     key={service.id} 
-                    className="glass border-border hover:border-primary/30 transition-all duration-300 animate-slide-up flex flex-col h-full"
+                    className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group flex flex-col h-full"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     {imageUrl ? (
@@ -134,7 +134,7 @@ export default function ServicesPage() {
                         <img 
                           src={imageUrl} 
                           alt={service.name}
-                          className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover"
+                          className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                           onError={(e) => {
                             (e.target as HTMLImageElement).style.display = 'none'
                           }}

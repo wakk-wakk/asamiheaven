@@ -154,7 +154,7 @@ export default function TherapistsPage() {
                 return (
                   <Card 
                     key={therapist.id} 
-                    className="glass border-border animate-slide-up overflow-hidden"
+                    className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group cursor-pointer"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     <div className="aspect-square overflow-hidden">
@@ -162,7 +162,7 @@ export default function TherapistsPage() {
                         <img 
                           src={imageUrl} 
                           alt={therapist.nickname}
-                          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                          className="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                           onError={(e) => {
                             (e.target as HTMLImageElement).style.display = 'none'
                           }}
@@ -174,7 +174,7 @@ export default function TherapistsPage() {
                       )}
                     </div>
                     <div className="p-4 text-center">
-                      <h3 className="font-heading text-lg text-foreground">
+                      <h3 className="font-heading text-lg text-foreground transition-colors duration-300 group-hover:text-primary">
                         {therapist.nickname}
                       </h3>
                     </div>
