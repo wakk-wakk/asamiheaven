@@ -442,8 +442,8 @@ export default function HomePage() {
 
             {/* About Us Content */}
             <div className="max-w-2xl mx-auto">
-              <p className="text-lg md:text-xl text-white/90 font-light leading-relaxed">
-                Step into a realm where luxury meets desire. We present an exclusive selection of Metro Manila's most captivating, top-tier models—chosen for their beauty, poise, and exceptional presence. Here, satisfaction isn't simply expected—it is effortlessly delivered as the standard.
+              <p className="text-2xl md:text-3xl text-white/100 font-light leading-relaxed">
+                Step into a realm where luxury meets desire. We present an exclusive selection of Metro Manila's most captivating, top-tier models—chosen for their beauty, poise, and exceptional presence. Here, satisfaction isn't simply expected—it is effortlessly delivered as the standard. No. 1 Japanese Nuro.
               </p>
             </div>
 
