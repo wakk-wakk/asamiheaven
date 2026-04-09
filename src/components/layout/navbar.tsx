@@ -17,7 +17,7 @@ const publicNavLinks: NavLink[] = [
   { href: '/', label: 'Home' },
   { href: '/services', label: 'Services' },
   { href: '/therapists', label: 'Models' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/contact', label: 'Contacts' },
 ]
 
 const adminNavLinks: NavLink[] = [
@@ -96,6 +96,19 @@ export function Navbar() {
                     key={link.href}
                     href={link.href}
                     className="flex items-center gap-1.5 px-4 py-2 bg-error/10 text-error rounded-lg hover:bg-error/20 transition-all duration-200 text-sm font-light"
+                  >
+                    {link.icon && <link.icon size={14} />}
+                    {link.label}
+                  </Link>
+                )
+              }
+              // Make "Contacts" stand out as a button
+              if (link.label === 'Contacts') {
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="flex items-center gap-1.5 px-4 py-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-all duration-200 text-sm font-medium"
                   >
                     {link.icon && <link.icon size={14} />}
                     {link.label}

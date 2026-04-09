@@ -483,7 +483,7 @@ export default function HomePage() {
             {/* About Us Content */}
             <div className="max-w-2xl mx-auto">
               <p className="text-xl md:text-2xl text-white/100 font-light leading-relaxed">
-                Step into a realm where luxury meets desire. We present an exclusive selection of Metro Manila's most captivating, top-tier models—chosen for their beauty, poise, and exceptional presence. Here, satisfaction isn't simply expected—it is effortlessly delivered as the standard. No. 1 Japanese Nuro.
+                Step into a world of luxury and indulgence at Asami Heaven. We offer an exclusive selection of Metro Manila's most captivating and refined companions, chosen for their elegance and presence. Experience satisfaction as the standard—proudly recognized as the No. 1 Nuru experience in the Philippines.
               </p>
             </div>
 
