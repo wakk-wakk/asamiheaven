@@ -5,6 +5,12 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { ArrowRight, Leaf, Clock, Heart, Image as ImageIcon, User, Star, Zap, Calendar, MessageCircle, Copy, ExternalLink, MessageSquare } from 'lucide-react'
+
+const FacebookIcon = () => (
+  <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+  </svg>
+)
 import { createClient } from '@supabase/supabase-js'
 
 interface Service {
@@ -64,6 +70,7 @@ export default function HomePage() {
   const [isLoadingReviews, setIsLoadingReviews] = useState(true)
   const [viberValue, setViberValue] = useState<string>('')
   const [whatsappValue, setWhatsappValue] = useState<string>('')
+  const [facebookValue, setFacebookValue] = useState<string>('')
 
   useEffect(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -192,7 +199,7 @@ export default function HomePage() {
       try {
         const { data, error } = await supabase
           .from('contact_settings')
-          .select('viber, whatsapp')
+          .select('viber, whatsapp, facebook')
           .single()
         
         if (data && !error) {
@@ -201,6 +208,9 @@ export default function HomePage() {
           }
           if (data.whatsapp) {
             setWhatsappValue(data.whatsapp)
+          }
+          if (data.facebook) {
+            setFacebookValue(data.facebook)
           }
         }
       } catch (error) {
@@ -322,6 +332,20 @@ export default function HomePage() {
       setTimeout(() => {
         window.open(webViberUrl, '_blank', 'noopener,noreferrer')
       }, 2000)
+    }
+  }
+
+  // Handle Facebook click - open Facebook page/messenger
+  const handleFacebookClick = () => {
+    if (!facebookValue) return
+    
+    if (isUrl(facebookValue)) {
+      const url = formatUrl(facebookValue)
+      window.open(url, '_blank', 'noopener,noreferrer')
+    } else {
+      // If it's not a URL, treat it as a Facebook username/page
+      const fbUrl = `https://www.facebook.com/${facebookValue}`
+      window.open(fbUrl, '_blank', 'noopener,noreferrer')
     }
   }
 
@@ -449,17 +473,34 @@ export default function HomePage() {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              {viberValue && (
-                <Button 
-                  onClick={handleViberClick}
-                  variant="outline" 
-                  size="lg" 
-                  className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
-                >
-                  <MessageCircle className="mr-2 h-5 w-5" />
-                  Message us on Viber
-                </Button>
-              )}
+              {/* Mobile: Viber button */}
+              <div className="block md:hidden">
+                {viberValue && (
+                  <Button 
+                    onClick={handleViberClick}
+                    variant="outline" 
+                    size="lg" 
+                    className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
+                  >
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    Message us on Viber
+                  </Button>
+                )}
+              </div>
+              {/* Desktop: Facebook button */}
+              <div className="hidden md:block">
+                {facebookValue && (
+                  <Button 
+                    onClick={handleFacebookClick}
+                    variant="outline" 
+                    size="lg" 
+                    className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
+                  >
+                    <FacebookIcon />
+                    <span className="ml-2">Message us on Facebook</span>
+                  </Button>
+                )}
+              </div>
               <Link href="/contact" className="w-full sm:w-auto">
                 <Button size="lg" className="w-full px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group">
                   Contact Us
