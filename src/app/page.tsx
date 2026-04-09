@@ -489,34 +489,18 @@ export default function HomePage() {
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              {/* Mobile: Telegram button */}
-              <div className="block md:hidden">
-                {telegramValue && (
-                  <Button 
-                    onClick={handleTelegramClick}
-                    variant="outline" 
-                    size="lg" 
-                    className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
-                  >
-                    <MessageCircle className="mr-2 h-5 w-5" />
-                    Message us on Telegram
-                  </Button>
-                )}
-              </div>
-              {/* Desktop: Facebook button */}
-              <div className="hidden md:block">
-                {facebookValue && (
-                  <Button 
-                    onClick={handleFacebookClick}
-                    variant="outline" 
-                    size="lg" 
-                    className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
-                  >
-                    <FacebookIcon />
-                    <span className="ml-2">Message us on Facebook</span>
-                  </Button>
-                )}
-              </div>
+              {/* Telegram button - shown on both mobile and desktop */}
+              {telegramValue && (
+                <Button 
+                  onClick={handleTelegramClick}
+                  variant="outline" 
+                  size="lg" 
+                  className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
+                >
+                  <MessageCircle className="mr-2 h-5 w-5" />
+                  Message us on Telegram
+                </Button>
+              )}
               <Link href="/contact" className="w-full sm:w-auto">
                 <Button size="lg" className="w-full px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group">
                   Contact Us
