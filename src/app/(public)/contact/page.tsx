@@ -276,16 +276,18 @@ export default function ContactPage() {
   return (
     <div className="animate-fade-in">
       {/* Header */}
-      <section className="py-16 md:py-24 px-4">
-        <div className="max-w-4xl mx-auto text-center space-y-6">
+      <section className="py-12 md:py-20 px-4">
+        <div className="max-w-4xl mx-auto">
           <Link href="/" className="inline-flex items-center gap-2 text-text-secondary hover:text-primary mb-8">
             <ArrowLeft className="h-4 w-4" />
             Back to Home
           </Link>
-          <h1 className="font-heading text-4xl md:text-5xl text-foreground">Contact Us</h1>
-          <p className="text-text-secondary font-light text-lg max-w-2xl mx-auto">
-            Have questions? We would love to hear from you. Reach out to us and we will respond as soon as possible.
-          </p>
+          <div className="text-center space-y-6">
+            <h1 className="font-heading text-4xl md:text-5xl text-foreground">Contact Us</h1>
+            <p className="text-text-secondary font-light text-lg max-w-2xl mx-auto">
+              Have questions? We would love to hear from you. Reach out to us and we will respond as soon as possible.
+            </p>
+          </div>
         </div>
       </section>
 
