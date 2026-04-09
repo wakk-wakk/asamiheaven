@@ -119,15 +119,15 @@ export default function TherapistsPage() {
   }
 
   return (
-    <div className="animate-fade-in pt-20">
-      <section className="px-4 py-12">
+    <div className="animate-fade-in pt-16 md:pt-20">
+      <section className="px-4 py-6 md:py-12">
         <div className="max-w-6xl mx-auto">
           <Link href="/" className="flex items-center gap-2 text-text-secondary hover:text-primary mb-8">
             <ArrowLeft className="h-4 w-4" />
             Back to Home
           </Link>
           
-          <div className="text-center mb-16 space-y-4">
+          <div className="text-center mb-8 md:mb-16 space-y-4">
             <h1 className="font-heading text-4xl md:text-5xl text-foreground">
               {displaySettings.therapists_mode === 'static' ? 'Our Model' : 'Meet Our Models'}
             </h1>
