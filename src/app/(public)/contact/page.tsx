@@ -77,7 +77,6 @@ export default function ContactPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [whatsappValue, setWhatsappValue] = useState<string>('')
   const [viberValue, setViberValue] = useState<string>('')
-  const [isMobile, setIsMobile] = useState<boolean>(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -138,15 +137,6 @@ export default function ContactPage() {
     }
   }, [])
 
-  // Check if user is on mobile device
-  useEffect(() => {
-    const checkMobile = () => {
-      const mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
-      setIsMobile(mobile)
-    }
-    checkMobile()
-  }, [])
-
   const socialLinks = [
     { href: contact.viber, icon: ViberIcon, label: 'Viber' },
     { href: contact.whatsapp, icon: WhatsAppIcon, label: 'WhatsApp' },
@@ -176,7 +166,7 @@ export default function ContactPage() {
     return phone.replace(/[^0-9+]/g, '')
   }
 
-  // Handle WhatsApp click - always works on desktop and mobile
+  // Handle WhatsApp click
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (!whatsappValue) return
@@ -186,13 +176,13 @@ export default function ContactPage() {
     if (isUrl(whatsappValue)) {
       window.open(formatUrl(whatsappValue), '_blank', 'noopener,noreferrer')
     } else {
-      const phoneNumber = cleanPhoneNumber(whatsappValue).replace(/^\+/, '')
+      const phoneNumber = cleanPhoneNumber(whatsappValue)
       const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`
       window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
     }
   }
 
-  // Handle Viber click - works best on mobile (uses app scheme)
+  // Handle Viber click - open Viber web directly (more reliable)
   const handleViberClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (!viberValue) return
@@ -200,10 +190,10 @@ export default function ContactPage() {
     if (isUrl(viberValue)) {
       window.open(formatUrl(viberValue), '_blank', 'noopener,noreferrer')
     } else {
-      const phoneNumber = cleanPhoneNumber(viberValue).replace(/^\+/, '')
+      const phoneNumber = cleanPhoneNumber(viberValue)
       const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
-      const viberUrl = `viber://chat?number=${phoneNumber}&text=${message}`
-      window.open(viberUrl, '_blank')
+      const webViberUrl = `https://pa.viber.com/?pa=${phoneNumber}&text=${message}`
+      window.open(webViberUrl, '_blank', 'noopener,noreferrer')
     }
   }
 
@@ -512,11 +502,11 @@ export default function ContactPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-3">
-                      {/* WhatsApp - Primary (always show) */}
+                      {/* WhatsApp */}
                       {contact.whatsapp && (
                         <button
                           onClick={handleWhatsAppClick}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#25D366]/10 hover:bg-[#25D366]/20 transition-all duration-300 text-[#25D366]"
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
                           title={`WhatsApp: ${contact.whatsapp}`}
                           aria-label="Contact via WhatsApp"
                         >
@@ -524,22 +514,17 @@ export default function ContactPage() {
                           <span className="text-sm font-light">WhatsApp</span>
                         </button>
                       )}
-                      {/* Viber - Secondary (show on mobile, note on desktop) */}
+                      {/* Viber */}
                       {contact.viber && (
-                        <div className="flex flex-col gap-1">
-                          <button
-                            onClick={handleViberClick}
-                            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#7360F2]/10 hover:bg-[#7360F2]/20 transition-all duration-300 text-[#7360F2]"
-                            title={`Viber: ${contact.viber}`}
-                            aria-label="Contact via Viber"
-                          >
-                            <ViberIcon />
-                            <span className="text-sm font-light">Viber</span>
-                          </button>
-                          {!isMobile && (
-                            <span className="text-xs text-text-muted px-1">Best on mobile</span>
-                          )}
-                        </div>
+                        <button
+                          onClick={handleViberClick}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`Viber: ${contact.viber}`}
+                          aria-label="Contact via Viber"
+                        >
+                          <ViberIcon />
+                          <span className="text-sm font-light">Viber</span>
+                        </button>
                       )}
                       {/* Instagram */}
                       {contact.instagram && (
