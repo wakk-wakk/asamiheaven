@@ -182,24 +182,18 @@ export default function ContactPage() {
     }
   }
 
-  // Handle Viber click
+  // Handle Viber click - open Viber web directly (more reliable)
   const handleViberClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (!viberValue) return
-    
-    const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
     
     if (isUrl(viberValue)) {
       window.open(formatUrl(viberValue), '_blank', 'noopener,noreferrer')
     } else {
       const phoneNumber = cleanPhoneNumber(viberValue)
-      const viberUrl = `viber://chat?number=${encodeURIComponent(phoneNumber)}&text=${message}`
+      const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
       const webViberUrl = `https://pa.viber.com/?pa=${phoneNumber}&text=${message}`
-      
-      window.location.href = viberUrl
-      setTimeout(() => {
-        window.open(webViberUrl, '_blank', 'noopener,noreferrer')
-      }, 2000)
+      window.open(webViberUrl, '_blank', 'noopener,noreferrer')
     }
   }
 
