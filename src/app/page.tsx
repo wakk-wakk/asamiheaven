@@ -399,7 +399,7 @@ export default function HomePage() {
           aria-label="Contact us on WhatsApp"
         >
           <MessageSquare className="h-5 w-5" />
-          <span className="text-sm font-light">Contact Us</span>
+          <span className="text-sm font-light">WhatsApp</span>
         </button>
       )}
 
@@ -442,7 +442,7 @@ export default function HomePage() {
 
             {/* About Us Content */}
             <div className="max-w-2xl mx-auto">
-              <p className="text-2xl md:text-3xl text-white/100 font-light leading-relaxed">
+              <p className="text-xl md:text-2xl text-white/100 font-light leading-relaxed">
                 Step into a realm where luxury meets desire. We present an exclusive selection of Metro Manila's most captivating, top-tier models—chosen for their beauty, poise, and exceptional presence. Here, satisfaction isn't simply expected—it is effortlessly delivered as the standard. No. 1 Japanese Nuro.
               </p>
             </div>
