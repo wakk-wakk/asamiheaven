@@ -544,6 +544,18 @@ export default function ContactPage() {
                           <span className="text-sm font-light">Viber</span>
                         </button>
                       )}
+                      {/* Telegram */}
+                      {contact.telegram && (
+                        <button
+                          onClick={(e) => handleSocialClick(contact.telegram, 'Telegram', e)}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`Telegram: ${contact.telegram}`}
+                          aria-label="Contact via Telegram"
+                        >
+                          <TelegramIcon />
+                          <span className="text-sm font-light">Telegram</span>
+                        </button>
+                      )}
                       {/* Instagram */}
                       {contact.instagram && (
                         <button
