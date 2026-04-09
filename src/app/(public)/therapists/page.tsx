@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { ArrowLeft, User, Loader2 } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 
@@ -173,11 +173,11 @@ export default function TherapistsPage() {
                         </div>
                       )}
                     </div>
-                    <CardHeader className="pb-2 text-center">
-                      <CardTitle className="font-heading text-lg text-foreground">
+                    <div className="p-4 text-center">
+                      <h3 className="font-heading text-lg text-foreground">
                         {therapist.nickname}
-                      </CardTitle>
-                    </CardHeader>
+                      </h3>
+                    </div>
                   </Card>
                 )
               })}
