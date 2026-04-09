@@ -36,7 +36,7 @@ export default function TherapistsPage() {
   const [displaySettings, setDisplaySettings] = useState<DisplaySettings>({
     therapists_mode: 'dynamic'
   })
-  const [supabase, setSupabase] = useState<ReturnType<typeof createClient> | null>(null)
+  const [supabase, setSupabase] = useState<any>(null)
 
   useEffect(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
