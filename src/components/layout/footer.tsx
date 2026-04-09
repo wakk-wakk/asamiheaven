@@ -289,8 +289,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/booking" className="text-text-secondary hover:text-primary transition-colors text-sm font-light">
-                  Book Now
+                <Link href="/therapists" className="text-text-secondary hover:text-primary transition-colors text-sm font-light">
+                  Models
                 </Link>
               </li>
               <li>
