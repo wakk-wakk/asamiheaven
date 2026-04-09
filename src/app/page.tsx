@@ -460,9 +460,9 @@ export default function HomePage() {
         </div>
         
         <div className="absolute inset-0 overflow-hidden z-0">
-          <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[100px] animate-pulse-glow" />
-          <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[80px] animate-pulse-glow" style={{ animationDelay: '1.5s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[120px] animate-pulse-glow" style={{ animationDelay: '3s' }} />
+          <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[80px]" />
+          <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[60px]" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[80px]" style={{ animationDelay: '3s' }} />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center w-full -mt-16 md:-mt-20">
@@ -471,12 +471,12 @@ export default function HomePage() {
             <h1 className="font-heading text-[10rem] md:text-[14rem] lg:text-[18rem] xl:text-[20rem] text-foreground font-medium leading-tight">
               <span className="relative inline-block">
                 <span className="relative z-10 text-primary">Asami</span>
-                <span className="absolute inset-0 text-primary blur-xl opacity-40">Asami</span>
+                <span className="absolute inset-0 text-primary blur-lg opacity-30">Asami</span>
               </span>
               {' '}
               <span className="relative inline-block">
                 <span className="relative z-10 text-primary">Heaven</span>
-                <span className="absolute inset-0 text-primary blur-xl opacity-40">Heaven</span>
+                <span className="absolute inset-0 text-primary blur-lg opacity-30">Heaven</span>
               </span>
             </h1>
 
@@ -630,8 +630,8 @@ export default function HomePage() {
         <>
           <section className="py-16 md:py-20 px-4 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-              <div className="absolute top-1/3 -right-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-glow" />
-              <div className="absolute bottom-1/3 -left-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '2s' }} />
+              <div className="absolute top-1/3 -right-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
+              <div className="absolute bottom-1/3 -left-32 w-96 h-96 bg-primary/5 rounded-full blur-3xl" style={{ animationDelay: '2s' }} />
             </div>
 
             <div className="max-w-7xl mx-auto relative">
@@ -710,8 +710,8 @@ export default function HomePage() {
 
           <section className="py-12 md:py-16 px-4 relative overflow-hidden">
             <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-              <div className="absolute top-1/3 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
-              <div className="absolute bottom-1/3 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-3xl" />
+              <div className="absolute top-1/3 -left-32 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
+              <div className="absolute bottom-1/3 -right-32 w-64 h-64 bg-primary/5 rounded-full blur-2xl" />
             </div>
 
             <div className="max-w-7xl mx-auto relative">
