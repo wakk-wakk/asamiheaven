@@ -576,7 +576,6 @@ export default function HomePage() {
                           <CardTitle className="font-heading text-2xl text-foreground font-medium">
                             {therapists[0].nickname}
                           </CardTitle>
-                          <p className="text-text-secondary font-light text-sm mt-2">Model</p>
                         </CardContent>
                       </>
                     );
@@ -657,7 +656,6 @@ export default function HomePage() {
                           <CardTitle className="font-heading text-2xl text-foreground font-medium transition-colors duration-300 group-hover:text-primary">
                             {therapist.nickname}
                           </CardTitle>
-                          <p className="text-text-secondary font-light text-sm mt-2 uppercase tracking-wider">Model</p>
                           {/* Decorative line */}
                           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary group-hover:w-3/4 transition-all duration-500" />
                         </CardContent>
