@@ -921,20 +921,30 @@ export default function HomePage() {
 
       {/* CTA Section */}
       <section className="py-12 px-4 relative overflow-hidden">
-        <div className="max-w-4xl mx-auto relative">
-          <div className="glass rounded-3xl p-8 md:p-12 text-center animate-slide-up relative overflow-hidden">
+        <div className="max-w-6xl mx-auto relative">
+          <div className="glass rounded-3xl p-8 md:p-12 animate-slide-up relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
             <div className="absolute inset-0 rounded-3xl border border-primary/10" />
             
-            <div className="relative space-y-6">
+            {/* Image on left */}
+            <div className="w-full md:w-1/2 relative">
+              <img 
+                src="/og-image.jpg" 
+                alt="Asami Heaven - Relaxation"
+                className="w-full h-64 md:h-80 object-cover rounded-2xl"
+              />
+            </div>
+            
+            {/* Content on right */}
+            <div className="w-full md:w-1/2 relative space-y-6 text-center md:text-left">
               <h2 className="font-heading text-3xl md:text-5xl text-foreground font-medium">
                 Ready to <span className="text-primary">Relax</span>?
               </h2>
               
-              <p className="text-base md:text-lg text-text-secondary font-light max-w-xl mx-auto">
+              <p className="text-base md:text-lg text-text-secondary font-light">
                 Contact us today and discover the art of true relaxation.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
                 <Link href="/contact">
                   <Button size="lg" className="px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-full font-light shadow-lg hover:scale-105 group">
                     Contact Us
