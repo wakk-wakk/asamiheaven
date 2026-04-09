@@ -215,6 +215,19 @@ export default function ContactPage() {
     }
   }
 
+  // Handle Telegram click - open Telegram
+  const handleTelegramClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    if (!contact.telegram) return
+    
+    if (isUrl(contact.telegram)) {
+      window.open(formatUrl(contact.telegram), '_blank', 'noopener,noreferrer')
+    } else {
+      const telegramUrl = `https://t.me/${contact.telegram.replace('@', '')}`
+      window.open(telegramUrl, '_blank', 'noopener,noreferrer')
+    }
+  }
+
   // Copy to clipboard function
   const copyToClipboard = async (text: string, label: string) => {
     try {
@@ -547,7 +560,7 @@ export default function ContactPage() {
                       {/* Telegram */}
                       {contact.telegram && (
                         <button
-                          onClick={(e) => handleSocialClick(contact.telegram, 'Telegram', e)}
+                          onClick={handleTelegramClick}
                           className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
                           title={`Telegram: ${contact.telegram}`}
                           aria-label="Contact via Telegram"
