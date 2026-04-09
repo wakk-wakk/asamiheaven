@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     creator: "@asamiheaven",
   },
   verification: {
-    google: "your-google-site-verification-code",
+    google: "google2c781e3ff6fd1b88",
   },
 };
 
