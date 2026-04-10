@@ -119,8 +119,8 @@ export default function TherapistsPage() {
   }
 
   return (
-    <div className="animate-fade-in pt-16 md:pt-20">
-      <section className="px-4 py-6 md:py-12">
+    <div className="animate-fade-in">
+      <section className="py-16 md:py-24 px-4">
         <div className="max-w-6xl mx-auto">
           <Link href="/" className="flex items-center gap-2 text-text-secondary hover:text-primary mb-8">
             <ArrowLeft className="h-4 w-4" />
