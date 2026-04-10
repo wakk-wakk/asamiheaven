@@ -8,6 +8,15 @@
           "value": "image/jpeg"
         }
       ]
+    },
+    {
+      "source": "/og-image-v3.jpg",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "image/jpeg"
+        }
+      ]
     }
   ]
 }
