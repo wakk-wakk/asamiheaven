@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/og-image-v2.jpg",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "image/jpeg"
+        }
+      ]
+    }
+  ]
+}
