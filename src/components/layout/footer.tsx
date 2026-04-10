@@ -197,18 +197,21 @@ export function Footer() {
     }
   }
 
-  // Handle Viber click - open Viber web directly (more reliable)
+  // Handle Viber click - open app on mobile, copy on desktop
   const handleViberClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (!viberValue) return
     
-    if (isUrl(viberValue)) {
-      window.open(formatUrl(viberValue), '_blank', 'noopener,noreferrer')
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    const phoneNumber = cleanPhoneNumber(viberValue)
+    
+    if (isMobile) {
+      // Open Viber app on mobile
+      const viberAppUrl = `viber://contact/${phoneNumber}`
+      window.location.href = viberAppUrl
     } else {
-      const phoneNumber = cleanPhoneNumber(viberValue)
-      const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
-      const webViberUrl = `https://pa.viber.com/?pa=${phoneNumber}&text=${message}`
-      window.open(webViberUrl, '_blank', 'noopener,noreferrer')
+      // Copy to clipboard on desktop
+      copyToClipboard(viberValue, 'Viber')
     }
   }
 

@@ -310,32 +310,20 @@ export default function HomePage() {
     }
   }
 
-  // Handle Viber click - open Viber app with initiation message
+  // Handle Viber click - open app on mobile, copy on desktop
   const handleViberClick = () => {
     if (!viberValue) return
     
-    if (isUrl(viberValue)) {
-      // If it's already a URL, open it directly
-      const url = formatUrl(viberValue)
-      window.open(url, '_blank', 'noopener,noreferrer')
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
+    const phoneNumber = cleanPhoneNumber(viberValue)
+    
+    if (isMobile) {
+      // Open Viber app on mobile
+      const viberAppUrl = `viber://contact/${phoneNumber}`
+      window.location.href = viberAppUrl
     } else {
-      // Clean the phone number and open Viber
-      const phoneNumber = cleanPhoneNumber(viberValue)
-      const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
-      
-      // Try Viber's URI scheme first (works on mobile)
-      const viberUrl = `viber://chat?number=${encodeURIComponent(phoneNumber)}&text=${message}`
-      
-      // Fallback to web version if Viber app is not available
-      const webViberUrl = `https://pa.viber.com/?pa=${phoneNumber}&text=${message}`
-      
-      // Try to open Viber app, fallback to web
-      window.location.href = viberUrl
-      
-      // If the app doesn't open within 2 seconds, redirect to web
-      setTimeout(() => {
-        window.open(webViberUrl, '_blank', 'noopener,noreferrer')
-      }, 2000)
+      // Copy to clipboard on desktop
+      copyToClipboard(viberValue, 'Viber')
     }
   }
 
