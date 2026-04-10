@@ -444,7 +444,7 @@ export default function HomePage() {
       )}
 
       {/* Hero Section */}
-      <section className="relative min-h-[calc(100vh-4rem)] md:min-h-[calc(100vh-5rem)] flex items-center justify-center px-2 md:px-4 py-16 md:py-20 overflow-hidden">
+      <section className="relative flex items-center justify-center px-2 md:px-4 py-16 md:py-20 overflow-hidden">
         <div className="absolute inset-0 z-0 w-full h-full">
           <video 
             autoPlay 
@@ -522,7 +522,7 @@ export default function HomePage() {
 
       {/* Services Section */}
       {displaySettings.services_mode === 'static' && displaySettings.therapists_mode === 'static' && services.length > 0 && therapists.length > 0 ? (
-        <section className="py-16 md:py-20 px-4">
+        <section className="py-12 md:py-16 px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16 space-y-4">
               <h2 className="font-heading text-3xl md:text-4xl text-foreground">Our Team</h2>
