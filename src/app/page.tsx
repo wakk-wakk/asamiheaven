@@ -483,7 +483,7 @@ export default function HomePage() {
             {/* About Us Content */}
             <div className="max-w-2xl mx-auto px-4">
               <p className="text-base md:text-xl lg:text-2xl text-white/100 font-light leading-relaxed">
-                Step into a world of luxury and indulgence at Asami Heaven. We offer an exclusive selection of Metro Manila's most captivating and refined companions, chosen for their elegance and presence. Experience satisfaction as the standard—proudly recognized as the No. 1 Nuru experience in the Philippines.
+                Step into a world where luxury and indulgence come together seamlessly. At Asami Heaven, we offer an exclusive selection of Metro Manila's most captivating and refined companions—carefully chosen for their elegance, charm, and exceptional presence. Every experience is crafted to exceed expectations, where satisfaction is not just promised, but delivered effortlessly as the standard. Recognized as the No. 1 Japanese Nuru in the Philippines, we redefine relaxation and pleasure with unmatched quality.
               </p>
             </div>
 
