@@ -168,12 +168,12 @@ export default function ServicesPage() {
                         {service.description}
                       </p>
                       <div className="mt-auto">
-                        <Link href={`/booking?service=${encodeURIComponent(service.name)}`}>
+                        <Link href="/contact">
                           <Button 
                             variant="outline" 
                             className="w-full border-border hover:border-primary/50 hover:text-primary hover:bg-primary/10 transition-all duration-300 rounded-lg font-light"
                           >
-                            Book Now
+                            Inquire Now
                             <ArrowRight className="ml-2 h-4 w-4" />
                           </Button>
                         </Link>
