@@ -203,7 +203,6 @@ export function Footer() {
     if (!viberValue) return
     
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-    // Format: 6393199727977 (no leading 0, with country code 63)
     let phoneNumber = cleanPhoneNumber(viberValue).replace(/^\+/, '').replace(/^63/, '').replace(/^0/, '')
     phoneNumber = '63' + phoneNumber
     
@@ -211,11 +210,6 @@ export function Footer() {
       // Open Viber app on mobile with correct format
       const viberAppUrl = `viber://chat?number=${phoneNumber}`
       window.location.href = viberAppUrl
-      
-      // Fallback to Viber website if app not installed
-      setTimeout(() => {
-        window.location.href = 'https://www.viber.com/'
-      }, 1500)
     } else {
       // Copy to clipboard on desktop
       copyToClipboard(viberValue, 'Viber')
