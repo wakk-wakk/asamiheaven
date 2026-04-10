@@ -510,13 +510,6 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-
-        {/* Scroll indicator - hidden on mobile */}
-        <div className="hidden md:block absolute bottom-6 left-1/2 -translate-x-1/2 z-10 animate-bounce">
-          <div className="w-6 h-10 rounded-full border-2 border-foreground/30 flex items-start justify-center p-2">
-            <div className="w-1 h-2 bg-foreground/50 rounded-full animate-pulse" />
-          </div>
-        </div>
       </section>
 
 
