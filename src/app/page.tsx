@@ -595,7 +595,7 @@ export default function HomePage() {
                             <img 
                               src={therapistImageUrl} 
                               alt={therapists[0].nickname}
-                              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover object-top transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                              className="absolute inset-0 min-w-full min-h-full w-full h-full object-cover object-top transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                               onError={(e) => {
                                 (e.target as HTMLImageElement).style.display = 'none'
                               }}
@@ -665,7 +665,7 @@ export default function HomePage() {
                             <img 
                               src={therapistImageUrl} 
                               alt={therapist.nickname}
-                              className="absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                              className="absolute inset-0 min-w-full min-h-full w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                               onError={(e) => {
                                 (e.target as HTMLImageElement).style.display = 'none'
                               }}
