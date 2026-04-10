@@ -354,7 +354,7 @@ export default function ContactPage() {
             Back to Home
           </Link>
           <div className="text-center space-y-6">
-            <h1 className="font-heading text-4xl md:text-5xl text-foreground">Contact Us</h1>
+            <h1 className="font-heading text-4xl md:text-5xl text-foreground">Reach Us</h1>
             <p className="text-text-secondary font-light text-lg max-w-2xl mx-auto">
               Have questions? We would love to hear from you. Reach out to us and we will respond as soon as possible.
             </p>
@@ -366,6 +366,146 @@ export default function ContactPage() {
       <section className="py-12 px-4 pb-24">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
+            {/* Contact Info - Left Side */}
+            <div className="space-y-6">
+              {/* Social Media */}
+              {(contact.whatsapp || contact.viber || contact.instagram || contact.facebook || contact.twitter) && (
+                <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.2s' }}>
+                  <CardHeader>
+                    <CardTitle className="font-heading text-2xl text-foreground">Contact Us</CardTitle>
+                    <CardDescription className="text-text-secondary font-light">
+                      Stay connected on social media.
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-wrap gap-3">
+                      {/* WhatsApp */}
+                      {contact.whatsapp && (
+                        <button
+                          onClick={handleWhatsAppClick}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`WhatsApp: ${contact.whatsapp}`}
+                          aria-label="Contact via WhatsApp"
+                        >
+                          <WhatsAppIcon />
+                          <span className="text-sm font-light">WhatsApp</span>
+                        </button>
+                      )}
+                      {/* Viber */}
+                      {contact.viber && (
+                        <button
+                          onClick={handleViberClick}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`Viber: ${contact.viber}`}
+                          aria-label="Contact via Viber"
+                        >
+                          <ViberIcon />
+                          <span className="text-sm font-light">Viber</span>
+                        </button>
+                      )}
+                      {/* Telegram */}
+                      {contact.telegram && (
+                        <button
+                          onClick={handleTelegramClick}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`Telegram: ${contact.telegram}`}
+                          aria-label="Contact via Telegram"
+                        >
+                          <TelegramIcon />
+                          <span className="text-sm font-light">Telegram</span>
+                        </button>
+                      )}
+                      {/* Instagram */}
+                      {contact.instagram && (
+                        <button
+                          onClick={(e) => handleSocialClick(contact.instagram, 'Instagram', e)}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`Instagram: ${contact.instagram}`}
+                          aria-label="View Instagram"
+                        >
+                          <InstagramIcon />
+                          <span className="text-sm font-light">Instagram</span>
+                        </button>
+                      )}
+                      {/* Facebook */}
+                      {contact.facebook && (
+                        <button
+                          onClick={(e) => handleSocialClick(contact.facebook, 'Facebook', e)}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`Facebook: ${contact.facebook}`}
+                          aria-label="View Facebook"
+                        >
+                          <FacebookIcon />
+                          <span className="text-sm font-light">Facebook</span>
+                        </button>
+                      )}
+                      {/* Twitter */}
+                      {contact.twitter && (
+                        <button
+                          onClick={(e) => handleSocialClick(contact.twitter, 'Twitter', e)}
+                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                          title={`Twitter: ${contact.twitter}`}
+                          aria-label="View Twitter"
+                        >
+                          <TwitterIcon />
+                          <span className="text-sm font-light">Twitter</span>
+                        </button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Contact Details */}
+              <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.1s' }}>
+                <CardHeader>
+                  <CardTitle className="font-heading text-2xl text-foreground">Get in Touch</CardTitle>
+                  <CardDescription className="text-text-secondary font-light">
+                    Here is how you can reach us directly.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                  {contact.phone && (
+                    <div className="flex items-start space-x-4">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Phone className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-heading text-lg text-foreground mb-1">Phone</h3>
+                        <p className="text-text-secondary font-light">{contact.phone}</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {contact.email && (
+                    <div className="flex items-start space-x-4">
+                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <Mail className="h-5 w-5 text-primary" />
+                      </div>
+                      <div>
+                        <h3 className="font-heading text-lg text-foreground mb-1">Email</h3>
+                        <a href={`mailto:${contact.email}`} className="text-text-secondary font-light hover:text-primary transition-colors">
+                          {contact.email}
+                        </a>
+                      </div>
+                    </div>
+                  )}
+
+                  <div className="flex items-start space-x-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                      <Clock className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-heading text-lg text-foreground mb-1">Hours</h3>
+                      <p className="text-text-secondary font-light">
+                        Open 24/7
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
             {/* Contact Form */}
             <Card className="glass border-border animate-slide-up">
               <CardHeader>
@@ -470,146 +610,6 @@ export default function ContactPage() {
                 </form>
               </CardContent>
             </Card>
-
-            {/* Contact Info */}
-            <div className="space-y-6">
-              {/* Contact Details */}
-              <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.1s' }}>
-                <CardHeader>
-                  <CardTitle className="font-heading text-2xl text-foreground">Get in Touch</CardTitle>
-                  <CardDescription className="text-text-secondary font-light">
-                    Here is how you can reach us directly.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  {contact.phone && (
-                    <div className="flex items-start space-x-4">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <Phone className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-heading text-lg text-foreground mb-1">Phone</h3>
-                        <p className="text-text-secondary font-light">{contact.phone}</p>
-                      </div>
-                    </div>
-                  )}
-
-                  {contact.email && (
-                    <div className="flex items-start space-x-4">
-                      <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <Mail className="h-5 w-5 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="font-heading text-lg text-foreground mb-1">Email</h3>
-                        <a href={`mailto:${contact.email}`} className="text-text-secondary font-light hover:text-primary transition-colors">
-                          {contact.email}
-                        </a>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="flex items-start space-x-4">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                      <Clock className="h-5 w-5 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-heading text-lg text-foreground mb-1">Hours</h3>
-                      <p className="text-text-secondary font-light">
-                        Open 24/7
-                      </p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Social Media */}
-              {(contact.whatsapp || contact.viber || contact.instagram || contact.facebook || contact.twitter) && (
-                <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.2s' }}>
-                  <CardHeader>
-                    <CardTitle className="font-heading text-2xl text-foreground">Follow Us</CardTitle>
-                    <CardDescription className="text-text-secondary font-light">
-                      Stay connected on social media.
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-wrap gap-3">
-                      {/* WhatsApp */}
-                      {contact.whatsapp && (
-                        <button
-                          onClick={handleWhatsAppClick}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`WhatsApp: ${contact.whatsapp}`}
-                          aria-label="Contact via WhatsApp"
-                        >
-                          <WhatsAppIcon />
-                          <span className="text-sm font-light">WhatsApp</span>
-                        </button>
-                      )}
-                      {/* Viber */}
-                      {contact.viber && (
-                        <button
-                          onClick={handleViberClick}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`Viber: ${contact.viber}`}
-                          aria-label="Contact via Viber"
-                        >
-                          <ViberIcon />
-                          <span className="text-sm font-light">Viber</span>
-                        </button>
-                      )}
-                      {/* Telegram */}
-                      {contact.telegram && (
-                        <button
-                          onClick={handleTelegramClick}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`Telegram: ${contact.telegram}`}
-                          aria-label="Contact via Telegram"
-                        >
-                          <TelegramIcon />
-                          <span className="text-sm font-light">Telegram</span>
-                        </button>
-                      )}
-                      {/* Instagram */}
-                      {contact.instagram && (
-                        <button
-                          onClick={(e) => handleSocialClick(contact.instagram, 'Instagram', e)}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`Instagram: ${contact.instagram}`}
-                          aria-label="View Instagram"
-                        >
-                          <InstagramIcon />
-                          <span className="text-sm font-light">Instagram</span>
-                        </button>
-                      )}
-                      {/* Facebook */}
-                      {contact.facebook && (
-                        <button
-                          onClick={(e) => handleSocialClick(contact.facebook, 'Facebook', e)}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`Facebook: ${contact.facebook}`}
-                          aria-label="View Facebook"
-                        >
-                          <FacebookIcon />
-                          <span className="text-sm font-light">Facebook</span>
-                        </button>
-                      )}
-                      {/* Twitter */}
-                      {contact.twitter && (
-                        <button
-                          onClick={(e) => handleSocialClick(contact.twitter, 'Twitter', e)}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`Twitter: ${contact.twitter}`}
-                          aria-label="View Twitter"
-                        >
-                          <TwitterIcon />
-                          <span className="text-sm font-light">Twitter</span>
-                        </button>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
           </div>
         </div>
       </section>
