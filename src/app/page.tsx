@@ -444,14 +444,14 @@ export default function HomePage() {
       )}
 
       {/* Hero Section */}
-      <section className="relative min-h-screen flex items-center px-4 pt-16 overflow-hidden">
-        <div className="absolute inset-0 z-0 w-full h-full max-h-screen overflow-hidden">
+      <section className="relative h-screen flex items-center justify-center px-4 overflow-hidden">
+        <div className="absolute inset-0 z-0 w-full h-full">
           <video 
             autoPlay 
             muted 
             loop 
             playsInline
-            className="w-full h-full min-w-full min-h-full max-h-screen object-cover object-center"
+            className="w-full h-full object-cover"
           >
             <source src="/bg.mp4" type="video/mp4" />
           </video>
@@ -459,16 +459,16 @@ export default function HomePage() {
           <div className="absolute inset-0 bottom-[-10px] bg-gradient-to-t from-background via-background/20 to-transparent" />
         </div>
         
-        <div className="absolute inset-0 overflow-hidden z-0">
+        <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
           <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[80px]" />
           <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[60px]" style={{ animationDelay: '1.5s' }} />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[80px]" style={{ animationDelay: '3s' }} />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center w-full -mt-16 md:-mt-20">
-          <div className="space-y-8 md:space-y-10 animate-slide-up">
+        <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center w-full">
+          <div className="space-y-6 md:space-y-10 animate-slide-up">
             {/* Brand Name */}
-            <h1 className="font-heading text-[10rem] md:text-[14rem] lg:text-[18rem] xl:text-[20rem] text-foreground font-medium leading-tight">
+            <h1 className="font-heading text-[5rem] md:text-[10rem] lg:text-[14rem] xl:text-[16rem] text-foreground font-medium leading-tight">
               <span className="relative inline-block">
                 <span className="relative z-10 text-primary">Asami</span>
                 <span className="absolute inset-0 text-primary blur-lg opacity-30">Asami</span>
@@ -481,14 +481,14 @@ export default function HomePage() {
             </h1>
 
             {/* About Us Content */}
-            <div className="max-w-2xl mx-auto">
-              <p className="text-xl md:text-2xl text-white/100 font-light leading-relaxed">
-                Step into a world of luxury and indulgence at Asami Heaven. We offer an exclusive selection of Metro Manila's most captivating and refined companions, chosen for their elegance and presence. Experience satisfaction as the standard—proudly recognized as the No. 1 Nuru experience in the Philippines.
+            <div className="max-w-2xl mx-auto px-4">
+              <p className="text-base md:text-xl lg:text-2xl text-white/100 font-light leading-relaxed">
+                Step into a world of luxury and indulgence at Asami Heaven. We offer an exclusive selection of Metro Manila's most captivating and refined companions, chosen for their elegance and presence. Experience satisfaction as the standard—proudly recognized as the No. 1 Japanese Nuru experience in the Philippines.
               </p>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center px-4">
               {/* Telegram button - shown on both mobile and desktop */}
               {telegramValue && (
                 <Button 
