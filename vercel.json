@@ -1,16 +1,7 @@
 {
   "headers": [
     {
-      "source": "/og-image-v2.jpg",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "image/jpeg"
-        }
-      ]
-    },
-    {
-      "source": "/og-image-v3.jpg",
+      "source": "/og-image-v4.jpg",
       "headers": [
         {
           "key": "Content-Type",
