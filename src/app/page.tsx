@@ -651,20 +651,17 @@ export default function HomePage() {
                   <p className="text-text-secondary font-light text-lg">Our models will be introduced soon.</p>
                 </div>
               ) : (
-                <div className={`gap-6 md:gap-8 ${
-                  displaySettings.therapists_mode === 'static'
-                    ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto'
-                    : 'grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
-                }`}>
-                  {therapists.map((therapist, index) => {
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
+                  {therapists.slice(0, 5).map((therapist, index) => {
                     const therapistImageUrl = getTherapistImageUrl(therapist);
+                    const sizeClass = index === 0 ? 'row-span-2' : index === 3 ? 'md:row-span-2' : '';
                     return (
                       <Card 
                         key={therapist.id} 
-                        className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden" 
+                        className={`group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer ${sizeClass}`}
                         style={{ animationDelay: `${index * 0.12}s` }}
                       >
-                        <div className="w-full h-80 overflow-hidden bg-secondary/10 relative">
+                        <div className={`relative overflow-hidden bg-secondary/10 ${index === 0 ? 'h-full min-h-[400px]' : 'h-48 md:h-56'}`}>
                           {therapistImageUrl ? (
                             <img 
                               src={therapistImageUrl} 
@@ -679,20 +676,14 @@ export default function HomePage() {
                               <User className="h-20 w-20 text-text-muted" />
                             </div>
                           )}
-                          {/* Gradient overlay on hover - extended below to cover image edges */}
-                          <div className="absolute inset-0 bottom-[-10px] bg-gradient-to-t from-background via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
-                          {/* Shimmer effect */}
-                          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-primary/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
-                          </div>
+                          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
                         </div>
-                        <CardContent className="p-4 text-center relative">
-                          <CardTitle className="font-heading text-2xl text-foreground font-medium transition-colors duration-300 group-hover:text-primary">
+                        <div className="p-3 md:p-4 text-center relative bg-gradient-to-b from-card/80 to-card">
+                          <CardTitle className="font-heading text-lg md:text-xl text-foreground font-medium transition-colors duration-300 group-hover:text-primary">
                             {therapist.nickname}
                           </CardTitle>
-                          {/* Decorative line */}
                           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary group-hover:w-3/4 transition-all duration-500" />
-                        </CardContent>
+                        </div>
                       </Card>
                     );
                   })}
