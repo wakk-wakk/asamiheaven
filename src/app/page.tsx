@@ -444,7 +444,7 @@ export default function HomePage() {
       )}
 
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center px-2 md:px-4 overflow-hidden">
+      <section className="relative h-[calc(100vh-4rem)] md:h-[calc(100vh-5rem)] flex items-center justify-center px-2 md:px-4 overflow-hidden">
         <div className="absolute inset-0 z-0 w-full h-full">
           <video 
             autoPlay 
@@ -512,7 +512,7 @@ export default function HomePage() {
         </div>
 
         {/* Scroll indicator - hidden on mobile */}
-        <div className="hidden md:block absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+        <div className="hidden md:block absolute bottom-6 left-1/2 -translate-x-1/2 z-10 animate-bounce">
           <div className="w-6 h-10 rounded-full border-2 border-foreground/30 flex items-start justify-center p-2">
             <div className="w-1 h-2 bg-foreground/50 rounded-full animate-pulse" />
           </div>
