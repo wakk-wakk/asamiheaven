@@ -347,8 +347,8 @@ export default function ContactPage() {
   return (
     <div className="animate-fade-in">
       {/* Header */}
-      <section className="py-12 md:py-20 px-4">
-        <div className="max-w-4xl mx-auto">
+      <section className="py-16 md:py-24 px-4">
+        <div className="max-w-6xl mx-auto">
           <Link href="/" className="flex items-center gap-2 text-text-secondary hover:text-primary mb-8">
             <ArrowLeft className="h-4 w-4" />
             Back to Home
