@@ -206,12 +206,17 @@ export default function ContactPage() {
     if (!viberValue) return
     
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-    const phoneNumber = cleanPhoneNumber(viberValue)
+    const phoneNumber = cleanPhoneNumber(viberValue).replace(/^63/, '')
     
     if (isMobile) {
-      // Open Viber app on mobile
-      const viberAppUrl = `viber://contact/${phoneNumber}`
+      // Open Viber app on mobile with correct format
+      const viberAppUrl = `viber://chat?number=${phoneNumber}`
       window.location.href = viberAppUrl
+      
+      // Fallback to Viber website if app not installed
+      setTimeout(() => {
+        window.location.href = 'https://www.viber.com/'
+      }, 1500)
     } else {
       // Copy to clipboard on desktop
       copyToClipboard(viberValue, 'Viber')
