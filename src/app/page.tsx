@@ -445,8 +445,8 @@ export default function HomePage() {
           >
             <source src="/bg.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/60 to-background/30" />
-          <div className="absolute inset-0 bottom-[-10px] bg-gradient-to-t from-background via-background/20 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/40 to-background/20" />
+          <div className="absolute inset-0 bottom-[-10px] bg-gradient-to-t from-background via-background/10 to-transparent" />
         </div>
         
         <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
