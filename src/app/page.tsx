@@ -315,7 +315,9 @@ export default function HomePage() {
     if (!viberValue) return
     
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-    let phoneNumber = cleanPhoneNumber(viberValue).replace(/^\+/, '').replace(/^63/, '')
+    // Format: 6393199727977 (no leading 0, with country code 63)
+    let phoneNumber = cleanPhoneNumber(viberValue).replace(/^\+/, '').replace(/^63/, '').replace(/^0/, '')
+    phoneNumber = '63' + phoneNumber
     
     if (isMobile) {
       // Open Viber app on mobile with correct format
