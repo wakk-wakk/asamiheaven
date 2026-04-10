@@ -651,22 +651,21 @@ export default function HomePage() {
                   <p className="text-text-secondary font-light text-lg">Our models will be introduced soon.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6">
-                  {therapists.slice(0, 5).map((therapist, index) => {
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
+                  {therapists.slice(0, 4).map((therapist, index) => {
                     const therapistImageUrl = getTherapistImageUrl(therapist);
-                    const sizeClass = index === 0 ? 'row-span-2' : index === 3 ? 'md:row-span-2' : '';
                     return (
                       <Card 
                         key={therapist.id} 
-                        className={`group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer ${sizeClass}`}
-                        style={{ animationDelay: `${index * 0.12}s` }}
+                        className="group glass border-border hover:border-primary/40 hover:-translate-y-2 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer"
+                        style={{ animationDelay: `${index * 0.1}s` }}
                       >
-                        <div className={`relative overflow-hidden bg-secondary/10 ${index === 0 ? 'h-full min-h-[400px]' : 'h-48 md:h-56'}`}>
+                        <div className="relative overflow-hidden bg-secondary/10 aspect-[3/4]">
                           {therapistImageUrl ? (
                             <img 
                               src={therapistImageUrl} 
                               alt={therapist.nickname}
-                              className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                              className="absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                               onError={(e) => {
                                 (e.target as HTMLImageElement).style.display = 'none'
                               }}
@@ -676,10 +675,10 @@ export default function HomePage() {
                               <User className="h-20 w-20 text-text-muted" />
                             </div>
                           )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity duration-500" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
                         </div>
-                        <div className="p-3 md:p-4 text-center relative bg-gradient-to-b from-card/80 to-card">
-                          <CardTitle className="font-heading text-lg md:text-xl text-foreground font-medium transition-colors duration-300 group-hover:text-primary">
+                        <div className="p-4 text-center relative bg-card/90 backdrop-blur-sm">
+                          <CardTitle className="font-heading text-xl text-foreground font-medium transition-colors duration-300 group-hover:text-primary">
                             {therapist.nickname}
                           </CardTitle>
                           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary group-hover:w-3/4 transition-all duration-500" />
