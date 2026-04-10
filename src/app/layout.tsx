@@ -43,8 +43,8 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    locale: "en_PH",
-    alternateLocale: "en_US",
+    locale: "en_US",
+    alternateLocale: ["en_PH"],
     url: "https://asamiheaven.vercel.app",
     siteName: "Asami Heaven",
     title: "Asami Heaven - Premium Spa & Massage",
@@ -52,6 +52,7 @@ export const metadata: Metadata = {
     images: [
       {
         url: "https://asamiheaven.vercel.app/og-image.jpg",
+        secureUrl: "https://asamiheaven.vercel.app/og-image.jpg",
         width: 1200,
         height: 630,
         alt: "Asami Heaven - Premium Spa & Massage",
