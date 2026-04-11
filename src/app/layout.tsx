@@ -97,6 +97,23 @@ const paths = {
   },
 }
 
+function AdSense() {
+  return (
+    <>
+      <script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1702672979918686"
+        crossOrigin="anonymous"
+      />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(adsbygoogle = window.adsbygoogle || []).push({})`,
+        }}
+      />
+    </>
+  );
+}
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -104,11 +121,22 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable} h-full antialiased`}>
+      <head>
+        <AdSense />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <Navbar />
         <main className="flex-1 pt-16 md:pt-20">
           {children}
         </main>
+        <ins
+          className="adsbygoogle"
+          style={{ display: "block" }}
+          data-ad-client="ca-pub-1702672979918686"
+          data-ad-slot="6958170524"
+          data-ad-format="auto"
+          data-full-width-responsive="true"
+        />
         <Footer />
       </body>
     </html>
