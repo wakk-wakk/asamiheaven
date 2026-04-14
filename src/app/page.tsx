@@ -154,7 +154,7 @@ export default function HomePage() {
         
         if (data && !error) {
           setTherapists(data)
-          setHasMoreTherapists(data.length > displayedTherapistsCount)
+          setHasMoreTherapists(data.length > 8)
         }
       } catch (error) {
         console.error('Error fetching therapists:', error)
@@ -448,14 +448,14 @@ export default function HomePage() {
           >
             <source src="/bg.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/85 to-background/70" />
-          <div className="absolute inset-0 bg-background/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/98 via-background/92 to-background/80" />
+          <div className="absolute inset-0 bg-background/60" />
         </div>
         
         <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
-          <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[80px]" />
-          <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[60px]" style={{ animationDelay: '1.5s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[80px]" style={{ animationDelay: '3s' }} />
+          <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-black/30 rounded-full blur-[80px]" />
+          <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-black/20 rounded-full blur-[60px]" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-black/10 rounded-full blur-[80px]" style={{ animationDelay: '3s' }} />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center w-full -mt-12 md:mt-0">
