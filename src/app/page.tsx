@@ -154,7 +154,7 @@ export default function HomePage() {
         
         if (data && !error) {
           setTherapists(data)
-          setHasMoreTherapists(data.length > 8)
+          setHasMoreTherapists(data.length > displayedTherapistsCount)
         }
       } catch (error) {
         console.error('Error fetching therapists:', error)
