@@ -72,6 +72,8 @@ export default function HomePage() {
   const [whatsappValue, setWhatsappValue] = useState<string>('')
   const [facebookValue, setFacebookValue] = useState<string>('')
   const [telegramValue, setTelegramValue] = useState<string>('')
+  const [displayedTherapists, setDisplayedTherapists] = useState(8)
+  const [displayedServices, setDisplayedServices] = useState(8)
 
   useEffect(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -535,26 +537,29 @@ export default function HomePage() {
                             <div className="w-full h-full flex items-center justify-center bg-secondary/20">
                               <ImageIcon className="h-16 w-16 text-text-muted" />
                             </div>
-                          )}
-                        </div>
-                        <div className="p-6 flex flex-col gap-4 flex-grow">
-                          <div className="flex justify-between items-start">
-                            <div className="flex-1">
-                              <h3 className="font-heading text-2xl text-foreground font-medium mb-1">
-                                {services[0].name}
-                              </h3>
-                              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                                <Clock size={16} />
-                                <span>{services[0].duration} minutes</span>
-                              </div>
-                            </div>
-                            {services[0].price > 0 && (
-                              <div className="text-right">
-                                <span className="text-primary font-heading text-lg font-medium">
-                                  ₱{services[0].price.toLocaleString()}
-                                </span>
-                              </div>
-                            )}
+)}
+                </div>
+                {therapists.length > displayedTherapists ? (
+                  <div className="flex justify-center gap-4 mt-8">
+                    <Button 
+                      onClick={() => setDisplayedTherapists(prev => prev + 8)}
+                      className="bg-primary hover:bg-primary-hover text-background rounded-xl"
+                    >
+                      View More Models
+                    </Button>
+                  </div>
+                ) : displayedTherapists > 8 && (
+                  <div className="text-center mt-8">
+                    <Button 
+                      onClick={() => setDisplayedTherapists(8)}
+                      variant="outline"
+                      className="border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 rounded-xl"
+                    >
+                      Show Less
+                    </Button>
+                  </div>
+                )}
+              </>
                           </div>
                           <p className="text-text-secondary font-light leading-relaxed line-clamp-3 flex-grow">
                             {services[0].description}
@@ -641,8 +646,9 @@ export default function HomePage() {
                   <p className="text-text-secondary font-light text-lg">Our models will be introduced soon.</p>
                 </div>
               ) : (
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
-                  {therapists.map((therapist, index) => {
+                <>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
+                    {therapists.slice(0, displayedTherapists).map((therapist, index) => {
                     const therapistImageUrl = getTherapistImageUrl(therapist);
                     return (
                       <Card 
@@ -712,7 +718,7 @@ export default function HomePage() {
                 </div>
               ) : (
                 <div className="flex flex-wrap justify-center gap-8">
-                {services.slice(0, 6).map((service, index) => {
+                {services.slice(0, displayedServices).map((service, index) => {
                   const serviceImageUrl = getServiceImageUrl(service);
                   return (
                     <Card key={service.id} className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full w-full sm:w-[380px] max-w-[420px]" style={{ animationDelay: `${index * 0.1}s` }}>
@@ -767,6 +773,26 @@ export default function HomePage() {
                   );
                 })}
                 </div>
+                {services.length > displayedServices ? (
+                  <div className="flex justify-center gap-4 mt-8">
+                    <Button 
+                      onClick={() => setDisplayedServices(prev => prev + 8)}
+                      className="bg-primary hover:bg-primary-hover text-background rounded-xl"
+                    >
+                      View More Services
+                    </Button>
+                  </div>
+                ) : displayedServices > 8 && (
+                  <div className="text-center mt-8">
+                    <Button 
+                      onClick={() => setDisplayedServices(8)}
+                      variant="outline"
+                      className="border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 rounded-xl"
+                    >
+                      Show Less
+                    </Button>
+                  </div>
+                )}
               )}
             </div>
           </section>
