@@ -460,15 +460,24 @@ export default function HomePage() {
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center w-full -mt-12 md:mt-0">
           <div className="space-y-4 md:space-y-10 animate-slide-up">
             {/* Brand Name */}
-            <h1 className="font-heading text-[5rem] md:text-[12rem] lg:text-[18rem] xl:text-[22rem] text-foreground leading-[0.8] tracking-tight">
+            <h1 className="font-heading text-[4rem] md:text-[8rem] lg:text-[14rem] xl:text-[20rem] text-foreground leading-[0.75] tracking-tight">
               <span className="relative inline-block">
-                <span className="relative z-10 text-primary font-semibold drop-shadow-[0_0_40px_rgba(212,175,55,0.6)]">Asami</span>
-                <span className="absolute inset-0 text-primary blur-[80px] opacity-60">Asami</span>
+                <span className="relative z-10 text-primary font-semibold drop-shadow-[0_0_50px_rgba(212,175,55,0.7)]">Asami</span>
+                <span className="absolute inset-0 text-primary blur-[100px] opacity-70">Asami</span>
               </span>
-              <br />
-              <span className="relative inline-block">
-                <span className="relative z-10 text-primary font-medium drop-shadow-[0_0_30px_rgba(212,175,55,0.5)]">Heaven</span>
-                <span className="absolute inset-0 text-primary blur-[60px] opacity-50">Heaven</span>
+              <span className="hidden md:inline">&nbsp;</span>
+              <br className="md:hidden" />
+              <span className="hidden md:inline">
+                <span className="relative inline-block">
+                  <span className="relative z-10 text-primary font-medium drop-shadow-[0_0_40px_rgba(212,175,55,0.6)]">Heaven</span>
+                  <span className="absolute inset-0 text-primary blur-[80px] opacity-60">Heaven</span>
+                </span>
+              </span>
+              <span className="md:hidden">
+                <span className="relative inline-block">
+                  <span className="relative z-10 text-primary font-medium drop-shadow-[0_0_40px_rgba(212,175,55,0.6)]">Heaven</span>
+                  <span className="absolute inset-0 text-primary blur-[80px] opacity-60">Heaven</span>
+                </span>
               </span>
             </h1>
 
