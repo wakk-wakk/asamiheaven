@@ -62,6 +62,8 @@ export default function HomePage() {
   const [isLoadingServices, setIsLoadingServices] = useState(true)
   const [therapists, setTherapists] = useState<Therapist[]>([])
   const [isLoadingTherapists, setIsLoadingTherapists] = useState(true)
+  const [displayedTherapistsCount, setDisplayedTherapistsCount] = useState(8)
+  const [hasMoreTherapists, setHasMoreTherapists] = useState(false)
   const [displaySettings, setDisplaySettings] = useState<DisplaySettings>({
     services_mode: 'dynamic',
     therapists_mode: 'dynamic'
@@ -72,8 +74,6 @@ export default function HomePage() {
   const [whatsappValue, setWhatsappValue] = useState<string>('')
   const [facebookValue, setFacebookValue] = useState<string>('')
   const [telegramValue, setTelegramValue] = useState<string>('')
-  const [displayedTherapists, setDisplayedTherapists] = useState(8)
-  const [displayedServices, setDisplayedServices] = useState(8)
 
   useEffect(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -154,6 +154,7 @@ export default function HomePage() {
         
         if (data && !error) {
           setTherapists(data)
+          setHasMoreTherapists(data.length > 8)
         }
       } catch (error) {
         console.error('Error fetching therapists:', error)
@@ -537,29 +538,26 @@ export default function HomePage() {
                             <div className="w-full h-full flex items-center justify-center bg-secondary/20">
                               <ImageIcon className="h-16 w-16 text-text-muted" />
                             </div>
-)}
-                </div>
-                {therapists.length > displayedTherapists ? (
-                  <div className="flex justify-center gap-4 mt-8">
-                    <Button 
-                      onClick={() => setDisplayedTherapists(prev => prev + 8)}
-                      className="bg-primary hover:bg-primary-hover text-background rounded-xl"
-                    >
-                      View More Models
-                    </Button>
-                  </div>
-                ) : displayedTherapists > 8 && (
-                  <div className="text-center mt-8">
-                    <Button 
-                      onClick={() => setDisplayedTherapists(8)}
-                      variant="outline"
-                      className="border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 rounded-xl"
-                    >
-                      Show Less
-                    </Button>
-                  </div>
-                )}
-              </>
+                          )}
+                        </div>
+                        <div className="p-6 flex flex-col gap-4 flex-grow">
+                          <div className="flex justify-between items-start">
+                            <div className="flex-1">
+                              <h3 className="font-heading text-2xl text-foreground font-medium mb-1">
+                                {services[0].name}
+                              </h3>
+                              <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                                <Clock size={16} />
+                                <span>{services[0].duration} minutes</span>
+                              </div>
+                            </div>
+                            {services[0].price > 0 && (
+                              <div className="text-right">
+                                <span className="text-primary font-heading text-lg font-medium">
+                                  ₱{services[0].price.toLocaleString()}
+                                </span>
+                              </div>
+                            )}
                           </div>
                           <p className="text-text-secondary font-light leading-relaxed line-clamp-3 flex-grow">
                             {services[0].description}
@@ -645,44 +643,56 @@ export default function HomePage() {
                   </div>
                   <p className="text-text-secondary font-light text-lg">Our models will be introduced soon.</p>
                 </div>
-              ) : (
+) : (
                 <>
                   <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
-                    {therapists.slice(0, displayedTherapists).map((therapist, index) => {
-                    const therapistImageUrl = getTherapistImageUrl(therapist);
-                    return (
-                      <Card 
-                        key={therapist.id} 
-                        className="group glass border-border hover:border-primary/40 hover:-translate-y-2 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer"
-                        style={{ animationDelay: `${index * 0.1}s` }}
+                    {therapists.slice(0, displayedTherapistsCount).map((therapist, index) => {
+                      const therapistImageUrl = getTherapistImageUrl(therapist);
+                      return (
+                        <Card 
+                          key={therapist.id} 
+                          className="group glass border-border hover:border-primary/40 hover:-translate-y-2 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer"
+                          style={{ animationDelay: `${index * 0.1}s` }}
+                        >
+                          <div className="relative overflow-hidden bg-secondary/10 aspect-[3/4]">
+                            {therapistImageUrl ? (
+                              <img 
+                                src={therapistImageUrl} 
+                                alt={therapist.nickname}
+                                className="absolute inset-0 min-w-full min-h-full w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                                onError={(e) => {
+                                  (e.target as HTMLImageElement).style.display = 'none'
+                                }}
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                                <User className="h-20 w-20 text-text-muted" />
+                              </div>
+                            )}
+                            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
+                          </div>
+                          <div className="p-4 text-center relative bg-card/90 backdrop-blur-sm">
+                            <CardTitle className="font-heading text-xl text-foreground font-medium transition-colors duration-300 group-hover:text-primary">
+                              {therapist.nickname}
+                            </CardTitle>
+                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary group-hover:w-3/4 transition-all duration-500" />
+                          </div>
+                        </Card>
+                      );
+                    })}
+                  </div>
+                  {hasMoreTherapists && (
+                    <div className="text-center mt-8">
+                      <Button
+                        onClick={() => setDisplayedTherapistsCount(prev => prev + 8)}
+                        variant="outline"
+                        className="px-8 border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5"
                       >
-                        <div className="relative overflow-hidden bg-secondary/10 aspect-[3/4]">
-                          {therapistImageUrl ? (
-                            <img 
-                              src={therapistImageUrl} 
-                              alt={therapist.nickname}
-                              className="absolute inset-0 min-w-full min-h-full w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).style.display = 'none'
-                              }}
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-secondary/20">
-                              <User className="h-20 w-20 text-text-muted" />
-                            </div>
-                          )}
-                          <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
-                        </div>
-                        <div className="p-4 text-center relative bg-card/90 backdrop-blur-sm">
-                          <CardTitle className="font-heading text-xl text-foreground font-medium transition-colors duration-300 group-hover:text-primary">
-                            {therapist.nickname}
-                          </CardTitle>
-                          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary group-hover:w-3/4 transition-all duration-500" />
-                        </div>
-                      </Card>
-                    );
-                  })}
-                </div>
+                        Load More Models
+                      </Button>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </section>
@@ -718,7 +728,7 @@ export default function HomePage() {
                 </div>
               ) : (
                 <div className="flex flex-wrap justify-center gap-8">
-                {services.slice(0, displayedServices).map((service, index) => {
+                {services.slice(0, 6).map((service, index) => {
                   const serviceImageUrl = getServiceImageUrl(service);
                   return (
                     <Card key={service.id} className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full w-full sm:w-[380px] max-w-[420px]" style={{ animationDelay: `${index * 0.1}s` }}>
@@ -773,26 +783,6 @@ export default function HomePage() {
                   );
                 })}
                 </div>
-                {services.length > displayedServices ? (
-                  <div className="flex justify-center gap-4 mt-8">
-                    <Button 
-                      onClick={() => setDisplayedServices(prev => prev + 8)}
-                      className="bg-primary hover:bg-primary-hover text-background rounded-xl"
-                    >
-                      View More Services
-                    </Button>
-                  </div>
-                ) : displayedServices > 8 && (
-                  <div className="text-center mt-8">
-                    <Button 
-                      onClick={() => setDisplayedServices(8)}
-                      variant="outline"
-                      className="border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 rounded-xl"
-                    >
-                      Show Less
-                    </Button>
-                  </div>
-                )}
               )}
             </div>
           </section>
