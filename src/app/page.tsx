@@ -63,7 +63,7 @@ export default function HomePage() {
   const [therapists, setTherapists] = useState<Therapist[]>([])
   const [isLoadingTherapists, setIsLoadingTherapists] = useState(true)
   const [displayedTherapistsCount, setDisplayedTherapistsCount] = useState(8)
-  const [hasMoreTherapists, setHasMoreTherapists] = useState(false)
+  const [totalTherapistsCount, setTotalTherapistsCount] = useState(0)
   const [displaySettings, setDisplaySettings] = useState<DisplaySettings>({
     services_mode: 'dynamic',
     therapists_mode: 'dynamic'
@@ -154,7 +154,7 @@ export default function HomePage() {
         
         if (data && !error) {
           setTherapists(data)
-          setHasMoreTherapists(data.length > 8)
+          setTotalTherapistsCount(data.length)
         }
       } catch (error) {
         console.error('Error fetching therapists:', error)
@@ -448,14 +448,13 @@ export default function HomePage() {
           >
             <source src="/bg.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-background/98 via-background/92 to-background/80" />
-          <div className="absolute inset-0 bg-background/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/85 to-background/70" />
         </div>
         
         <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
-          <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-black/30 rounded-full blur-[80px]" />
-          <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-black/20 rounded-full blur-[60px]" style={{ animationDelay: '1.5s' }} />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-black/10 rounded-full blur-[80px]" style={{ animationDelay: '3s' }} />
+          <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[80px]" />
+          <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[60px]" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[80px]" style={{ animationDelay: '3s' }} />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center w-full -mt-12 md:mt-0">
@@ -645,27 +644,27 @@ export default function HomePage() {
                 </div>
 ) : (
                 <>
-                  <div className="columns-2 md:columns-3 lg:columns-4 gap-4 md:gap-6 max-w-6xl mx-auto">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
                     {therapists.slice(0, displayedTherapistsCount).map((therapist, index) => {
                       const therapistImageUrl = getTherapistImageUrl(therapist);
                       return (
-                        <div key={therapist.id} className="break-inside-avoid mb-4 md:mb-6">
+                        <div key={therapist.id} className="mb-4 md:mb-6">
                           <Card 
                             className="group glass border-border hover:border-primary/40 hover:-translate-y-2 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer"
                             style={{ animationDelay: `${index * 0.1}s` }}
                           >
-                            <div className="relative overflow-hidden bg-secondary/10">
+                            <div className="relative overflow-hidden bg-secondary/10 aspect-[3/4]">
                               {therapistImageUrl ? (
                                 <img 
                                   src={therapistImageUrl} 
                                   alt={therapist.nickname}
-                                  className="w-full h-auto object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                                  className="absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).style.display = 'none'
                                   }}
                                 />
                               ) : (
-                                <div className="w-full aspect-[3/4] flex items-center justify-center bg-secondary/20">
+                                <div className="w-full h-full flex items-center justify-center bg-secondary/20">
                                   <User className="h-20 w-20 text-text-muted" />
                                 </div>
                               )}
@@ -682,7 +681,7 @@ export default function HomePage() {
                       );
                     })}
                   </div>
-                  {hasMoreTherapists ? (
+                  {displayedTherapistsCount < totalTherapistsCount ? (
                     <div className="text-center mt-8">
                       <Button
                         onClick={() => setDisplayedTherapistsCount(prev => prev + 8)}
