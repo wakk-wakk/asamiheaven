@@ -462,21 +462,21 @@ export default function HomePage() {
             {/* Brand Name */}
             <h1 className="font-heading text-[4rem] md:text-[8rem] lg:text-[14rem] xl:text-[20rem] text-foreground leading-[0.75] tracking-tight">
               <span className="relative inline-block">
-                <span className="relative z-10 text-primary font-semibold drop-shadow-[0_0_50px_rgba(212,175,55,0.7)]">Asami</span>
-                <span className="absolute inset-0 text-primary blur-[100px] opacity-70">Asami</span>
+                <span className="relative z-10 text-primary font-semibold" style={{ textShadow: '0 0 80px rgba(212,175,55,0.9), 0 0 120px rgba(212,175,55,0.7), 0 0 200px rgba(212,175,55,0.5)' }}>Asami</span>
+                <span className="absolute inset-0 text-primary blur-[120px] opacity-80">Asami</span>
               </span>
               <span className="hidden md:inline">&nbsp;</span>
               <br className="md:hidden" />
               <span className="hidden md:inline">
                 <span className="relative inline-block">
-                  <span className="relative z-10 text-primary font-medium drop-shadow-[0_0_40px_rgba(212,175,55,0.6)]">Heaven</span>
-                  <span className="absolute inset-0 text-primary blur-[80px] opacity-60">Heaven</span>
+                  <span className="relative z-10 text-primary font-medium" style={{ textShadow: '0 0 60px rgba(212,175,55,0.8), 0 0 100px rgba(212,175,55,0.5)' }}>Heaven</span>
+                  <span className="absolute inset-0 text-primary blur-[100px] opacity-70">Heaven</span>
                 </span>
               </span>
               <span className="md:hidden">
                 <span className="relative inline-block">
-                  <span className="relative z-10 text-primary font-medium drop-shadow-[0_0_40px_rgba(212,175,55,0.6)]">Heaven</span>
-                  <span className="absolute inset-0 text-primary blur-[80px] opacity-60">Heaven</span>
+                  <span className="relative z-10 text-primary font-medium" style={{ textShadow: '0 0 60px rgba(212,175,55,0.8), 0 0 100px rgba(212,175,55,0.5)' }}>Heaven</span>
+                  <span className="absolute inset-0 text-primary blur-[100px] opacity-70">Heaven</span>
                 </span>
               </span>
             </h1>
@@ -653,13 +653,13 @@ export default function HomePage() {
                 </div>
 ) : (
                 <>
-                  <div className="columns-2 md:columns-3 lg:columns-4 gap-4 md:gap-6 max-w-6xl mx-auto">
+                  <div className="columns-2 md:columns-3 lg:columns-4 gap-6 md:gap-8 max-w-6xl mx-auto">
                     {therapists.slice(0, displayedTherapistsCount).map((therapist, index) => {
                       const therapistImageUrl = getTherapistImageUrl(therapist);
                       return (
-                        <div key={therapist.id} className="break-inside-avoid mb-4 md:mb-6">
+                        <div key={therapist.id} className="break-inside-avoid mb-6 md:mb-8">
                           <Card 
-                            className="group glass border-border hover:border-primary/40 hover:-translate-y-2 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer"
+                            className="group glass border border-white/40 hover:border-white/80 hover:-translate-y-2 transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer bg-black/20"
                             style={{ animationDelay: `${index * 0.1}s` }}
                           >
                             <div className="relative overflow-hidden bg-secondary/10">
