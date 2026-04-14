@@ -448,7 +448,7 @@ export default function HomePage() {
           >
             <source src="/bg.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-background/95 via-background/85 to-background/70" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/50 to-background/30" />
         </div>
         
         <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
@@ -659,7 +659,7 @@ export default function HomePage() {
                       return (
                         <div key={therapist.id} className="break-inside-avoid mb-6 md:mb-8">
                           <Card 
-                            className="group glass border border-white/40 hover:border-white/80 hover:-translate-y-2 transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer bg-black/20"
+                            className="group glass border-2 border-white/60 hover:border-white hover:-translate-y-2 transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer bg-black/20"
                             style={{ animationDelay: `${index * 0.1}s` }}
                           >
                             <div className="relative overflow-hidden bg-secondary/10">
