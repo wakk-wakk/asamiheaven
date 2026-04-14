@@ -645,39 +645,40 @@ export default function HomePage() {
                 </div>
 ) : (
                 <>
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
+                  <div className="columns-2 md:columns-3 lg:columns-4 gap-4 md:gap-6 max-w-6xl mx-auto">
                     {therapists.slice(0, displayedTherapistsCount).map((therapist, index) => {
                       const therapistImageUrl = getTherapistImageUrl(therapist);
                       return (
-                        <Card 
-                          key={therapist.id} 
-                          className="group glass border-border hover:border-primary/40 hover:-translate-y-2 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer"
-                          style={{ animationDelay: `${index * 0.1}s` }}
-                        >
-                          <div className="relative overflow-hidden bg-secondary/10 aspect-[3/4]">
-                            {therapistImageUrl ? (
-                              <img 
-                                src={therapistImageUrl} 
-                                alt={therapist.nickname}
-                                className="absolute inset-0 min-w-full min-h-full w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
-                                onError={(e) => {
-                                  (e.target as HTMLImageElement).style.display = 'none'
-                                }}
-                              />
-                            ) : (
-                              <div className="w-full h-full flex items-center justify-center bg-secondary/20">
-                                <User className="h-20 w-20 text-text-muted" />
-                              </div>
-                            )}
-                            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
-                          </div>
-                          <div className="p-4 text-center relative bg-card/90 backdrop-blur-sm">
-                            <CardTitle className="font-heading text-xl text-foreground font-medium transition-colors duration-300 group-hover:text-primary">
-                              {therapist.nickname}
-                            </CardTitle>
-                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary group-hover:w-3/4 transition-all duration-500" />
-                          </div>
-                        </Card>
+                        <div key={therapist.id} className="break-inside-avoid mb-4 md:mb-6">
+                          <Card 
+                            className="group glass border-border hover:border-primary/40 hover:-translate-y-2 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer"
+                            style={{ animationDelay: `${index * 0.1}s` }}
+                          >
+                            <div className="relative overflow-hidden bg-secondary/10">
+                              {therapistImageUrl ? (
+                                <img 
+                                  src={therapistImageUrl} 
+                                  alt={therapist.nickname}
+                                  className="w-full h-auto object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                                  onError={(e) => {
+                                    (e.target as HTMLImageElement).style.display = 'none'
+                                  }}
+                                />
+                              ) : (
+                                <div className="w-full aspect-[3/4] flex items-center justify-center bg-secondary/20">
+                                  <User className="h-20 w-20 text-text-muted" />
+                                </div>
+                              )}
+                              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
+                            </div>
+                            <div className="p-4 text-center relative bg-card/90 backdrop-blur-sm">
+                              <CardTitle className="font-heading text-xl text-foreground font-medium transition-colors duration-300 group-hover:text-primary">
+                                {therapist.nickname}
+                              </CardTitle>
+                              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary group-hover:w-3/4 transition-all duration-500" />
+                            </div>
+                          </Card>
+                        </div>
                       );
                     })}
                   </div>
