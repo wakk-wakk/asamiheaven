@@ -460,22 +460,22 @@ export default function HomePage() {
         <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center text-center w-full -mt-12 md:mt-0">
           <div className="space-y-4 md:space-y-10 animate-slide-up">
             {/* Brand Name */}
-            <h1 className="font-heading text-[4rem] md:text-[10rem] lg:text-[14rem] xl:text-[16rem] text-foreground font-medium leading-tight">
+            <h1 className="font-heading text-[5rem] md:text-[12rem] lg:text-[16rem] xl:text-[20rem] text-foreground font-light leading-[0.85] tracking-tight">
               <span className="relative inline-block">
-                <span className="relative z-10 text-primary">Asami</span>
-                <span className="absolute inset-0 text-primary blur-lg opacity-30">Asami</span>
+                <span className="relative z-10 text-primary drop-shadow-[0_0_30px_rgba(212,175,55,0.5)]">Asami</span>
+                <span className="absolute inset-0 text-primary blur-[60px] opacity-50">Asami</span>
               </span>
-              {' '}
+              <br />
               <span className="relative inline-block">
-                <span className="relative z-10 text-primary">Heaven</span>
-                <span className="absolute inset-0 text-primary blur-lg opacity-30">Heaven</span>
+                <span className="relative z-10 text-primary drop-shadow-[0_0_30px_rgba(212,175,55,0.5)]">Heaven</span>
+                <span className="absolute inset-0 text-primary blur-[60px] opacity-50">Heaven</span>
               </span>
             </h1>
 
             {/* About Us Content */}
             <div className="max-w-2xl mx-auto px-4">
-              <p className="text-base md:text-xl lg:text-2xl text-white/100 font-light leading-relaxed">
-                Step into a world of luxury and indulgence at Asami Heaven. We offer an exclusive selection of Metro Manila's most captivating and refined companions, chosen for their elegance and presence. Experience satisfaction as the standard—proudly recognized as the No. 1 Japanese Nuru in the Philippines.
+              <p className="text-base md:text-xl lg:text-2xl text-white/90 font-light leading-relaxed">
+                Step into a world of luxury and indulgence. We offer an exclusive selection of Metro Manila's most captivating and refined companions, chosen for their elegance and presence. Experience satisfaction as the standard—proudly recognized as the No. 1 Japanese Nuru in the Philippines.
               </p>
             </div>
 
