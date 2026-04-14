@@ -1,0 +1,257 @@
+================================================================================
+ASAMI HAVEN - COMPLETE DEVELOPMENT GUIDE
+================================================================================
+
+================================================================================
+TECH STACK
+================================================================================
+
+| Layer           | Technology                                    |
+|-----------------|-----------------------------------------------|
+| Framework       | Next.js 16.2.2 (App Router)                  |
+| Language        | TypeScript                                    |
+| Styling         | Tailwind CSS 4 + shadcn/ui (Radix primitives) |
+| Database/Auth  | Supabase (PostgreSQL)                         |
+| Contact Forms   | Formspree                                     |
+| Hosting         | Vercel                                        |
+| Icons           | Lucide React                                  |
+
+================================================================================
+PROJECT STRUCTURE
+================================================================================
+
+src/
+├── app/
+│   ├── (public)/              # Public pages (route group)
+│   │   ├── page.tsx           # Home
+│   │   ├── services/          # Services listing
+│   │   ├── therapists/        # Therapists page
+│   │   ├── booking/           # Booking form
+│   │   ├── contact/           # Contact form
+│   │   └── reviews/           # Reviews page
+│   ├── (admin)/               # Admin pages (route group)
+│   │   └── admin/
+│   │       ├── page.tsx       # Admin dashboard
+│   │       ├── login/         # Admin login
+│   │       ├── services/      # Manage services
+│   │       ├── therapists    # Manage therapists
+│   │       └── static-*/     # Static page management
+│   ├── layout.tsx             # Root layout
+│   └── globals.css            # Global styles
+├── components/
+│   ├── ui/                    # shadcn/ui components
+│   ├── layout/                # Navbar, Footer
+│   └── booking/                # Booking components
+└── lib/
+    ├── supabase/client.ts     # Supabase client
+    └── utils.ts              # Utilities
+
+================================================================================
+ENVIRONMENT VARIABLES (.env.local)
+================================================================================
+
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_xxxxxxxxxxxxx
+ADMIN_EMAIL=your-admin@email.com
+NEXT_PUBLIC_FORMSPREE_ENDPOINT=https://formspree.io/f/xxxxxx
+
+================================================================================
+HOW IT WORKS
+================================================================================
+
+1. PUBLIC PAGES
+   - Home, Services, Therapists, Booking, Contact, Reviews
+   - Fetch data from Supabase (services, therapists, reviews tables)
+   - Booking form submits to Supabase bookings table
+
+2. ADMIN DASHBOARD
+   - Located at /admin (requires login)
+   - Manage services, therapists, bookings
+   - Login uses Supabase Auth
+
+3. DATABASE (Supabase)
+   - services table: spa services with name, price, duration, description
+   - bookings table: customer appointments
+   - therapists table: staff members
+   - RLS (Row Level Security) for access control
+
+4. MAILING (Formspree)
+   - Contact form submits to Formspree API
+   - Email notifications sent to admin
+
+================================================================================
+GITHUB → VERCEL INTEGRATION
+================================================================================
+
+STEP 1: PUSH TO GITHUB
+   git add .
+   git commit -m "Initial commit"
+   git push origin main
+
+STEP 2: IMPORT TO VERCEL
+   1. Go to vercel.com
+   2. Click "Add New..." → Project
+   3. Import from GitHub
+   4. Select your repository
+
+STEP 3: CONFIGURE ENVIRONMENT
+   1. Go to Project Settings → Environment Variables
+   2. Add all variables from .env.local
+   3. Redeploy
+
+================================================================================
+SUPABASE SETUP
+================================================================================
+
+STEP 1: CREATE PROJECT
+   1. Go to supabase.com
+   2. Create new project
+   3. Wait for setup to complete
+
+STEP 2: RUN DATABASE MIGRATION
+   1. Go to SQL Editor in Supabase dashboard
+   2. Run SQL from SETUP.md (creates services, bookings tables)
+   3. Run additional migrations as needed
+
+STEP 3: CONFIGURE RLS POLICIES
+   - Enable Row Level Security on tables
+   - Set policies for public read, admin write
+
+STEP 4: CREATE STORAGE BUCKET
+   1. Go to Storage
+   2. Create bucket: services-images (public)
+   3. Add RLS policies for upload/view
+
+STEP 5: CREATE ADMIN USER
+   1. Go to Authentication → Users
+   2. Add user with admin email
+   3. Use for /admin/login
+
+================================================================================
+FORMSPREE SETUP (MAILING)
+================================================================================
+
+STEP 1: CREATE ACCOUNT
+   1. Go to formspree.io
+   2. Sign up for free account
+   3. Create new form
+
+STEP 2: CONFIGURE
+   1. Copy form endpoint URL
+   2. Add to .env.local: NEXT_PUBLIC_FORMSPREE_ENDPOINT
+   3. Verify in Formspree dashboard
+
+STEP 3: TEST
+   1. Run dev server
+   2. Submit contact form
+   3. Check email inbox
+
+================================================================================
+PROS
+================================================================================
+
++ Modern stack: Next.js 16 + Tailwind 4
++ Server Actions (no API routes needed)
++ RLS provides built-in database security
++ Free tier adequate for small spa business
++ Image storage included with Supabase
++ Fully responsive dark theme design
++ Clean project structure with route groups
++ TypeScript throughout
++ shadcn/ui components (accessible)
+
+================================================================================
+CONS
+================================================================================
+
+- No real payment processing (manual tracking only)
+- Admin auth uses simple email/password
+- No email notifications from Supabase (need external service)
+- No advanced booking features (time slots, conflicts)
+- No calendar integration for appointments
+
+================================================================================
+DO
+================================================================================
+
+✓ Keep folder structure: (public) and (admin) route groups
+✓ Use Supabase for all dynamic data
+✓ Keep Tailwind 4 + shadcn/ui
+✓ Maintain dark theme with gold/bronze accents
+✓ Use TypeScript throughout
+✓ Run npm run lint before committing
+✓ Keep RLS policies enabled
+✓ Use environment variables for secrets
+
+================================================================================
+DON'T
+================================================================================
+
+✗ Skip RLS policies (security risk)
+✗ Commit .env.local to git
+✗ Use client-side only auth
+✗ Skip form validation on booking
+✗ Hardcode sensitive values
+✗ Use var() for Supabase credentials (use process.env)
+
+================================================================================
+REMOVE CHECKLIST - STARTING FRESH
+================================================================================
+
+1. Create Next.js app with TypeScript
+   npx create-next-app@latest asamiheaven --typescript --tailwind --eslint
+
+2. Install dependencies
+   npm install @supabase/supabase-js @radix-ui/react-dialog @radix-ui/react-select lucide-react clsx tailwind-merge class-variance-authority
+
+3. Set up Supabase project
+   - Create tables: services, bookings, therapists
+   - Configure RLS policies
+   - Create storage bucket
+
+4. Set up Formspree
+   - Create form at formspree.io
+   - Get endpoint
+
+5. Configure environment variables
+   - Create .env.local from example
+
+6. Build pages
+   - Public: home, services, therapists, booking, contact, reviews
+   - Admin: dashboard, login, services, therapists management
+
+7. Deploy to Vercel
+   - Push to GitHub
+   - Import in Vercel
+   - Add env variables
+
+================================================================================
+QUICK START COMMANDS
+================================================================================
+
+# Install dependencies
+npm install
+
+# Run development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm run start
+
+# Run linting
+npm run lint
+
+================================================================================
+USEFUL RESOURCES
+================================================================================
+
+- Next.js: nextjs.org/docs
+- Supabase: supabase.com/docs
+- Formspree: formspree.io/docs
+- Tailwind: tailwindcss.com/docs
+- Vercel: vercel.com/docs
+
+================================================================================

@@ -111,7 +111,7 @@ export default function HomePage() {
           .select('*')
           .eq('is_active', true)
           .order('name')
-          .limit(6)
+          .limit(20)
         
         if (data && !error) {
           setServices(data)
@@ -148,7 +148,7 @@ export default function HomePage() {
           .select('*')
           .eq('is_active', true)
           .order('nickname')
-          .limit(6)
+          .limit(20)
         
         if (data && !error) {
           setTherapists(data)
@@ -642,7 +642,7 @@ export default function HomePage() {
                 </div>
               ) : (
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
-                  {therapists.slice(0, 4).map((therapist, index) => {
+                  {therapists.map((therapist, index) => {
                     const therapistImageUrl = getTherapistImageUrl(therapist);
                     return (
                       <Card 
