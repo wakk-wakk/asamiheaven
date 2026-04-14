@@ -644,27 +644,27 @@ export default function HomePage() {
                 </div>
 ) : (
                 <>
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 max-w-6xl mx-auto">
+                  <div className="columns-2 md:columns-3 lg:columns-4 gap-4 md:gap-6 max-w-6xl mx-auto">
                     {therapists.slice(0, displayedTherapistsCount).map((therapist, index) => {
                       const therapistImageUrl = getTherapistImageUrl(therapist);
                       return (
-                        <div key={therapist.id} className="mb-4 md:mb-6">
+                        <div key={therapist.id} className="break-inside-avoid mb-4 md:mb-6">
                           <Card 
                             className="group glass border-border hover:border-primary/40 hover:-translate-y-2 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer"
                             style={{ animationDelay: `${index * 0.1}s` }}
                           >
-                            <div className="relative overflow-hidden bg-secondary/10 aspect-[3/4]">
+                            <div className="relative overflow-hidden bg-secondary/10">
                               {therapistImageUrl ? (
                                 <img 
                                   src={therapistImageUrl} 
                                   alt={therapist.nickname}
-                                  className="absolute inset-0 w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                                  className="w-full h-auto object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).style.display = 'none'
                                   }}
                                 />
                               ) : (
-                                <div className="w-full h-full flex items-center justify-center bg-secondary/20">
+                                <div className="w-full aspect-[3/4] flex items-center justify-center bg-secondary/20">
                                   <User className="h-20 w-20 text-text-muted" />
                                 </div>
                               )}
