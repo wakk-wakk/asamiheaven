@@ -448,13 +448,13 @@ export default function HomePage() {
           >
             <source src="/bg.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/40 to-background/20" />
-          <div className="absolute inset-0 bottom-[-10px] bg-gradient-to-t from-background via-background/10 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/90 via-background/70 to-background/50" />
+          <div className="absolute inset-0 bottom-[-10px] bg-gradient-to-t from-background via-background/30 to-transparent" />
         </div>
         
         <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
-          <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/15 rounded-full blur-[80px]" />
-          <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[60px]" style={{ animationDelay: '1.5s' }} />
+          <div className="absolute top-1/4 -left-20 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[80px]" />
+          <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[60px]" style={{ animationDelay: '1.5s' }} />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 rounded-full blur-[80px]" style={{ animationDelay: '3s' }} />
         </div>
 
@@ -682,7 +682,7 @@ export default function HomePage() {
                       );
                     })}
                   </div>
-                  {hasMoreTherapists && (
+                  {hasMoreTherapists ? (
                     <div className="text-center mt-8">
                       <Button
                         onClick={() => setDisplayedTherapistsCount(prev => prev + 8)}
@@ -690,6 +690,16 @@ export default function HomePage() {
                         className="px-8 border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5"
                       >
                         Load More Models
+                      </Button>
+                    </div>
+                  ) : displayedTherapistsCount > 8 && (
+                    <div className="text-center mt-8">
+                      <Button
+                        onClick={() => setDisplayedTherapistsCount(8)}
+                        variant="outline"
+                        className="px-8 border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5"
+                      >
+                        Load Less
                       </Button>
                     </div>
                   )}
