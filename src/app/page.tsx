@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -74,6 +75,8 @@ export default function HomePage() {
   const [whatsappValue, setWhatsappValue] = useState<string>('')
   const [facebookValue, setFacebookValue] = useState<string>('')
   const [telegramValue, setTelegramValue] = useState<string>('')
+
+  const router = useRouter()
 
   useEffect(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -484,12 +487,15 @@ export default function HomePage() {
                   Message us on Telegram
                 </Button>
               )}
-              <Link href="/contact" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group">
-                  Contact Us
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
-              </Link>
+              <Button 
+                type="button"
+                size="lg"
+                className="w-full sm:w-auto px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group"
+                onClick={() => router.push('/contact')}
+              >
+                Contact Us
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
             </div>
           </div>
         </div>
@@ -553,12 +559,14 @@ export default function HomePage() {
                             {services[0].description}
                           </p>
                         <div className="mt-auto">
-                          <Link href="/contact">
-                            <Button className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn">
-                              Inquire Now
-                              <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                            </Button>
-                          </Link>
+                          <Button 
+                            type="button"
+                            className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
+                            onClick={() => router.push('/contact')}
+                          >
+                            Inquire Now
+                            <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                          </Button>
                         </div>
                         </div>
                       </>
@@ -772,12 +780,14 @@ export default function HomePage() {
                           {service.description}
                         </p>
                         <div className="mt-auto">
-                          <Link href="/contact">
-                            <Button className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn">
-                              Inquire Now
-                              <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                            </Button>
-                          </Link>
+                          <Button 
+                            type="button"
+                            className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
+                            onClick={() => router.push('/contact')}
+                          >
+                            Inquire Now
+                            <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                          </Button>
                         </div>
                       </div>
                     </Card>
@@ -924,14 +934,17 @@ export default function HomePage() {
                 Contact us today and discover the art of true relaxation.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
-                <Link href="/contact">
-                  <Button size="lg" className="px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-full font-light shadow-lg hover:scale-105 group">
-                    Contact Us
-                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
-                <Link href="/services">
+               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
+                 <Button 
+                   type="button"
+                   size="lg"
+                   className="px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-full font-light shadow-lg hover:scale-105 group"
+                   onClick={() => router.push('/contact')}
+                 >
+                   Contact Us
+                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                 </Button>
+                 <Link href="/services">
                   <Button variant="outline" size="lg" className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-full font-light backdrop-blur-sm">
                     View Services
                   </Button>

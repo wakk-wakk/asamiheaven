@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -39,6 +40,7 @@ const getSupabaseImageUrl = (imagePath: string): string => {
 export default function ServicesPage() {
   const [services, setServices] = useState<Service[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -165,20 +167,22 @@ export default function ServicesPage() {
                           </div>
                         )}
                       </div>
-                      <p className="text-text-secondary font-light text-sm leading-relaxed flex-grow">
-                        {service.description}
-                      </p>
-                      <div className="mt-auto">
-                        <Link href="/contact" className="w-full">
-                          <button className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn">
-                            Inquire Now
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" aria-hidden="true">
-                              <path d="M5 12h14"></path>
-                              <path d="m12 5 7 7-7 7"></path>
-                            </svg>
-                          </button>
-                        </Link>
-                      </div>
+                       <p className="text-text-secondary font-light text-sm leading-relaxed flex-grow">
+                         {service.description}
+                       </p>
+                       <div className="mt-auto">
+                         <button
+                           type="button"
+                           className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
+                           onClick={() => router.push('/contact')}
+                         >
+                           Inquire Now
+                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" aria-hidden="true">
+                             <path d="M5 12h14"></path>
+                             <path d="m12 5 7 7-7 7"></path>
+                           </svg>
+                         </button>
+                       </div>
                     </div>
                   </Card>
                 )
@@ -199,12 +203,15 @@ export default function ServicesPage() {
               Our team is here to help you choose the perfect treatment for your needs. 
               Contact us for a personalized recommendation.
             </p>
-            <Link href="/contact">
-              <Button size="lg" className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-lg font-light">
-                Contact Us
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
+            <Button 
+              type="button"
+              size="lg"
+              className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-lg font-light"
+              onClick={() => router.push('/contact')}
+            >
+              Contact Us
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
           </div>
         </div>
       </section>
