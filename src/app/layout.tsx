@@ -123,7 +123,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${cormorant.variable} h-full antialiased`}>
       <head>
-        <AdSense />
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1702672979918686"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <Navbar />
@@ -139,6 +143,11 @@ export default function RootLayout({
           data-full-width-responsive="true"
         />
         <Footer />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(adsbygoogle = window.adsbygoogle || []).push({})`,
+          }}
+        />
       </body>
     </html>
   );

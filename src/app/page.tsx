@@ -507,9 +507,9 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center">
-              {services[0] && (
-                <Card className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full">
+                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8 justify-center">
+               {services[0] && (
+                 <Card className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full">
                   {(() => {
                     const imageUrl = getServiceImageUrl(services[0]);
                     return (
