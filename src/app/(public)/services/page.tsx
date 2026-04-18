@@ -132,14 +132,14 @@ export default function ServicesPage() {
                   >
                      {imageUrl ? (
                        <div className="w-full h-64 overflow-hidden rounded-t-lg bg-secondary/20 relative">
-                         <img 
-                           src={imageUrl} 
-                           alt={service.name}
-                           className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
-                           onError={(e) => {
-                             (e.target as HTMLImageElement).style.display = 'none'
-                           }}
-                         />
+                          <img 
+                            src={imageUrl} 
+                            alt={service.name}
+                            className="absolute inset-0 min-w-full min-h-full w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).style.display = 'none'
+                            }}
+                          />
                        </div>
                      ) : (
                       <div className="h-64 rounded-t-lg flex items-center justify-center bg-secondary/20">

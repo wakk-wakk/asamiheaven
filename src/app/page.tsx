@@ -519,7 +519,7 @@ export default function HomePage() {
                             <img 
                               src={imageUrl} 
                               alt={services[0].name}
-                              className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                              className="absolute inset-0 min-w-full min-h-full w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                               onError={(e) => {
                                 (e.target as HTMLImageElement).style.display = 'none'
                               }}
@@ -735,14 +735,14 @@ export default function HomePage() {
                     <Card key={service.id} className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full w-full sm:w-[380px] max-w-[420px]" style={{ animationDelay: `${index * 0.1}s` }}>
                        <div className="w-full h-64 overflow-hidden bg-secondary/10 relative">
                          {serviceImageUrl ? (
-                           <img 
-                             src={serviceImageUrl} 
-                             alt={service.name}
-                             className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
-                             onError={(e) => {
-                               (e.target as HTMLImageElement).style.display = 'none'
-                             }}
-                           />
+                            <img 
+                              src={serviceImageUrl} 
+                              alt={service.name}
+                              className="absolute inset-0 min-w-full min-h-full w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none'
+                              }}
+                            />
                          ) : (
                           <div className="w-full h-full flex items-center justify-center bg-secondary/20">
                             <ImageIcon className="h-16 w-16 text-text-muted" />
