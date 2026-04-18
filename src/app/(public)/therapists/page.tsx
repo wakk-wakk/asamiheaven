@@ -30,13 +30,13 @@ const isValidImageUrl = (url: string): boolean => {
 }
 
 const getTherapistImageUrl = (therapist: Therapist): string | null => {
-  if (therapist.image_path) {
+  if (therapist.image_path && typeof therapist.image_path === 'string') {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     if (supabaseUrl) {
       return `${supabaseUrl}/storage/v1/object/public/therapists-images/${therapist.image_path}`
     }
   }
-  if (therapist.image_url && isValidImageUrl(therapist.image_url)) {
+  if (therapist.image_url && typeof therapist.image_url === 'string' && isValidImageUrl(therapist.image_url)) {
     return therapist.image_url
   }
   return null

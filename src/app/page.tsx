@@ -360,10 +360,10 @@ export default function HomePage() {
   // Get the display image URL for a service (Supabase Storage or external URL)
   const getServiceImageUrl = (service: Service): string | null => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    if (service.image_path && supabaseUrl) {
+    if (service.image_path && typeof service.image_path === 'string' && supabaseUrl) {
       return `${supabaseUrl}/storage/v1/object/public/services-images/${service.image_path}`
     }
-    if (service.image_url && isValidImageUrl(service.image_url)) {
+    if (service.image_url && typeof service.image_url === 'string' && isValidImageUrl(service.image_url)) {
       return service.image_url
     }
     return null
@@ -372,10 +372,10 @@ export default function HomePage() {
   // Get the display image URL for a therapist (Supabase Storage or external URL)
   const getTherapistImageUrl = (therapist: Therapist): string | null => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    if (therapist.image_path && supabaseUrl) {
+    if (therapist.image_path && typeof therapist.image_path === 'string' && supabaseUrl) {
       return `${supabaseUrl}/storage/v1/object/public/therapists-images/${therapist.image_path}`
     }
-    if (therapist.image_url && isValidImageUrl(therapist.image_url)) {
+    if (therapist.image_url && typeof therapist.image_url === 'string' && isValidImageUrl(therapist.image_url)) {
       return therapist.image_url
     }
     return null
@@ -806,10 +806,13 @@ export default function HomePage() {
                   // Get the image URL from Supabase Storage if image_path exists
                   const getReviewImageUrl = (): string | null => {
                     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-                    if (review.image_path && supabaseUrl) {
+                    if (review.image_path && typeof review.image_path === 'string' && supabaseUrl) {
                       return `${supabaseUrl}/storage/v1/object/public/reviews-images/${review.image_path}`
                     }
-                    return review.image_url || null
+                    if (review.image_url && typeof review.image_url === 'string') {
+                      return review.image_url
+                    }
+                    return null
                   }
                   const reviewImageUrl = getReviewImageUrl()
 
@@ -847,10 +850,13 @@ export default function HomePage() {
                   // Get the image URL from Supabase Storage if image_path exists
                   const getReviewImageUrl = (): string | null => {
                     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-                    if (review.image_path && supabaseUrl) {
+                    if (review.image_path && typeof review.image_path === 'string' && supabaseUrl) {
                       return `${supabaseUrl}/storage/v1/object/public/reviews-images/${review.image_path}`
                     }
-                    return review.image_url || null
+                    if (review.image_url && typeof review.image_url === 'string') {
+                      return review.image_url
+                    }
+                    return null
                   }
                   const reviewImageUrl = getReviewImageUrl()
 

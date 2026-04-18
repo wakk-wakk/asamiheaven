@@ -68,19 +68,22 @@ export default function ServicesPage() {
     fetchServices()
   }, [])
 
-  // Get the display image URL for a service
-  const getServiceImageUrl = (service: Service): string | null => {
-    if (service.image_path) {
-      const url = getSupabaseImageUrl(service.image_path)
-      if (url) return url
-    }
-    if (service.image_url && isValidImageUrl(service.image_url)) {
-      return service.image_url
-    }
-    return null
-  }
+   // Get the display image URL for a service
+   const getServiceImageUrl = (service: Service): string | null => {
+     // Priority: image_path (Supabase Storage) > image_url (external)
+     if (service.image_path && typeof service.image_path === 'string') {
+       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+       if (supabaseUrl) {
+         return `${supabaseUrl}/storage/v1/object/public/services-images/${service.image_path}`
+       }
+     }
+     if (service.image_url && typeof service.image_url === 'string' && isValidImageUrl(service.image_url)) {
+       return service.image_url
+     }
+     return null
+   }
 
-  if (isLoading) {
+   if (isLoading) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center space-y-4">
