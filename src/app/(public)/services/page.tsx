@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -27,6 +27,13 @@ const isValidImageUrl = (url: string): boolean => {
   } catch {
     return false
   }
+}
+
+// Get Supabase public URL for an image path
+const getSupabaseImageUrl = (imagePath: string): string => {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  if (!supabaseUrl || !imagePath) return ''
+  return `${supabaseUrl}/storage/v1/object/public/services-images/${imagePath}`
 }
 
 export default function ServicesPage() {
@@ -63,18 +70,9 @@ export default function ServicesPage() {
 
   // Get the display image URL for a service
   const getServiceImageUrl = (service: Service): string | null => {
-    // Priority: image_path (Supabase Storage) > image_url (external)
     if (service.image_path) {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-      
-      if (supabaseUrl && supabaseAnonKey) {
-        const supabase = createClient(supabaseUrl, supabaseAnonKey)
-        const { data } = supabase.storage
-          .from('services-images')
-          .getPublicUrl(service.image_path)
-        return data?.publicUrl || null
-      }
+      const url = getSupabaseImageUrl(service.image_path)
+      if (url) return url
     }
     if (service.image_url && isValidImageUrl(service.image_url)) {
       return service.image_url
@@ -129,18 +127,18 @@ export default function ServicesPage() {
                     className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group flex flex-col h-full"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    {imageUrl ? (
-                      <div className="w-full h-64 overflow-hidden rounded-t-lg bg-secondary/20 relative">
-                        <img 
-                          src={imageUrl} 
-                          alt={service.name}
-                          className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none'
-                          }}
-                        />
-                      </div>
-                    ) : (
+                     {imageUrl ? (
+                       <div className="w-full h-64 overflow-hidden rounded-t-lg bg-secondary/20 relative">
+                         <img 
+                           src={imageUrl} 
+                           alt={service.name}
+                           className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                           onError={(e) => {
+                             (e.target as HTMLImageElement).style.display = 'none'
+                           }}
+                         />
+                       </div>
+                     ) : (
                       <div className="h-64 rounded-t-lg flex items-center justify-center bg-secondary/20">
                         <ImageIcon className="h-12 w-12 text-text-muted" />
                       </div>

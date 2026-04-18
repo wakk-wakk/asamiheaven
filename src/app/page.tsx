@@ -359,18 +359,9 @@ export default function HomePage() {
 
   // Get the display image URL for a service (Supabase Storage or external URL)
   const getServiceImageUrl = (service: Service): string | null => {
-    // Priority: image_path (Supabase Storage) > image_url (external)
-    if (service.image_path) {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-      
-      if (supabaseUrl && supabaseAnonKey) {
-        const supabase = createClient(supabaseUrl, supabaseAnonKey)
-        const { data } = supabase.storage
-          .from('services-images')
-          .getPublicUrl(service.image_path)
-        return data?.publicUrl || null
-      }
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    if (service.image_path && supabaseUrl) {
+      return `${supabaseUrl}/storage/v1/object/public/services-images/${service.image_path}`
     }
     if (service.image_url && isValidImageUrl(service.image_url)) {
       return service.image_url
@@ -380,18 +371,9 @@ export default function HomePage() {
 
   // Get the display image URL for a therapist (Supabase Storage or external URL)
   const getTherapistImageUrl = (therapist: Therapist): string | null => {
-    // Priority: image_path (Supabase Storage) > image_url (external)
-    if (therapist.image_path) {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-      
-      if (supabaseUrl && supabaseAnonKey) {
-        const supabase = createClient(supabaseUrl, supabaseAnonKey)
-        const { data } = supabase.storage
-          .from('therapists-images')
-          .getPublicUrl(therapist.image_path)
-        return data?.publicUrl || null
-      }
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    if (therapist.image_path && supabaseUrl) {
+      return `${supabaseUrl}/storage/v1/object/public/therapists-images/${therapist.image_path}`
     }
     if (therapist.image_url && isValidImageUrl(therapist.image_url)) {
       return therapist.image_url
@@ -751,17 +733,17 @@ export default function HomePage() {
                   const serviceImageUrl = getServiceImageUrl(service);
                   return (
                     <Card key={service.id} className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full w-full sm:w-[380px] max-w-[420px]" style={{ animationDelay: `${index * 0.1}s` }}>
-                      <div className="w-full h-64 overflow-hidden bg-secondary/10 relative">
-                        {serviceImageUrl ? (
-                          <img 
-                            src={serviceImageUrl} 
-                            alt={service.name}
-                            className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).style.display = 'none'
-                            }}
-                          />
-                        ) : (
+                       <div className="w-full h-64 overflow-hidden bg-secondary/10 relative">
+                         {serviceImageUrl ? (
+                           <img 
+                             src={serviceImageUrl} 
+                             alt={service.name}
+                             className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                             onError={(e) => {
+                               (e.target as HTMLImageElement).style.display = 'none'
+                             }}
+                           />
+                         ) : (
                           <div className="w-full h-full flex items-center justify-center bg-secondary/20">
                             <ImageIcon className="h-16 w-16 text-text-muted" />
                           </div>
@@ -823,19 +805,11 @@ export default function HomePage() {
                 {reviews.map((review) => {
                   // Get the image URL from Supabase Storage if image_path exists
                   const getReviewImageUrl = (): string | null => {
-                    if (review.image_path) {
-                      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-                      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-                      
-                      if (supabaseUrl && supabaseAnonKey) {
-                        const supabase = createClient(supabaseUrl, supabaseAnonKey)
-                        const { data } = supabase.storage
-                          .from('reviews-images')
-                          .getPublicUrl(review.image_path)
-                        return data?.publicUrl || null
-                      }
+                    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+                    if (review.image_path && supabaseUrl) {
+                      return `${supabaseUrl}/storage/v1/object/public/reviews-images/${review.image_path}`
                     }
-                    return review.image_url
+                    return review.image_url || null
                   }
                   const reviewImageUrl = getReviewImageUrl()
 
@@ -872,19 +846,11 @@ export default function HomePage() {
                 {reviews.map((review) => {
                   // Get the image URL from Supabase Storage if image_path exists
                   const getReviewImageUrl = (): string | null => {
-                    if (review.image_path) {
-                      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-                      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-                      
-                      if (supabaseUrl && supabaseAnonKey) {
-                        const supabase = createClient(supabaseUrl, supabaseAnonKey)
-                        const { data } = supabase.storage
-                          .from('reviews-images')
-                          .getPublicUrl(review.image_path)
-                        return data?.publicUrl || null
-                      }
+                    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+                    if (review.image_path && supabaseUrl) {
+                      return `${supabaseUrl}/storage/v1/object/public/reviews-images/${review.image_path}`
                     }
-                    return review.image_url
+                    return review.image_url || null
                   }
                   const reviewImageUrl = getReviewImageUrl()
 

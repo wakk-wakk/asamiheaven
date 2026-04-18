@@ -32,14 +32,8 @@ const isValidImageUrl = (url: string): boolean => {
 const getTherapistImageUrl = (therapist: Therapist): string | null => {
   if (therapist.image_path) {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-    
-    if (supabaseUrl && supabaseAnonKey) {
-      const supabase = createClient(supabaseUrl, supabaseAnonKey)
-      const { data } = supabase.storage
-        .from('therapists-images')
-        .getPublicUrl(therapist.image_path)
-      return data?.publicUrl || null
+    if (supabaseUrl) {
+      return `${supabaseUrl}/storage/v1/object/public/therapists-images/${therapist.image_path}`
     }
   }
   if (therapist.image_url && isValidImageUrl(therapist.image_url)) {
