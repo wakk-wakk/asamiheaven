@@ -817,6 +817,80 @@ export default function HomePage() {
         </section>
       )}
 
+      {/* Our Packages Section - displays all services like services page */}
+      {!isLoadingServices && services.length > 0 && (
+        <section className="py-12 md:py-16 px-4 relative overflow-hidden">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center mb-16 space-y-4">
+              <h2 className="font-heading text-4xl md:text-5xl text-foreground font-medium">
+                Our Packages
+              </h2>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {services.map((service, index) => {
+                const imageUrl = getServiceImageUrl(service);
+                return (
+                  <Card 
+                    key={service.id} 
+                    className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group flex flex-col h-full"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    {imageUrl ? (
+                      <div className="w-full h-64 overflow-hidden rounded-t-lg bg-secondary/20 relative flex items-center justify-center">
+                        <img 
+                          src={imageUrl} 
+                          alt={service.name}
+                          className="min-w-full min-h-full max-w-full max-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none'
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-64 rounded-t-lg flex items-center justify-center bg-secondary/20">
+                        <ImageIcon className="h-12 w-12 text-text-muted" />
+                      </div>
+                    )}
+                    <CardContent className="p-6 flex flex-col gap-4 flex-grow">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <h3 className="font-heading text-xl text-foreground font-medium mb-1">
+                            {service.name}
+                          </h3>
+                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
+                            <Clock size={14} />
+                            <span>{service.duration} minutes</span>
+                          </div>
+                        </div>
+                        {service.price && service.price > 0 && (
+                          <div className="text-right">
+                            <span className="text-primary font-heading text-lg font-medium">
+                              ₱{service.price.toLocaleString()}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-text-secondary font-light text-sm leading-relaxed flex-grow">
+                        {service.description}
+                      </p>
+                      <Button 
+                        type="button"
+                        className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
+                        onClick={() => router.push('/contact')}
+                      >
+                        Inquire Now
+                        <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                      </Button>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* CTA Section */}
       <section className="py-12 px-4 relative overflow-hidden">
         <div className="max-w-6xl mx-auto relative">
