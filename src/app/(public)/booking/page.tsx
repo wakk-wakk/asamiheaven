@@ -237,7 +237,7 @@ export default function BookingPage() {
                   {displaySettings.services_mode === 'static' && staticService ? (
                     // Static mode: show read-only service name only
                     <div className="p-4 bg-primary/5 border border-primary/20 rounded-lg">
-                      <p className="text-foreground font-medium">{staticService.name}</p>
+                      <p className="text-foreground">{staticService.name}</p>
                     </div>
                   ) : isLoadingServices ? (
                     <div className="flex items-center justify-center p-4">
@@ -246,7 +246,7 @@ export default function BookingPage() {
                   ) : (
                     // Dynamic mode: show dropdown
                     <Select value={formData.service} onValueChange={(value: string) => handleChange('service', value)}>
-                      <SelectTrigger className={`bg-card border-border focus:border-primary/50 ${errors.service ? 'border-error' : ''}`}>
+                      <SelectTrigger className={`bg-background-alt border-border focus:border-primary/50 ${errors.service ? 'border-error' : ''}`}>
                         <SelectValue placeholder="Select a service" />
                       </SelectTrigger>
                       <SelectContent>
@@ -270,7 +270,7 @@ export default function BookingPage() {
                     value={formData.date}
                     onChange={(e) => handleChange('date', e.target.value)}
                     min={today}
-                    className={`bg-card border-border focus:border-primary/50 ${errors.date ? 'border-error' : ''}`}
+                    className={`bg-background-alt border-border focus:border-primary/50 ${errors.date ? 'border-error' : ''}`}
                   />
                   {errors.date && <p className="text-error text-sm font-light">{errors.date}</p>}
                 </div>
@@ -286,7 +286,7 @@ export default function BookingPage() {
                       value={formData.name}
                       onChange={(e) => handleChange('name', e.target.value)}
                       placeholder="Your full name"
-                      className={`bg-card border-border focus:border-primary/50 ${errors.name ? 'border-error' : ''}`}
+                      className={`bg-background-alt border-border focus:border-primary/50 ${errors.name ? 'border-error' : ''}`}
                     />
                     {errors.name && <p className="text-error text-sm font-light">{errors.name}</p>}
                   </div>
@@ -300,7 +300,7 @@ export default function BookingPage() {
                         value={formData.email}
                         onChange={(e) => handleChange('email', e.target.value)}
                         placeholder="your@email.com"
-                        className={`bg-card border-border focus:border-primary/50 ${errors.email ? 'border-error' : ''}`}
+                        className={`bg-background-alt border-border focus:border-primary/50 ${errors.email ? 'border-error' : ''}`}
                       />
                       {errors.email && <p className="text-error text-sm font-light">{errors.email}</p>}
                     </div>
@@ -311,7 +311,7 @@ export default function BookingPage() {
                         value={formData.phone}
                         onChange={(e) => handleChange('phone', e.target.value)}
                         placeholder="+1 (555) 123-4567"
-                        className={`bg-card border-border focus:border-primary/50 ${errors.phone ? 'border-error' : ''}`}
+                        className={`bg-background-alt border-border focus:border-primary/50 ${errors.phone ? 'border-error' : ''}`}
                       />
                       {errors.phone && <p className="text-error text-sm font-light">{errors.phone}</p>}
                     </div>
@@ -329,7 +329,7 @@ export default function BookingPage() {
                     onChange={(e) => handleChange('notes', e.target.value)}
                     placeholder="Any special requests or information we should know?"
                     rows={3}
-                    className="bg-card border-border focus:border-primary/50 resize-none"
+                    className="bg-background-alt border-border focus:border-primary/50 resize-none"
                   />
                 </div>
 

@@ -546,7 +546,7 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleChange}
                         placeholder="Your name" 
-                        className={`bg-card border-border focus:border-primary/50 transition-colors ${errors.name ? 'border-destructive' : ''}`}
+                        className={`bg-background-alt border-border focus:border-primary/50 transition-colors ${errors.name ? 'border-destructive' : ''}`}
                       />
                       {errors.name && (
                         <p className="text-destructive text-xs font-light">{errors.name}</p>
@@ -560,7 +560,7 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="your@email.com" 
-                        className={`bg-card border-border focus:border-primary/50 transition-colors ${errors.email ? 'border-destructive' : ''}`}
+                        className={`bg-background-alt border-border focus:border-primary/50 transition-colors ${errors.email ? 'border-destructive' : ''}`}
                       />
                       {errors.email && (
                         <p className="text-destructive text-xs font-light">{errors.email}</p>
@@ -574,7 +574,7 @@ export default function ContactPage() {
                       value={formData.subject}
                       onChange={handleChange}
                       placeholder="How can we help?" 
-                      className={`bg-card border-border focus:border-primary/50 transition-colors ${errors.subject ? 'border-destructive' : ''}`}
+                      className={`bg-background-alt border-border focus:border-primary/50 transition-colors ${errors.subject ? 'border-destructive' : ''}`}
                     />
                     {errors.subject && (
                       <p className="text-destructive text-xs font-light">{errors.subject}</p>
@@ -588,7 +588,7 @@ export default function ContactPage() {
                       onChange={handleChange}
                       placeholder="Tell us more about your inquiry..." 
                       rows={5}
-                      className={`bg-card border-border focus:border-primary/50 transition-colors resize-none ${errors.message ? 'border-destructive' : ''}`}
+                      className={`bg-background-alt border-border focus:border-primary/50 transition-colors resize-none ${errors.message ? 'border-destructive' : ''}`}
                     />
                     {errors.message && (
                       <p className="text-destructive text-xs font-light">{errors.message}</p>

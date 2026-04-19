@@ -433,7 +433,7 @@ export default function HomePage() {
           >
             <source src="/bg.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-gradient-to-r from-background/70 via-background/50 to-background/30" />
+          <div className="absolute inset-0 bg-black/60" />
         </div>
         
         <div className="absolute inset-0 overflow-hidden z-0 pointer-events-none">
@@ -447,20 +447,20 @@ export default function HomePage() {
             {/* Brand Name */}
             <h1 className="font-heading text-[4rem] md:text-[8rem] lg:text-[14rem] xl:text-[20rem] text-foreground leading-[0.75] tracking-tight">
               <span className="relative inline-block">
-                <span className="relative z-10 text-primary font-semibold" style={{ textShadow: '0 0 80px rgba(212,175,55,0.9), 0 0 120px rgba(212,175,55,0.7), 0 0 200px rgba(212,175,55,0.5)' }}>Asami</span>
+                <span className="relative z-10 text-primary font-semibold" style={{ textShadow: '0 0 80px rgba(198,169,107,0.9), 0 0 120px rgba(198,169,107,0.7), 0 0 200px rgba(198,169,107,0.5)' }}>Asami</span>
                 <span className="absolute inset-0 text-primary blur-[120px] opacity-80">Asami</span>
               </span>
               <span className="hidden md:inline">&nbsp;</span>
               <br className="md:hidden" />
               <span className="hidden md:inline">
                 <span className="relative inline-block">
-                  <span className="relative z-10 text-primary font-medium" style={{ textShadow: '0 0 60px rgba(212,175,55,0.8), 0 0 100px rgba(212,175,55,0.5)' }}>Heaven</span>
+                  <span className="relative z-10 text-primary font-medium" style={{ textShadow: '0 0 60px rgba(198,169,107,0.8), 0 0 100px rgba(198,169,107,0.5)' }}>Heaven</span>
                   <span className="absolute inset-0 text-primary blur-[100px] opacity-70">Heaven</span>
                 </span>
               </span>
               <span className="md:hidden">
                 <span className="relative inline-block">
-                  <span className="relative z-10 text-primary font-medium" style={{ textShadow: '0 0 60px rgba(212,175,55,0.8), 0 0 100px rgba(212,175,55,0.5)' }}>Heaven</span>
+                  <span className="relative z-10 text-primary font-medium" style={{ textShadow: '0 0 60px rgba(198,169,107,0.8), 0 0 100px rgba(198,169,107,0.5)' }}>Heaven</span>
                   <span className="absolute inset-0 text-primary blur-[100px] opacity-70">Heaven</span>
                 </span>
               </span>
@@ -468,8 +468,8 @@ export default function HomePage() {
 
             {/* About Us Content */}
             <div className="max-w-2xl mx-auto px-4">
-              <p className="text-base md:text-xl lg:text-2xl text-white/90 font-light leading-relaxed">
-                Step into a world of luxury and indulgence. We offer an exclusive selection of Metro Manila's most captivating and refined companions, chosen for their elegance and presence. Experience satisfaction as the standard—proudly recognized as the No. 1 Japanese Nuru in the Philippines.
+              <p className="text-base md:text-xl text-white/90 font-light leading-relaxed">
+                Relax. Indulge. Escape.
               </p>
             </div>
 
@@ -655,7 +655,7 @@ export default function HomePage() {
                       return (
                         <div key={therapist.id} className="break-inside-avoid mb-6 md:mb-8">
                           <Card 
-                            className="group glass border-2 border-white/60 hover:border-white hover:-translate-y-2 transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer bg-black/20"
+                            className="group glass border border-white/10 hover:border-primary/40 transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer bg-black/20"
                             style={{ animationDelay: `${index * 0.1}s` }}
                           >
                             <div className="relative overflow-hidden bg-secondary/10">
@@ -663,7 +663,7 @@ export default function HomePage() {
                                 <img 
                                   src={therapistImageUrl} 
                                   alt={therapist.nickname}
-                                  className="w-full h-auto object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                                  className="w-full h-auto object-cover transition-all duration-500 ease-out group-hover:scale-105"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).style.display = 'none'
                                   }}
@@ -673,13 +673,12 @@ export default function HomePage() {
                                   <User className="h-20 w-20 text-text-muted" />
                                 </div>
                               )}
-                              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-70 group-hover:opacity-50 transition-opacity duration-500" />
-                            </div>
-                            <div className="p-4 text-center relative bg-card/90 backdrop-blur-sm">
-                              <CardTitle className="font-heading text-xl text-foreground font-medium transition-colors duration-300 group-hover:text-primary">
-                                {therapist.nickname}
-                              </CardTitle>
-                              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-primary group-hover:w-3/4 transition-all duration-500" />
+                              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500" />
+                              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                                <span className="text-primary font-heading text-lg tracking-widest uppercase">
+                                  {therapist.nickname}
+                                </span>
+                              </div>
                             </div>
                           </Card>
                         </div>
@@ -724,63 +723,32 @@ export default function HomePage() {
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map((service, index) => {
-                const imageUrl = getServiceImageUrl(service);
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {services.slice(0, 6).map((service, index) => {
                 return (
-                  <Card 
+                  <div 
                     key={service.id} 
-                    className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group flex flex-col h-full"
+                    className="glass border border-white/10 p-6 hover:border-primary/30 transition-all duration-500"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    {imageUrl ? (
-                      <div className="w-full h-64 overflow-hidden rounded-t-lg bg-secondary/20 relative flex items-center justify-center">
-                        <img 
-                          src={imageUrl} 
-                          alt={service.name}
-                          className="min-w-full min-h-full max-w-full max-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none'
-                          }}
-                        />
-                      </div>
-                    ) : (
-                      <div className="h-64 rounded-t-lg flex items-center justify-center bg-secondary/20">
-                        <ImageIcon className="h-12 w-12 text-text-muted" />
-                      </div>
-                    )}
-                    <CardContent className="p-6 flex flex-col gap-4 flex-grow">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h3 className="font-heading text-xl text-foreground font-medium mb-1">
-                            {service.name}
-                          </h3>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                            <Clock size={14} />
-                            <span>{service.duration} minutes</span>
-                          </div>
-                        </div>
-                        {service.price && service.price > 0 && (
-                          <div className="text-right">
-                            <span className="text-primary font-heading text-lg font-medium">
-                              ₱{service.price.toLocaleString()}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                      <p className="text-text-secondary font-light text-sm leading-relaxed flex-grow">
-                        {service.description}
-                      </p>
-                      <Button 
-                        type="button"
-                        className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
-                        onClick={() => router.push('/contact')}
-                      >
-                        Inquire Now
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                      </Button>
-                    </CardContent>
-                  </Card>
+                    <div className="flex justify-between items-start mb-4">
+                      <h3 className="font-heading text-xl text-foreground">
+                        {service.name}
+                      </h3>
+                      {service.price && service.price > 0 && (
+                        <span className="text-primary font-heading text-lg">
+                          ₱{service.price.toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-text-muted mb-3">
+                      <Clock size={14} />
+                      <span>{service.duration} min</span>
+                    </div>
+                    <p className="text-text-secondary font-light text-sm leading-relaxed line-clamp-2">
+                      {service.description}
+                    </p>
+                  </div>
                 );
               })}
             </div>

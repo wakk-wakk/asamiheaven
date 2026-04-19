@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Card } from '@/components/ui/card'
-import { Clock, ArrowRight, Image as ImageIcon, Loader2, ArrowLeft } from 'lucide-react'
+import { Clock, ArrowRight, Loader2, ArrowLeft } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 
 interface Service {
@@ -115,7 +114,7 @@ export default function ServicesPage() {
         </div>
       </section>
 
-      {/* Services Grid */}
+{/* Services Grid */}
       <section className="py-12 px-4 pb-24">
         <div className="max-w-7xl mx-auto">
           {services.length === 0 ? (
@@ -123,68 +122,32 @@ export default function ServicesPage() {
               <p className="text-text-secondary font-light">No services available at the moment.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {services.map((service, index) => {
-                const imageUrl = getServiceImageUrl(service)
                 return (
-                  <Card 
+                  <div 
                     key={service.id} 
-                    className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group flex flex-col h-full"
+                    className="glass border border-white/10 p-6 hover:border-primary/30 transition-all duration-500"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                     {imageUrl ? (
-                       <div className="w-full h-64 overflow-hidden rounded-t-lg bg-secondary/20 relative flex items-center justify-center">
-                          <img 
-                            src={imageUrl} 
-                            alt={service.name}
-                            className="min-w-full min-h-full max-w-full max-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).style.display = 'none'
-                            }}
-                          />
-                       </div>
-                     ) : (
-                      <div className="h-64 rounded-t-lg flex items-center justify-center bg-secondary/20">
-                        <ImageIcon className="h-12 w-12 text-text-muted" />
-                      </div>
-                    )}
-                    <div className="p-6 flex flex-col gap-4 flex-grow">
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h3 className="font-heading text-xl text-foreground font-medium mb-1">
-                            {service.name}
-                          </h3>
-                          <div className="flex items-center gap-2 text-sm text-muted-foreground mb-3">
-                            <Clock size={14} />
-                            <span>{service.duration} minutes</span>
-                          </div>
-                        </div>
-                        {service.price && service.price > 0 && (
-                          <div className="text-right">
-                            <span className="text-primary font-heading text-lg font-medium">
-                              ₱{service.price.toLocaleString()}
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                       <p className="text-text-secondary font-light text-sm leading-relaxed flex-grow">
-                         {service.description}
-                       </p>
-                       <div className="mt-auto">
-                         <button
-                           type="button"
-                           className="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 px-4 py-2 w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
-                           onClick={() => router.push('/contact')}
-                         >
-                           Inquire Now
-                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-arrow-right ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" aria-hidden="true">
-                             <path d="M5 12h14"></path>
-                             <path d="m12 5 7 7-7 7"></path>
-                           </svg>
-                         </button>
-                       </div>
+                    <div className="flex justify-between items-start mb-4">
+                      <h3 className="font-heading text-xl text-foreground">
+                        {service.name}
+                      </h3>
+                      {service.price && service.price > 0 && (
+                        <span className="text-primary font-heading text-lg">
+                          ₱{service.price.toLocaleString()}
+                        </span>
+                      )}
                     </div>
-                  </Card>
+                    <div className="flex items-center gap-2 text-sm text-text-muted mb-3">
+                      <Clock size={14} />
+                      <span>{service.duration} min</span>
+                    </div>
+                    <p className="text-text-secondary font-light text-sm leading-relaxed line-clamp-3">
+                      {service.description}
+                    </p>
+                  </div>
                 )
               })}
             </div>

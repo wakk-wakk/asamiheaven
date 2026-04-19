@@ -138,7 +138,7 @@ export default function TherapistsPage() {
               <p className="text-text-secondary font-light">Our models will be introduced soon.</p>
             </div>
           ) : (
-            <div className={`grid gap-8 justify-center ${
+            <div className={`grid gap-6 md:gap-8 justify-center ${
               displaySettings.therapists_mode === 'static' 
                 ? 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 max-w-4xl mx-auto' 
                 : 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4'
@@ -146,17 +146,17 @@ export default function TherapistsPage() {
               {therapists.map((therapist, index) => {
                 const imageUrl = getTherapistImageUrl(therapist)
                 return (
-                  <Card 
+                  <div 
                     key={therapist.id} 
-                    className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group cursor-pointer"
+                    className="group relative overflow-hidden cursor-pointer"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="aspect-square overflow-hidden">
+                    <div className="aspect-[3/4] overflow-hidden bg-secondary/10">
                       {imageUrl ? (
                         <img 
                           src={imageUrl} 
                           alt={therapist.nickname}
-                          className="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                          className="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105"
                           onError={(e) => {
                             (e.target as HTMLImageElement).style.display = 'none'
                           }}
@@ -166,13 +166,14 @@ export default function TherapistsPage() {
                           <User className="h-16 w-16 text-text-muted" />
                         </div>
                       )}
+                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500" />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                        <span className="text-primary font-heading text-xl tracking-widest uppercase">
+                          {therapist.nickname}
+                        </span>
+                      </div>
                     </div>
-                    <div className="p-4 text-center">
-                      <h3 className="font-heading text-lg text-foreground transition-colors duration-300 group-hover:text-primary">
-                        {therapist.nickname}
-                      </h3>
-                    </div>
-                  </Card>
+                  </div>
                 )
               })}
             </div>

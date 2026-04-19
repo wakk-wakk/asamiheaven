@@ -1,20 +1,20 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap');
 @import "tailwindcss";
 
 /* Dark Theme Design System for Spa Website */
 :root {
   /* Background Colors */
-  --background: #0a0a0a;
-  --background-alt: #121212;
-  --foreground: #f5f5f5;
+  --background: #0F0F10;
+  --background-alt: #1A1A1D;
+  --foreground: #F5EFE6;
   --card: #161210;
   --card-hover: #1d1a17;
   
   /* Primary Colors - Warm Gold/Bronze */
-  --primary: #c9a227;
-  --primary-hover: #d4b02a;
-  --primary-glow: rgba(201, 162, 39, 0.4);
-  --primary-subtle: rgba(201, 162, 39, 0.1);
+  --primary: #C6A96B;
+  --primary-hover: #D4B87A;
+  --primary-glow: rgba(198, 169, 107, 0.4);
+  --primary-subtle: rgba(198, 169, 107, 0.1);
   
   /* Secondary Colors */
   --secondary: #2d2d2d;
@@ -31,13 +31,13 @@
   --info: #60a5fa;
   
   /* Text Colors */
-  --text-primary: #f5f5f5;
-  --text-secondary: #a3a3a3;
+  --text-primary: #F5EFE6;
+  --text-secondary: #A8A29E;
   --text-muted: #737373;
   
   /* Border Colors */
-  --border: rgba(212, 165, 116, 0.1);
-  --border-hover: rgba(212, 165, 116, 0.3);
+  --border: rgba(198, 169, 107, 0.1);
+  --border-hover: rgba(198, 169, 107, 0.3);
   
   /* Shadow */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
@@ -72,7 +72,7 @@
   --color-border-hover: var(--border-hover);
   
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-  --font-heading: 'Cormorant Garamond', Georgia, serif;
+  --font-heading: 'Playfair Display', Georgia, serif;
   --font-mono: 'SF Mono', 'Fira Code', monospace;
 }
 
