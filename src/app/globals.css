@@ -368,3 +368,94 @@ img {
 .animate-gold-sparkle {
   animation: gold-sparkle 1.5s ease-in-out infinite;
 }
+
+/* Glitter/star sparkle effect */
+@keyframes glitter {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+  }
+  10% {
+    opacity: 1;
+    transform: scale(1);
+    filter: brightness(2);
+  }
+  20% {
+    opacity: 0.5;
+    transform: scale(0.9);
+  }
+  30% {
+    opacity: 1;
+    transform: scale(1.1);
+    filter: brightness(2.5);
+  }
+  40% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  60% {
+    opacity: 0.6;
+    transform: scale(0.95);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.15);
+    filter: brightness(1.8);
+  }
+  80% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  90% {
+    opacity: 1;
+    transform: scale(1.05);
+    filter: brightness(2.2);
+  }
+}
+
+.animate-glitter {
+  animation: glitter 1s ease-in-out infinite;
+}
+
+/* Multi-sparkle effect using pseudo-elements */
+@keyframes sparkle-1 {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  25% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0; transform: scale(0); }
+}
+
+@keyframes sparkle-2 {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+  75% { opacity: 0; transform: scale(0); }
+}
+
+.sparkle-container {
+  position: relative;
+}
+
+.sparkle-container::before,
+.sparkle-container::after {
+  content: '✦';
+  position: absolute;
+  color: #FFD700;
+  font-size: 0.6em;
+  text-shadow: 0 0 5px #FFD700, 0 0 10px #FFA500;
+}
+
+.sparkle-container::before {
+  animation: sparkle-1 1.2s ease-in-out infinite;
+  left: -0.3em;
+  top: 0;
+}
+
+.sparkle-container::after {
+  animation: sparkle-2 1.2s ease-in-out infinite;
+  right: -0.3em;
+  bottom: 0;
+  animation-delay: 0.6s;
+}

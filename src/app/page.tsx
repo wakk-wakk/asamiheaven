@@ -483,8 +483,8 @@ export default function HomePage() {
                   size="lg" 
                   className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer animate-pulse-gold"
                 >
-                  <MessageCircle className="mr-2 h-5 w-5 animate-gold-sparkle" />
-                  <span className="animate-gold-sparkle">Message us on Telegram</span>
+                  <MessageCircle className="mr-2 h-5 w-5 animate-glitter" />
+                  <span className="animate-glitter">Message us on Telegram</span>
                 </Button>
               )}
               <Button 
