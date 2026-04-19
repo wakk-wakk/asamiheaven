@@ -163,7 +163,7 @@ export default function ServicesPage() {
                         <Clock size={14} />
                         <span>{service.duration} min</span>
                       </div>
-                      <p className="text-text-secondary font-light text-sm leading-relaxed line-clamp-3">
+                      <p className="text-text-secondary font-light text-sm leading-relaxed">
                         {service.description}
                       </p>
                     </div>
