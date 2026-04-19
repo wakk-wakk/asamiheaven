@@ -672,9 +672,9 @@ export default function HomePage() {
                                   <User className="h-20 w-20 text-text-muted" />
                                 </div>
                               )}
-                              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500" />
+                              <div className="absolute inset-0 bg-black/80 group-hover:bg-black/60 transition-all duration-500" />
                               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
-                                <span className="text-primary font-heading text-lg tracking-widest uppercase">
+                                <span className="bg-background/80 backdrop-blur-sm px-4 py-2 text-primary font-heading text-xl tracking-widest uppercase">
                                   {therapist.nickname}
                                 </span>
                               </div>
@@ -762,7 +762,7 @@ export default function HomePage() {
                         <Clock size={14} />
                         <span>{service.duration} min</span>
                       </div>
-                      <p className="text-text-secondary font-light text-sm leading-relaxed line-clamp-2">
+                      <p className="text-text-secondary font-light text-sm leading-relaxed line-clamp-4">
                         {service.description}
                       </p>
                     </CardContent>
