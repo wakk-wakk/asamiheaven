@@ -168,7 +168,7 @@ export default function ServicesPage() {
                       </p>
                       <Button 
                         type="button"
-                        className="w-full mt-2 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
+                        className="w-full mt-auto bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
                         onClick={() => router.push('/contact')}
                       >
                         Inquire Now
