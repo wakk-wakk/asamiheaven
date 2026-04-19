@@ -443,7 +443,7 @@ img {
   content: '✦';
   position: absolute;
   color: #FFD700;
-  font-size: 0.6em;
+  font-size: 0.8em;
   text-shadow: 0 0 5px #FFD700, 0 0 10px #FFA500;
 }
 

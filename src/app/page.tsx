@@ -477,15 +477,21 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               {/* Telegram button - shown on both mobile and desktop */}
               {telegramValue && (
-                <Button 
-                  onClick={handleTelegramClick}
-                  variant="outline" 
-                  size="lg" 
-                  className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer animate-pulse-gold"
-                >
-                  <MessageCircle className="mr-2 h-5 w-5 animate-glitter" />
-                  <span className="animate-glitter">Message us on Telegram</span>
-                </Button>
+                <div className="relative inline-block">
+                  <span className="absolute -top-2 -left-1 text-primary animate-pulse-gold" style={{ textShadow: '0 0 6px #D4AF37, 0 0 12px #D4AF37' }}>✦</span>
+                  <span className="absolute -top-2 -right-1 text-primary animate-pulse-gold" style={{ textShadow: '0 0 6px #D4AF37, 0 0 12px #D4AF37', animationDelay: '0.5s' }}>✦</span>
+                  <span className="absolute -bottom-2 -left-1 text-primary animate-pulse-gold" style={{ textShadow: '0 0 6px #D4AF37, 0 0 12px #D4AF37', animationDelay: '0.25s' }}>✦</span>
+                  <span className="absolute -bottom-2 -right-1 text-primary animate-pulse-gold" style={{ textShadow: '0 0 6px #D4AF37, 0 0 12px #D4AF37', animationDelay: '0.75s' }}>✦</span>
+                  <Button 
+                    onClick={handleTelegramClick}
+                    variant="outline" 
+                    size="lg" 
+                    className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
+                  >
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    Message us on Telegram
+                  </Button>
+                </div>
               )}
               <Button 
                 type="button"
