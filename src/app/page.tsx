@@ -469,7 +469,7 @@ export default function HomePage() {
             {/* About Us Content */}
             <div className="max-w-2xl mx-auto px-4">
               <p className="text-base md:text-xl text-white/90 font-light leading-relaxed">
-                Relax. Indulge. Escape.
+                Step into a world of luxury and indulgence. We offer an exclusive selection of Metro Manila's most captivating and refined companions, chosen for their elegance and presence.
               </p>
             </div>
 
@@ -477,11 +477,11 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               {/* Telegram button - shown on both mobile and desktop */}
               {telegramValue && (
-                <div className="relative inline-block">
-                  <span className="absolute -top-2 -left-1 text-primary animate-pulse-gold" style={{ textShadow: '0 0 6px #D4AF37, 0 0 12px #D4AF37' }}>✦</span>
-                  <span className="absolute -top-2 -right-1 text-primary animate-pulse-gold" style={{ textShadow: '0 0 6px #D4AF37, 0 0 12px #D4AF37', animationDelay: '0.5s' }}>✦</span>
-                  <span className="absolute -bottom-2 -left-1 text-primary animate-pulse-gold" style={{ textShadow: '0 0 6px #D4AF37, 0 0 12px #D4AF37', animationDelay: '0.25s' }}>✦</span>
-                  <span className="absolute -bottom-2 -right-1 text-primary animate-pulse-gold" style={{ textShadow: '0 0 6px #D4AF37, 0 0 12px #D4AF37', animationDelay: '0.75s' }}>✦</span>
+                <div className="relative inline-block z-10">
+                  <span className="absolute -top-2 -left-2 text-primary animate-pulse-gold z-20" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B' }}>✦</span>
+                  <span className="absolute -top-2 -right-2 text-primary animate-pulse-gold z-20" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B', animationDelay: '0.5s' }}>✦</span>
+                  <span className="absolute -bottom-2 -left-2 text-primary animate-pulse-gold z-20" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B', animationDelay: '0.25s' }}>✦</span>
+                  <span className="absolute -bottom-2 -right-2 text-primary animate-pulse-gold z-20" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B', animationDelay: '0.75s' }}>✦</span>
                   <Button 
                     onClick={handleTelegramClick}
                     variant="outline" 
@@ -723,32 +723,48 @@ export default function HomePage() {
               </h2>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.slice(0, 6).map((service, index) => {
+                const imageUrl = getServiceImageUrl(service);
                 return (
-                  <div 
+                  <Card 
                     key={service.id} 
-                    className="glass border border-white/10 p-6 hover:border-primary/30 transition-all duration-500"
+                    className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group flex flex-col h-full"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="flex justify-between items-start mb-4">
-                      <h3 className="font-heading text-xl text-foreground">
-                        {service.name}
-                      </h3>
-                      {service.price && service.price > 0 && (
-                        <span className="text-primary font-heading text-lg">
-                          ₱{service.price.toLocaleString()}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-2 text-sm text-text-muted mb-3">
-                      <Clock size={14} />
-                      <span>{service.duration} min</span>
-                    </div>
-                    <p className="text-text-secondary font-light text-sm leading-relaxed line-clamp-2">
-                      {service.description}
-                    </p>
-                  </div>
+                    {imageUrl ? (
+                      <div className="w-full h-48 overflow-hidden rounded-t-lg bg-secondary/20 relative flex items-center justify-center">
+                        <img 
+                          src={imageUrl} 
+                          alt={service.name}
+                          className="min-w-full min-h-full max-w-full max-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none'
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-48 rounded-t-lg flex items-center justify-center bg-secondary/20">
+                        <ImageIcon className="h-12 w-12 text-text-muted" />
+                      </div>
+                    )}
+                    <CardContent className="p-4 flex flex-col gap-2 flex-grow">
+                      <div className="flex justify-between items-start">
+                        <h3 className="font-heading text-lg text-foreground">
+                          {service.name}
+                        </h3>
+                        {service.price && service.price > 0 && (
+                          <span className="text-primary font-heading text-lg">
+                            ₱{service.price.toLocaleString()}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-text-muted">
+                        <Clock size={14} />
+                        <span>{service.duration} min</span>
+                      </div>
+                    </CardContent>
+                  </Card>
                 );
               })}
             </div>
