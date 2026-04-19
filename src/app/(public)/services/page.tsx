@@ -166,6 +166,14 @@ export default function ServicesPage() {
                       <p className="text-text-secondary font-light text-sm leading-relaxed">
                         {service.description}
                       </p>
+                      <Button 
+                        type="button"
+                        className="w-full mt-2 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
+                        onClick={() => router.push('/contact')}
+                      >
+                        Inquire Now
+                        <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                      </Button>
                     </div>
                   </Card>
                 )

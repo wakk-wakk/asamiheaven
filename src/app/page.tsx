@@ -481,26 +481,30 @@ export default function HomePage() {
                   <span className="absolute top-1 left-2 text-primary animate-pulse-gold z-20 text-xs" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B' }}>✦</span>
                   <span className="absolute -top-1.5 right-3 text-primary animate-pulse-gold z-20 text-lg" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B', animationDelay: '0.5s' }}>✦</span>
                   <span className="absolute bottom-2 right-1/3 text-primary animate-pulse-gold z-20 text-sm" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B', animationDelay: '0.75s' }}>✦</span>
-                  <Button 
-                    onClick={handleTelegramClick}
-                    variant="outline" 
-                    size="lg" 
-                    className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
-                  >
-                    <MessageCircle className="mr-2 h-5 w-5" />
-                    Message us on Telegram
-                  </Button>
+                  <div className="inline-block">
+                    <Button 
+                      onClick={handleTelegramClick}
+                      variant="outline" 
+                      size="lg" 
+                      className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
+                    >
+                      <MessageCircle className="mr-2 h-5 w-5" />
+                      Message us on Telegram
+                    </Button>
+                  </div>
                 </div>
               )}
-              <Button 
-                type="button"
-                size="lg"
-                className="px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group"
-                onClick={() => router.push('/contact')}
-              >
-                Contact Us
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <div className="inline-block">
+                <Button 
+                  type="button"
+                  size="lg"
+                  className="px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group"
+                  onClick={() => router.push('/contact')}
+                >
+                  Contact Us
+                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </div>
             </div>
           </div>
         </div>
@@ -765,6 +769,14 @@ export default function HomePage() {
                       <p className="text-text-secondary font-light text-sm leading-relaxed">
                         {service.description}
                       </p>
+                      <Button 
+                        type="button"
+                        className="w-full mt-2 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
+                        onClick={() => router.push('/contact')}
+                      >
+                        Inquire Now
+                        <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                      </Button>
                     </CardContent>
                   </Card>
                 );
