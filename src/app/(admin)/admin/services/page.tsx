@@ -292,6 +292,12 @@ export default function AdminServicesPage() {
     if (!confirm(`Are you sure you want to permanently delete "${service.name}"? This action cannot be undone.`)) return
 
     try {
+      // Clear service_id reference in therapists table first
+      await supabase
+        .from('therapists')
+        .update({ service_id: null })
+        .eq('service_id', service.id)
+
       // Delete image from storage if exists
       if (service.image_path) {
         await supabase.storage
