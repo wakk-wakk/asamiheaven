@@ -662,7 +662,7 @@ export default function HomePage() {
                                 <img 
                                   src={therapistImageUrl} 
                                   alt={therapist.nickname}
-                                  className="w-full h-auto object-cover transition-all duration-500 ease-out group-hover:scale-105"
+                                  className="w-full h-auto object-cover group-hover:scale-105 transition-all duration-500"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).style.display = 'none'
                                   }}
@@ -672,7 +672,7 @@ export default function HomePage() {
                                   <User className="h-20 w-20 text-text-muted" />
                                 </div>
                               )}
-                              <div className="absolute inset-0 bg-black/80 group-hover:bg-black/60 transition-all duration-500" />
+                              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500" />
                               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
                                 <span className="bg-background/80 backdrop-blur-sm px-4 py-2 text-primary font-heading text-xl tracking-widest uppercase">
                                   {therapist.nickname}
