@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { Clock, ArrowRight, Loader2, ArrowLeft } from 'lucide-react'
+import { Card, CardContent } from '@/components/ui/card'
+import { Clock, ArrowRight, Image as ImageIcon, Loader2, ArrowLeft } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
 
 interface Service {
@@ -122,32 +123,51 @@ export default function ServicesPage() {
               <p className="text-text-secondary font-light">No services available at the moment.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service, index) => {
+                const imageUrl = getServiceImageUrl(service)
                 return (
-                  <div 
+                  <Card 
                     key={service.id} 
-                    className="glass border border-white/10 p-6 hover:border-primary/30 transition-all duration-500"
+                    className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group flex flex-col h-full"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="flex justify-between items-start mb-4">
-                      <h3 className="font-heading text-xl text-foreground">
-                        {service.name}
-                      </h3>
-                      {service.price && service.price > 0 && (
-                        <span className="text-primary font-heading text-lg">
-                          ₱{service.price.toLocaleString()}
-                        </span>
-                      )}
+                    {imageUrl ? (
+                      <div className="w-full h-48 overflow-hidden rounded-t-lg bg-secondary/20 relative flex items-center justify-center">
+                        <img 
+                          src={imageUrl} 
+                          alt={service.name}
+                          className="min-w-full min-h-full max-w-full max-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none'
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div className="h-48 rounded-t-lg flex items-center justify-center bg-secondary/20">
+                        <ImageIcon className="h-12 w-12 text-text-muted" />
+                      </div>
+                    )}
+                    <div className="p-4 flex flex-col gap-2 flex-grow">
+                      <div className="flex justify-between items-start">
+                        <h3 className="font-heading text-lg text-foreground">
+                          {service.name}
+                        </h3>
+                        {service.price && service.price > 0 && (
+                          <span className="text-primary font-heading text-lg">
+                            ₱{service.price.toLocaleString()}
+                          </span>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 text-sm text-text-muted">
+                        <Clock size={14} />
+                        <span>{service.duration} min</span>
+                      </div>
+                      <p className="text-text-secondary font-light text-sm leading-relaxed line-clamp-3">
+                        {service.description}
+                      </p>
                     </div>
-                    <div className="flex items-center gap-2 text-sm text-text-muted mb-3">
-                      <Clock size={14} />
-                      <span>{service.duration} min</span>
-                    </div>
-                    <p className="text-text-secondary font-light text-sm leading-relaxed line-clamp-3">
-                      {service.description}
-                    </p>
-                  </div>
+                  </Card>
                 )
               })}
             </div>

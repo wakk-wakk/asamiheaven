@@ -156,7 +156,7 @@ export default function TherapistsPage() {
                         <img 
                           src={imageUrl} 
                           alt={therapist.nickname}
-                          className="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-105"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
                           onError={(e) => {
                             (e.target as HTMLImageElement).style.display = 'none'
                           }}
@@ -166,9 +166,9 @@ export default function TherapistsPage() {
                           <User className="h-16 w-16 text-text-muted" />
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-500" />
+                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500" />
                       <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
-                        <span className="text-primary font-heading text-xl tracking-widest uppercase">
+                        <span className="bg-background/80 backdrop-blur-sm px-4 py-2 text-primary font-heading text-xl tracking-widest uppercase">
                           {therapist.nickname}
                         </span>
                       </div>
