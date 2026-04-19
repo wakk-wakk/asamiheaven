@@ -288,38 +288,24 @@ export default function AdminServicesPage() {
     setShowDialog(true)
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (service: Service) => {
+    if (!confirm(`Are you sure you want to permanently delete "${service.name}"? This action cannot be undone.`)) return
+
     try {
-      // Check if service has associated bookings
-      const { data: bookings, error: bookingsError } = await supabase
-        .from('bookings')
-        .select('id')
-        .eq('service_id', id)
-        .limit(1)
-      
-      if (bookingsError) throw bookingsError
-
-      if (bookings && bookings.length > 0) {
-        // Has bookings - soft delete (deactivate)
-        if (!confirm('This service has associated bookings. Deactivating will hide it from customers but preserve booking history. Continue?')) return
-
-        const { error } = await supabase
-          .from('services')
-          .update({ is_active: false })
-          .eq('id', id)
-        
-        if (error) throw error
-      } else {
-        // No bookings - hard delete
-        if (!confirm('Are you sure you want to permanently delete this service? This action cannot be undone.')) return
-
-        const { error } = await supabase
-          .from('services')
-          .delete()
-          .eq('id', id)
-        
-        if (error) throw error
+      // Delete image from storage if exists
+      if (service.image_path) {
+        await supabase.storage
+          .from('services-images')
+          .remove([service.image_path])
       }
+
+      // Permanently delete the service
+      const { error } = await supabase
+        .from('services')
+        .delete()
+        .eq('id', service.id)
+      
+      if (error) throw error
       
       fetchServices()
     } catch (error) {
@@ -620,7 +606,7 @@ export default function AdminServicesPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDelete(service.id)}
+                          onClick={() => handleDelete(service)}
                           className="text-error hover:text-error hover:border-error/50"
                         >
                           <Trash2 className="h-4 w-4" />
