@@ -133,11 +133,11 @@ export default function ServicesPage() {
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                      {imageUrl ? (
-                       <div className="w-full h-64 overflow-hidden rounded-t-lg bg-secondary/20 relative">
+                       <div className="w-full h-64 overflow-hidden rounded-t-lg bg-secondary/20 relative flex items-center justify-center">
                           <img 
                             src={imageUrl} 
                             alt={service.name}
-                            className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                            className="min-w-full min-h-full max-w-full max-h-full object-contain transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
                             onError={(e) => {
                               (e.target as HTMLImageElement).style.display = 'none'
                             }}
