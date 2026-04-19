@@ -288,35 +288,23 @@ export default function AdminServicesPage() {
     setShowDialog(true)
   }
 
-  const handleDelete = async (service: Service) => {
-    if (!confirm(`Are you sure you want to permanently delete "${service.name}"? This action cannot be undone.`)) return
+  const handleToggleActive = async (service: Service) => {
+    const newStatus = !service.is_active
+    const action = newStatus ? 'activate' : 'deactivate'
+    if (!confirm(`Are you sure you want to ${action} "${service.name}"?`)) return
 
     try {
-      // Clear service_id reference in therapists table first
-      await supabase
-        .from('therapists')
-        .update({ service_id: null })
-        .eq('service_id', service.id)
-
-      // Delete image from storage if exists
-      if (service.image_path) {
-        await supabase.storage
-          .from('services-images')
-          .remove([service.image_path])
-      }
-
-      // Permanently delete the service
       const { error } = await supabase
         .from('services')
-        .delete()
+        .update({ is_active: newStatus })
         .eq('id', service.id)
       
       if (error) throw error
       
       fetchServices()
     } catch (error) {
-      console.error('Error deleting service:', error)
-      alert('Error deleting service')
+      console.error('Error toggling service:', error)
+      alert('Error toggling service')
     }
   }
 
@@ -612,10 +600,20 @@ export default function AdminServicesPage() {
                         <Button
                           variant="outline"
                           size="sm"
-                          onClick={() => handleDelete(service)}
-                          className="text-error hover:text-error hover:border-error/50"
+                          onClick={() => handleToggleActive(service)}
+                          className={service.is_active ? "text-yellow-500 hover:text-yellow-500 hover:border-yellow-500/50" : "text-green-500 hover:text-green-500 hover:border-green-500/50"}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          {service.is_active ? (
+                            <>
+                              <Trash2 className="h-4 w-4 mr-2" />
+                              Deactivate
+                            </>
+                          ) : (
+                            <>
+                              <Plus className="h-4 w-4 mr-2" />
+                              Activate
+                            </>
+                          )}
                         </Button>
                       </div>
                     </CardContent>
