@@ -721,19 +721,19 @@ export default function HomePage() {
         <section className="py-12 md:py-16 px-4 relative overflow-hidden">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16 space-y-4">
-              <h2 className="font-heading text-4xl md:text-5xl text-foreground font-medium">
-                Our Packages
-              </h2>
+<h2 className="font-heading text-4xl md:text-5xl text-white font-medium">
+                  Our Packages
+                </h2>
             </div>
             
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.slice(0, 6).map((service, index) => {
                 const imageUrl = getServiceImageUrl(service);
                 return (
-                  <Card 
+<Card 
                     key={service.id} 
-                    className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group flex flex-col h-full"
-                    style={{ animationDelay: `${index * 0.1}s` }}
+                    className="glass border border-white/10 hover:border-primary/50 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group flex flex-col h-full"
+                    style={{ backgroundColor: 'rgba(26, 26, 29, 0.8)' }}
                   >
                     {imageUrl ? (
                       <div className="w-full h-48 overflow-hidden rounded-t-lg bg-secondary/20 relative flex items-center justify-center">
@@ -898,8 +898,9 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-12 px-4 relative overflow-hidden">
         <div className="max-w-6xl mx-auto relative">
-          <div className="glass rounded-3xl p-8 md:p-12 animate-slide-up relative overflow-hidden flex flex-col md:flex-row items-center gap-8">
-            <div className="absolute inset-0 rounded-3xl border border-primary/10" />
+          <div className="glass rounded-3xl p-8 md:p-12 animate-slide-up relative overflow-hidden flex flex-col md:flex-row items-center gap-8" style={{ backgroundColor: 'rgba(26, 26, 29, 0.95)' }}>
+            <div className="absolute inset-0 rounded-3xl border border-white/10" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
             
             {/* Image on left */}
             <div className="w-full md:w-1/2 relative">
@@ -908,6 +909,7 @@ export default function HomePage() {
                 alt="Asami Heaven - Relaxation"
                 className="w-full h-64 md:h-80 object-cover rounded-2xl"
               />
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 border-r-2 border-b-2 border-primary/30 rounded-br-lg" />
             </div>
             
             {/* Content on right */}
@@ -916,7 +918,7 @@ export default function HomePage() {
                 Ready to <span className="text-primary">Relax</span>?
               </h2>
               
-              <p className="text-base md:text-lg text-text-secondary font-light">
+              <p className="text-base md:text-lg text-gray-300 font-light">
                 Contact us today and discover the art of true relaxation.
               </p>
 
