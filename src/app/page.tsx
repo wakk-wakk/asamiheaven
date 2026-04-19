@@ -485,7 +485,7 @@ export default function HomePage() {
                     onClick={handleTelegramClick}
                     variant="outline" 
                     size="lg" 
-                    className="w-full sm:w-auto px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
+                    className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
                   >
                     <MessageCircle className="mr-2 h-5 w-5" />
                     Message us on Telegram
@@ -495,7 +495,7 @@ export default function HomePage() {
               <Button 
                 type="button"
                 size="lg"
-                className="w-full sm:w-auto px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group"
+                className="px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group"
                 onClick={() => router.push('/contact')}
               >
                 Contact Us
