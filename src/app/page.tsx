@@ -735,14 +735,13 @@ export default function HomePage() {
                   </div>
                   <p className="text-text-secondary font-light text-lg">Our services will be available soon.</p>
                 </div>
-              ) : (
-                <div className="flex flex-wrap justify-center gap-8">
-                {services.slice(0, 6).map((service, index) => {
-                  const serviceImageUrl = getServiceImageUrl(service);
-                  return (
-                    <Card key={service.id} className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full w-full sm:w-[380px] max-w-[420px]" style={{ animationDelay: `${index * 0.1}s` }}>
-                       <div className="w-full h-64 overflow-hidden bg-secondary/10 relative">
-                         {serviceImageUrl ? (
+                 <div className="flex flex-wrap justify-center gap-8">
+                 {services.slice(0, 6).map((service, index) => {
+                   const serviceImageUrl = getServiceImageUrl(service);
+                   return (
+                     <Card key={service.id} className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full w-full sm:w-[380px] max-w-[420px]" style={{ animationDelay: `${index * 0.1}s` }}>
+                        <div className="w-full h-64 overflow-hidden rounded-t-lg bg-secondary/20 relative">
+                          {serviceImageUrl ? (
                             <img 
                               src={serviceImageUrl} 
                               alt={service.name}
@@ -751,12 +750,12 @@ export default function HomePage() {
                                 (e.target as HTMLImageElement).style.display = 'none'
                               }}
                             />
-                         ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-secondary/20">
-                            <ImageIcon className="h-16 w-16 text-text-muted" />
-                          </div>
-                        )}
-                      </div>
+                          ) : (
+                           <div className="h-64 rounded-t-lg flex items-center justify-center bg-secondary/20">
+                             <ImageIcon className="h-12 w-12 text-text-muted" />
+                           </div>
+                         )}
+                       </div>
                       <div className="p-6 flex flex-col gap-4 flex-grow">
                         <div className="flex justify-between items-start">
                           <div className="flex-1">
