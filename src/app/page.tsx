@@ -852,12 +852,16 @@ export default function HomePage() {
                    Contact Us
                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                  </Button>
-                 <Link href="/services">
-                  <Button variant="outline" size="lg" className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-full font-light backdrop-blur-sm">
-                    View Services
-                  </Button>
-                </Link>
-              </div>
+                 <Button
+                   type="button"
+                   variant="outline"
+                   size="lg"
+                   className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-full font-light backdrop-blur-sm"
+                   onClick={() => router.push('/services')}
+                 >
+                   View Services
+                 </Button>
+               </div>
             </div>
           </div>
         </div>
