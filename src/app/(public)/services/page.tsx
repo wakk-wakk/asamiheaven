@@ -55,6 +55,7 @@ export default function ServicesPage() {
             .select('*')
             .eq('is_active', true)
             .order('name')
+            .limit(20)
           
           if (data && !error) {
             setServices(data)
@@ -72,29 +73,29 @@ export default function ServicesPage() {
 
    // Get the display image URL for a service
    const getServiceImageUrl = (service: Service): string | null => {
-     // Priority: image_path (Supabase Storage) > image_url (external)
-     if (service.image_path && typeof service.image_path === 'string') {
-       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-       if (supabaseUrl) {
-         return `${supabaseUrl}/storage/v1/object/public/services-images/${service.image_path}`
-       }
-     }
-     if (service.image_url && typeof service.image_url === 'string' && isValidImageUrl(service.image_url)) {
-       return service.image_url
-     }
-     return null
-   }
-
-   if (isLoading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-          <p className="text-text-secondary font-light">Loading services...</p>
-        </div>
-      </div>
-    )
+    // Priority: image_path (Supabase Storage) > image_url (external)
+    if (service.image_path && typeof service.image_path === 'string') {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      if (supabaseUrl) {
+        return `${supabaseUrl}/storage/v1/object/public/services-images/${service.image_path}`
+      }
+    }
+    if (service.image_url && typeof service.image_url === 'string' && isValidImageUrl(service.image_url)) {
+      return service.image_url
+    }
+    return null
   }
+
+    if (isLoading) {
+     return (
+       <div className="min-h-[60vh] flex items-center justify-center">
+         <div className="text-center space-y-4">
+           <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+           <p className="text-text-secondary font-light">Loading services...</p>
+         </div>
+       </div>
+     )
+   }
 
   return (
     <div className="animate-fade-in">
@@ -115,16 +116,61 @@ export default function ServicesPage() {
         </div>
       </section>
 
-{/* Services Grid */}
+      {/* Services Grid */}
       <section className="py-12 px-4 pb-24">
         <div className="max-w-7xl mx-auto">
-          {services.length === 0 ? (
-            <div className="text-center py-12">
-              <p className="text-text-secondary font-light">No services available at the moment.</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.map((service, index) => {
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Featured Nuru Massage Card */}
+            <Card 
+              className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full cursor-pointer"
+              onClick={() => router.push('/services/japanese-nuru-massage')}
+            >
+              <div className="w-full h-48 overflow-hidden rounded-t-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center relative">
+                <div className="absolute inset-0 opacity-20">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <svg className="h-20 w-20 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                  </div>
+                </div>
+                <span className="text-primary font-heading text-2xl z-10">Premium</span>
+              </div>
+              <div className="p-4 flex flex-col gap-2 flex-grow">
+                <div className="flex justify-between items-start">
+                  <h3 className="font-heading text-lg text-foreground">
+                    Japanese Nuru Massage
+                  </h3>
+                  <span className="text-primary font-heading text-lg">
+                    From ₱3,500
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-text-muted">
+                  <Clock size={14} />
+                  <span>60-90 min</span>
+                </div>
+                <p className="text-text-secondary font-light text-sm leading-relaxed">
+                  Authentic Japanese body-to-body massage using traditional seaweed gel. Experience deep relaxation and sensory awakening with our licensed therapists.
+                </p>
+                <Button 
+                  type="button"
+                  className="w-full mt-auto bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    router.push('/services/japanese-nuru-massage');
+                  }}
+                >
+                  Learn More
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                </Button>
+              </div>
+            </Card>
+            
+            {services.length === 0 ? (
+              <div className="text-center py-12 col-span-full">
+                <p className="text-text-secondary font-light">No services available at the moment.</p>
+              </div>
+            ) : (
+              services.map((service, index) => {
                 const imageUrl = getServiceImageUrl(service)
                 return (
                   <Card 
@@ -177,9 +223,9 @@ export default function ServicesPage() {
                     </div>
                   </Card>
                 )
-              })}
-            </div>
-          )}
+              })
+            )}
+          </div>
         </div>
       </section>
 

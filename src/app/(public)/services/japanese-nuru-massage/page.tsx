@@ -1,0 +1,464 @@
+import Link from 'next/link'
+import { Card, CardContent } from '@/components/ui/card'
+import { Clock, ArrowRight, Phone, CheckCircle2, Shield } from 'lucide-react'
+import { createClient } from '@supabase/supabase-js'
+
+export const metadata = {
+  title: {
+    default: "Japanese Nuru Massage in Manila",
+    template: "%s | Asami Heaven"
+  },
+  description: "Experience authentic Japanese Nuru massage in Metro Manila. Premium spa treatment using traditional seaweed gel. Licensed therapists. Book today.",
+  keywords: [
+    "nuru massage",
+    "japanese nuru",
+    "nuru massage manila",
+    "seaweed massage",
+    "traditional japanese massage",
+    "body massage Philippines"
+  ],
+  alternates: {
+    canonical: "/services/japanese-nuru-massage",
+  },
+  openGraph: {
+    title: "Japanese Nuru Massage Manila",
+    description: "Authentic Japanese body-to-body massage using traditional techniques",
+    url: "https://asamiheaven.vercel.app/services/japanese-nuru-massage",
+    images: ['/og-nuru-massage.jpg'],
+  },
+}
+
+// FAQ Data for schema
+const faqData = [
+  {
+    question: "What is Japanese Nuru Massage?",
+    answer: "Japanese Nuru massage is a traditional body-to-body massage technique from Japan using seaweed-derived gel. Our licensed therapists provide this premium wellness treatment in a professional spa environment. The word 'nuru' means 'slippery' in Japanese, referring to the smooth, gliding sensation created by the special gel."
+  },
+  {
+    question: "Is Nuru massage legal in Manila?",
+    answer: "Yes, Nuru massage is legal when provided as a professional wellness service by licensed therapists in a registered spa. Asami Heaven operates legally with all required permits and follows local regulations for massage services."
+  },
+  {
+    question: "How much does Nuru massage cost?",
+    answer: "Our Japanese Nuru massage starts at P3,500 for a 60-minute session. We also offer 90-minute sessions for P5,000. All sessions include shower facilities and use premium organic seaweed gel."
+  },
+  {
+    question: "What is the difference between Nuru and traditional massage?",
+    answer: "Traditional massage uses hands-on techniques with oils, focusing on muscle relief. Nuru massage is a full-body technique using special seaweed gel for body-to-body contact, emphasizing sensory relaxation and deep tissue release. Both provide wellness benefits, but Nuru offers a unique, immersive experience."
+  },
+  {
+    question: "What should I expect during a Nuru massage session?",
+    answer: "Your session begins with a shower to prepare for the treatment. Our therapist will apply warm, organic seaweed gel to create the signature slippery texture. Using smooth, flowing body-to-body movements, the therapist provides deep relaxation and stress relief. The session concludes with a cleansing shower. Total time is 60-90 minutes."
+  }
+]
+
+// Service packages
+const packages = [
+  {
+    name: "Classic Nuru",
+    duration: 60,
+    price: 3500,
+    features: [
+      "Body-to-body technique with seaweed gel",
+      "Licensed therapist",
+      "Shower before and after",
+      "Premium spa environment"
+    ]
+  },
+  {
+    name: "Premium Nuru",
+    duration: 90,
+    price: 5000,
+    features: [
+      "Extended body-to-body technique",
+      "Licensed therapist",
+      "Shower before and after",
+      "Hot stone therapy add-on",
+      "Aromatherapy enhancement",
+      "Premium spa environment"
+    ]
+  }
+]
+
+const benefits = [
+  {
+    icon: "shield",
+    title: "Deep Relaxation",
+    description: "Release accumulated stress and tension through our immersive technique"
+  },
+  {
+    icon: "check",
+    title: "Skin Health",
+    description: "Natural seaweed gel hydrates and nourishes your skin"
+  },
+  {
+    icon: "clock",
+    title: "Sensory Awakening",
+    description: "Experience heightened sensory awareness and body connection"
+  },
+  {
+    icon: "star",
+    title: "Muscle Relief",
+    description: "Deep tissue release without the pressure of traditional massage"
+  }
+]
+
+export default async function JapaneseNuruMassagePage() {
+  // Server-side therapist fetch
+  let therapists: Array<{ id: string | number; nickname: string }> = []
+  try {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    if (supabaseUrl && supabaseAnonKey) {
+      const supabase = createClient(supabaseUrl, supabaseAnonKey)
+      const { data, error } = await supabase
+        .from('therapists')
+        .select('*')
+        .eq('is_active', true)
+        .order('nickname')
+        .limit(8)
+
+      if (data && !error) {
+        therapists = data
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching therapists:', error)
+  }
+
+  return (
+    <div className="animate-fade-in">
+      {/* Hero Section */}
+      <section className="py-20 md:py-32 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent"></div>
+        <div className="max-w-6xl mx-auto relative z-10">
+          <div className="text-center space-y-8">
+            <div className="inline-block">
+              <span className="px-4 py-2 rounded-full text-sm font-medium bg-primary/10 text-primary border border-primary/20">
+                Premium Wellness Experience
+              </span>
+            </div>
+            <h1 className="font-heading text-4xl md:text-6xl text-foreground leading-tight">
+              Japanese Nuru<br />Massage
+            </h1>
+            <p className="text-text-secondary font-light text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
+              Experience authentic Japanese body-to-body massage using traditional seaweed gel.<br />
+              <span className="text-text-muted">Licensed therapists • Premium wellness • Deep relaxation</span>
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Link
+                href="/contact?service=Japanese+Nuru+Massage"
+                className="inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-lg font-light"
+              >
+                Book Now
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+              <a
+                href="https://wa.me/639123456789"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-8 py-6 text-lg border border-border hover:bg-primary/5 transition-all duration-300 rounded-lg font-light"
+              >
+                <Phone className="mr-2 h-5 w-5" />
+                WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="py-16 px-4 bg-secondary/30">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div>
+              <p className="font-heading text-3xl text-foreground">100%</p>
+              <p className="text-text-muted text-sm mt-1">Licensed Therapists</p>
+            </div>
+            <div>
+              <p className="font-heading text-3xl text-foreground">60-90</p>
+              <p className="text-text-muted text-sm mt-1">Minutes</p>
+            </div>
+            <div>
+              <p className="font-heading text-3xl text-foreground">P3,500</p>
+              <p className="text-text-muted text-sm mt-1">Starting Price</p>
+            </div>
+            <div>
+              <p className="font-heading text-3xl text-foreground">10+</p>
+              <p className="text-text-muted text-sm mt-1">Years Experience</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Traditional Technique Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+              <span className="text-primary font-medium mb-4 inline-block">Traditional Japanese Technique</span>
+              <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-6">
+                Authentic Nuru Experience
+              </h2>
+              <p className="text-text-secondary font-light text-lg leading-relaxed mb-6">
+                Nuru massage originates from Japan — the word nuru translates to slippery in Japanese. This unique body-to-body technique uses a special seaweed-derived gel to create a smooth, gliding sensation that promotes deep relaxation and sensory awakening.
+              </p>
+              <p className="text-text-secondary font-light text-lg leading-relaxed mb-8">
+                Unlike traditional massage, Nuru focuses on full-body contact and fluid movement, providing an immersive wellness experience that releases tension and restores balance.
+              </p>
+              <ul className="space-y-4">
+                <li className="flex items-center gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span className="text-foreground">Organic seaweed-derived gel</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span className="text-foreground">Licensed, trained therapists</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span className="text-foreground">Private, hygienic environment</span>
+                </li>
+                <li className="flex items-center gap-3">
+                  <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                  <span className="text-foreground">Premium spa facilities</span>
+                </li>
+              </ul>
+            </div>
+            <div className="relative">
+              <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                <div className="text-center space-y-4">
+                  <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
+                    <Shield className="h-10 w-10 text-primary" />
+                  </div>
+                  <p className="text-foreground font-medium">Professional Setting</p>
+                  <p className="text-text-muted text-sm">All treatments provided in our premium spa environment with strict hygiene standards.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Benefits Section */}
+      <section className="py-20 px-4 bg-secondary/30">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-primary font-medium mb-4 inline-block">Wellness Benefits</span>
+            <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-6">
+              Why Choose Nuru Massage?
+            </h2>
+            <p className="text-text-secondary font-light text-lg max-w-2xl mx-auto">
+              Experience the unique benefits of Japanese Nuru technique for your body and mind.
+            </p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {benefits.map((benefit, index) => (
+              <div key={index} className="text-center p-6 rounded-2xl bg-background/50 hover:bg-background/80 transition-all duration-300">
+                <div className="w-16 h-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center mb-6">
+                  {benefit.icon === "shield" && <Shield className="h-8 w-8 text-primary" />}
+                  {benefit.icon === "check" && <CheckCircle2 className="h-8 w-8 text-primary" />}
+                  {benefit.icon === "clock" && <Clock className="h-8 w-8 text-primary" />}
+                  {benefit.icon === "star" && (
+                    <svg className="h-8 w-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                  )}
+                </div>
+                <h3 className="font-heading text-xl text-foreground mb-3">{benefit.title}</h3>
+                <p className="text-text-secondary font-light leading-relaxed">{benefit.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Packages Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-primary font-medium mb-4 inline-block">Service Packages</span>
+            <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-6">
+              Choose Your Experience
+            </h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {packages.map((pkg, index) => (
+              <Card
+                key={index}
+                className="glass border-border hover:border-primary/40 transition-all duration-300"
+              >
+                <CardContent className="p-8">
+                  <div className="text-center mb-6">
+                    <h3 className="font-heading text-2xl text-foreground mb-2">{pkg.name}</h3>
+                    <div className="flex items-baseline justify-center gap-2">
+                      <span className="text-4xl font-heading text-primary">₱{pkg.price.toLocaleString()}</span>
+                      <span className="text-text-muted">/{pkg.duration} min</span>
+                    </div>
+                  </div>
+                  <ul className="space-y-4 mb-8">
+                    {pkg.features.map((feature, i) => (
+                      <li key={i} className="flex items-center gap-3 text-text-secondary">
+                        <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    href={`/contact?service=${encodeURIComponent(pkg.name)}`}
+                    className="inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl font-medium"
+                  >
+                    Book {pkg.name}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Link>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Therapists Section */}
+      <section className="py-20 px-4 bg-secondary/30">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-primary font-medium mb-4 inline-block">Our Therapists</span>
+            <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-6">
+              Licensed Professionals
+            </h2>
+            <p className="text-text-secondary font-light text-lg max-w-2xl mx-auto">
+              Our certified therapists are trained in traditional Japanese techniques to provide an authentic Nuru experience.
+            </p>
+          </div>
+          {therapists.length > 0 && (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+              {therapists.map((therapist) => (
+                <Card key={therapist.id} className="glass border-border hover:border-primary/40 transition-all duration-300">
+                  <CardContent className="p-4 text-center">
+                    <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4">
+                      <span className="text-2xl font-heading text-primary">
+                        {therapist.nickname.charAt(0)}
+                      </span>
+                    </div>
+                    <h3 className="font-heading text-base text-foreground mb-1">{therapist.nickname}</h3>
+                    <p className="text-xs text-text-muted">Licensed Therapist</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+          {therapists.length === 0 && (
+            <div className="text-center">
+              <Link
+                href="/therapists"
+                className="inline-flex items-center justify-center px-8 py-4 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl transition-all duration-300"
+              >
+                View All Therapists
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* FAQ Section with Schema */}
+      <section className="py-20 px-4" id="faq">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="text-primary font-medium mb-4 inline-block">Frequently Asked Questions</span>
+            <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-6">
+              Your Questions Answered
+            </h2>
+          </div>
+          <div className="space-y-4">
+            {faqData.map((faq, index) => (
+              <details
+                key={index}
+                className="group glass rounded-xl border border-border hover:border-primary/40 transition-all duration-300"
+              >
+                <summary className="flex items-center justify-between p-6 cursor-pointer hover:text-primary transition-colors">
+                  <span className="font-heading text-lg">{faq.question}</span>
+                  <ArrowRight className="h-5 w-5 transition-transform duration-300 group-open:rotate-90" />
+                </summary>
+                <div className="px-6 pb-6 text-text-secondary">
+                  {faq.answer}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-4">
+        <div className="max-w-4xl mx-auto">
+          <div className="glass rounded-3xl p-8 md:p-16 text-center space-y-8">
+            <h2 className="font-heading text-3xl md:text-4xl text-foreground">
+              Ready to Experience Authentic Japanese Nuru?
+            </h2>
+            <p className="text-text-secondary font-light text-lg max-w-xl mx-auto">
+              Book your session today and discover the unique relaxation of traditional Japanese body-to-body massage.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/contact?service=Japanese+Nuru+Massage"
+                className="inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-lg font-light"
+              >
+                Book Now
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Link>
+              <a
+                href="https://wa.me/639123456789"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center px-8 py-6 text-lg border border-border hover:bg-primary/5 transition-all duration-300 rounded-lg font-light"
+              >
+                <Phone className="mr-2 h-5 w-5" />
+                WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Schema - Hidden but crawlable */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": faqData.map(faq => ({
+              "@type": "Question",
+              "name": faq.question,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.answer
+              }
+            }))
+          })
+        }}
+      />
+
+      {/* Service Schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            "serviceType": "Japanese Nuru Massage",
+            "provider": {
+              "@type": "HealthSpa",
+              "name": "Asami Heaven",
+              "areaServed": "Metro Manila, Philippines"
+            },
+            "description": "Authentic Japanese body-to-body massage using traditional seaweed gel for deep relaxation and stress relief.",
+            "areaServed": "Metro Manila, Philippines"
+          })
+        }}
+      />
+    </div>
+  )
+}

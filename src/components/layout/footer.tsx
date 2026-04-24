@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
-import { Phone, Mail, MapPin, Clock, CheckCircle2 } from 'lucide-react'
+import { Phone, Mail, MapPin, CheckCircle2 } from 'lucide-react'
 
 interface ContactSettings {
   phone: string
@@ -86,26 +86,19 @@ export function Footer() {
       const { createClient } = await import('@supabase/supabase-js')
       const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
       const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-      
-      console.log('Loading contact settings...', { supabaseUrl: !!supabaseUrl, supabaseAnonKey: !!supabaseAnonKey })
-      
+
       if (supabaseUrl && supabaseAnonKey) {
         const supabase = createClient(supabaseUrl, supabaseAnonKey)
         const { data, error } = await supabase
           .from('contact_settings')
           .select('*')
           .single()
-        
-        console.log('Contact settings response:', { data, error })
-        
+
         if (data && !error) {
           setContact(data)
           setWhatsappValue(data.whatsapp || '')
           setViberValue(data.viber || '')
           setTelegramValue(data.telegram || '')
-          console.log('Contact settings loaded:', data)
-        } else {
-          console.log('Error loading contact settings:', error)
         }
       }
     } catch (error) {
@@ -114,54 +107,32 @@ export function Footer() {
   }
 
   useEffect(() => {
-    console.log('Footer useEffect running, pathname:', typeof window !== 'undefined' ? window.location.pathname : 'no window')
-    // Load contact settings on all pages
-    if (typeof window === 'undefined') {
-      console.log('Footer: No window available')
-      return
-    }
-    
-    const isAdminPage = window.location.pathname.startsWith('/admin')
-    console.log('Is admin page:', isAdminPage)
-    
-    console.log('Footer: Loading contact settings')
+    if (typeof window === 'undefined') return
+
     loadContact()
-  
-    // Listen for storage events to refresh contact info when admin updates it
+
     const handleStorageChange = (e: StorageEvent) => {
       if (e.key === 'contact_settings_updated') {
         loadContact()
       }
     }
-    
+
     window.addEventListener('storage', handleStorageChange)
-    
-    // Also listen for custom event (same-tab updates)
+
     const handleCustomEvent = () => {
       loadContact()
     }
-    
+
     window.addEventListener('contactSettingsUpdated', handleCustomEvent)
-    
+
     return () => {
       window.removeEventListener('storage', handleStorageChange)
       window.removeEventListener('contactSettingsUpdated', handleCustomEvent)
     }
   }, [])
 
-  const socialLinks = [
-    { href: contact.viber, icon: ViberIcon, label: 'Viber' },
-    { href: contact.whatsapp, icon: WhatsAppIcon, label: 'WhatsApp' },
-    { href: contact.telegram, icon: TelegramIcon, label: 'Telegram' },
-    { href: contact.youtube, icon: YoutubeIcon, label: 'YouTube' },
-    { href: contact.instagram, icon: InstagramIcon, label: 'Instagram' },
-    { href: contact.facebook, icon: FacebookIcon, label: 'Facebook' },
-    { href: contact.twitter, icon: TwitterIcon, label: 'Twitter' },
-  ].filter(link => link.href)
-
   // Helper function to check if a value is a URL
   const isUrl = (value: string): boolean => {
-    // Check if it starts with http:// or https:// or www.
     return value.startsWith('http://') || value.startsWith('https://') || value.startsWith('www.')
   }
 
@@ -185,9 +156,9 @@ export function Footer() {
   const handleWhatsAppClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (!whatsappValue) return
-    
+
     const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
-    
+
     if (isUrl(whatsappValue)) {
       window.open(formatUrl(whatsappValue), '_blank', 'noopener,noreferrer')
     } else {
@@ -201,17 +172,15 @@ export function Footer() {
   const handleViberClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (!viberValue) return
-    
+
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
     let phoneNumber = cleanPhoneNumber(viberValue).replace(/^\+/, '').replace(/^63/, '').replace(/^0/, '')
     phoneNumber = '63' + phoneNumber
-    
+
     if (isMobile) {
-      // Open Viber app on mobile with correct format
       const viberAppUrl = `viber://chat?number=${phoneNumber}`
       window.location.href = viberAppUrl
     } else {
-      // Copy to clipboard on desktop
       copyToClipboard(viberValue, 'Viber')
     }
   }
@@ -220,11 +189,10 @@ export function Footer() {
   const handleTelegramClick = (e: React.MouseEvent) => {
     e.preventDefault()
     if (!telegramValue) return
-    
+
     if (isUrl(telegramValue)) {
       window.open(formatUrl(telegramValue), '_blank', 'noopener,noreferrer')
     } else {
-      // If it's not a URL, treat it as a username
       const telegramUrl = `https://t.me/${telegramValue.replace('@', '')}`
       window.open(telegramUrl, '_blank', 'noopener,noreferrer')
     }
@@ -234,11 +202,9 @@ export function Footer() {
   const copyToClipboard = async (text: string, label: string) => {
     try {
       await navigator.clipboard.writeText(text)
-      // Show a brief visual feedback
       alert(`${label} copied to clipboard: ${text}`)
     } catch (err) {
       console.error('Failed to copy:', err)
-      // Fallback for older browsers
       window.prompt(`Copy ${label} to clipboard:`, text)
     }
   }
@@ -246,13 +212,11 @@ export function Footer() {
   // Handle social link click
   const handleSocialClick = (href: string, label: string, e: React.MouseEvent) => {
     e.preventDefault()
-    
+
     if (isUrl(href)) {
-      // Open URL in new tab
       const url = formatUrl(href)
       window.open(url, '_blank', 'noopener,noreferrer')
     } else {
-      // Copy to clipboard (for phone numbers, usernames, etc.)
       copyToClipboard(href, label)
     }
   }
@@ -267,7 +231,7 @@ export function Footer() {
               Asami Heaven
             </h3>
             <p className="text-text-secondary text-sm font-light leading-relaxed">
-              Experience tranquility and rejuvenation at our premium spa. 
+              Experience tranquility and rejuvenation at our premium spa.
               Let us help you find your inner peace.
             </p>
             <div className="flex items-center space-x-2 text-success text-sm font-light">

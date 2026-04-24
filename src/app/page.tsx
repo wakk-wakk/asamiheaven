@@ -469,7 +469,7 @@ export default function HomePage() {
             {/* About Us Content */}
             <div className="max-w-2xl mx-auto px-4">
               <p className="text-base md:text-xl leading-relaxed drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6)' }}>
-                Step into a world of luxury and indulgence. We offer an exclusive selection of Metro Manila's most captivating and refined companions, chosen for their elegance and presence. Experience satisfaction as the standard—proudly recognized as the No. 1 Japanese Nuru in the Philippines.
+                Step into a world of luxury and indulgence. We offer an exclusive selection of Metro Manilas most captivating and refined companions, chosen for their elegance and presence. Experience satisfaction as the standard—proudly recognized as the No. 1 Japanese Nuru in the Philippines.
               </p>
             </div>
 
@@ -633,7 +633,7 @@ export default function HomePage() {
                   Featuring
                 </h2>
                 <p className="text-lg text-text-secondary font-light max-w-2xl mx-auto leading-relaxed">
-                  Metro Manila's most captivating top-tier models.
+                  Metro Manilas most captivating top-tier models.
                 </p>
               </div>
 
