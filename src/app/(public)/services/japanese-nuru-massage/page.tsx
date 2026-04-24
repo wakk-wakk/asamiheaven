@@ -104,28 +104,52 @@ const benefits = [
 ]
 
 export default async function JapaneseNuruMassagePage() {
-  // Server-side therapist fetch
+  // Server-side data fetch
   let therapists: Array<{ id: string | number; nickname: string }> = []
+  let serviceData: { name: string; description: string; price: number; duration: number; is_active: boolean } | null = null
+  
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
     if (supabaseUrl && supabaseAnonKey) {
       const supabase = createClient(supabaseUrl, supabaseAnonKey)
-      const { data, error } = await supabase
+      
+      // Fetch therapists
+      const { data: therapistData, error: therapistError } = await supabase
         .from('therapists')
         .select('*')
         .eq('is_active', true)
         .order('nickname')
         .limit(8)
-
-      if (data && !error) {
-        therapists = data
+      
+      if (therapistData && !therapistError) {
+        therapists = therapistData
+      }
+      
+      // Fetch service data for dynamic pricing
+      const { data: serviceResult, error: serviceError } = await supabase
+        .from('services')
+        .select('name, description, price, duration, is_active')
+        .eq('slug', 'japanese-nuru-massage')
+        .single()
+      
+      if (serviceResult && !serviceError) {
+        serviceData = serviceResult
       }
     }
   } catch (error) {
-    console.error('Error fetching therapists:', error)
+    console.error('Error fetching data:', error)
   }
+  
+  // Use dynamic pricing if available, otherwise fall back to static
+  const displayPrice = serviceData?.price && serviceData.price > 0 
+    ? serviceData.price 
+    : 3500
+  const displayDuration = serviceData?.duration 
+    ? `${serviceData.duration}-${Math.round(serviceData.duration * 1.5)}` 
+    : '60-90'
+  const isAvailable = !serviceData || serviceData.is_active !== false
 
   return (
     <div className="animate-fade-in">
@@ -146,10 +170,15 @@ export default async function JapaneseNuruMassagePage() {
               Experience authentic Japanese body-to-body massage using traditional seaweed gel.<br />
               <span className="text-text-muted">Licensed therapists • Premium wellness • Deep relaxation</span>
             </p>
+            {!isAvailable && (
+              <div className="inline-block px-6 py-3 rounded-xl bg-yellow-500/10 border border-yellow-500/30 text-yellow-600">
+                This service is currently unavailable. Please contact us for more information.
+              </div>
+            )}
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link
                 href="/contact?service=Japanese+Nuru+Massage"
-                className="inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-lg font-light"
+                className={`inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-lg font-light ${!isAvailable ? 'opacity-50 pointer-events-none' : ''}`}
               >
                 Book Now
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -177,11 +206,11 @@ export default async function JapaneseNuruMassagePage() {
               <p className="text-text-muted text-sm mt-1">Licensed Therapists</p>
             </div>
             <div>
-              <p className="font-heading text-3xl text-foreground">60-90</p>
+              <p className="font-heading text-3xl text-foreground">{displayDuration}</p>
               <p className="text-text-muted text-sm mt-1">Minutes</p>
             </div>
             <div>
-              <p className="font-heading text-3xl text-foreground">P3,500</p>
+              <p className="font-heading text-3xl text-foreground">P{displayPrice.toLocaleString()}</p>
               <p className="text-text-muted text-sm mt-1">Starting Price</p>
             </div>
             <div>
@@ -284,37 +313,86 @@ export default async function JapaneseNuruMassagePage() {
             </h2>
           </div>
           <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {packages.map((pkg, index) => (
-              <Card
-                key={index}
-                className="glass border-border hover:border-primary/40 transition-all duration-300"
-              >
-                <CardContent className="p-8">
-                  <div className="text-center mb-6">
-                    <h3 className="font-heading text-2xl text-foreground mb-2">{pkg.name}</h3>
-                    <div className="flex items-baseline justify-center gap-2">
-                      <span className="text-4xl font-heading text-primary">₱{pkg.price.toLocaleString()}</span>
-                      <span className="text-text-muted">/{pkg.duration} min</span>
-                    </div>
+            <Card className="glass border-border hover:border-primary/40 transition-all duration-300">
+              <CardContent className="p-8">
+                <div className="text-center mb-6">
+                  <h3 className="font-heading text-2xl text-foreground mb-2">Classic Nuru</h3>
+                  <div className="flex items-baseline justify-center gap-2">
+                    <span className="text-4xl font-heading text-primary">₱{displayPrice.toLocaleString()}</span>
+                    <span className="text-text-muted">/60 min</span>
                   </div>
-                  <ul className="space-y-4 mb-8">
-                    {pkg.features.map((feature, i) => (
-                      <li key={i} className="flex items-center gap-3 text-text-secondary">
-                        <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Link
-                    href={`/contact?service=${encodeURIComponent(pkg.name)}`}
-                    className="inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl font-medium"
-                  >
-                    Book {pkg.name}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </CardContent>
-              </Card>
-            ))}
+                </div>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-center gap-3 text-text-secondary">
+                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    <span>Body-to-body technique with seaweed gel</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-text-secondary">
+                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    <span>Licensed therapist</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-text-secondary">
+                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    <span>Shower before and after</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-text-secondary">
+                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    <span>Premium spa environment</span>
+                  </li>
+                </ul>
+                <Link
+                  href="/contact?service=Classic+Nuru"
+                  className={`inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl font-medium ${!isAvailable ? 'opacity-50 pointer-events-none' : ''}`}
+                >
+                  Book Classic Nuru
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </CardContent>
+            </Card>
+            <Card className="glass border-border hover:border-primary/40 transition-all duration-300">
+              <CardContent className="p-8">
+                <div className="text-center mb-6">
+                  <h3 className="font-heading text-2xl text-foreground mb-2">Premium Nuru</h3>
+                  <div className="flex items-baseline justify-center gap-2">
+                    <span className="text-4xl font-heading text-primary">₱{Math.round(displayPrice * 1.43).toLocaleString()}</span>
+                    <span className="text-text-muted">/90 min</span>
+                  </div>
+                </div>
+                <ul className="space-y-4 mb-8">
+                  <li className="flex items-center gap-3 text-text-secondary">
+                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    <span>Extended body-to-body technique</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-text-secondary">
+                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    <span>Licensed therapist</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-text-secondary">
+                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    <span>Shower before and after</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-text-secondary">
+                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    <span>Hot stone therapy add-on</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-text-secondary">
+                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    <span>Aromatherapy enhancement</span>
+                  </li>
+                  <li className="flex items-center gap-3 text-text-secondary">
+                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
+                    <span>Premium spa environment</span>
+                  </li>
+                </ul>
+                <Link
+                  href="/contact?service=Premium+Nuru"
+                  className={`inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl font-medium ${!isAvailable ? 'opacity-50 pointer-events-none' : ''}`}
+                >
+                  Book Premium Nuru
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>

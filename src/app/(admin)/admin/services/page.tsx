@@ -30,6 +30,8 @@ interface Service {
   image_url: string
   image_path: string
   is_active: boolean
+  is_featured: boolean
+  slug: string
   created_at: string
 }
 
@@ -60,7 +62,9 @@ export default function AdminServicesPage() {
     price: '',
     duration: '',
     image_url: '',
-    image_path: ''
+    image_path: '',
+    is_featured: false,
+    slug: ''
   })
   
   // Upload state
@@ -209,25 +213,17 @@ export default function AdminServicesPage() {
 
     setIsSaving(true)
     try {
-      const serviceData: {
-        name: string
-        description: string
-        duration: number
-        image_url: string
-        image_path: string
-        is_active: boolean
-        price?: number
-      } = {
+      const serviceData = {
         name: formData.name,
         description: formData.description,
         duration: parseInt(formData.duration),
         image_url: formData.image_url,
         image_path: formData.image_path,
-        is_active: true
+        is_active: true,
+        is_featured: formData.is_featured,
+        slug: formData.slug || null,
+        price: formData.price ? parseFloat(formData.price) : 0
       }
-      
-      // Set price to 0 if not provided (to avoid NOT NULL constraint)
-      serviceData.price = formData.price ? parseFloat(formData.price) : 0
 
       if (editingService) {
         // If replacing image, delete old image from storage
@@ -283,7 +279,9 @@ export default function AdminServicesPage() {
       price: service.price.toString(),
       duration: service.duration.toString(),
       image_url: service.image_url || '',
-      image_path: service.image_path || ''
+      image_path: service.image_path || '',
+      is_featured: service.is_featured || false,
+      slug: service.slug || ''
     })
     setShowDialog(true)
   }
@@ -315,7 +313,9 @@ export default function AdminServicesPage() {
       price: '',
       duration: '',
       image_url: '',
-      image_path: ''
+      image_path: '',
+      is_featured: false,
+      slug: ''
     })
     setEditingService(null)
     setPreviewUrl(null)
@@ -391,17 +391,17 @@ export default function AdminServicesPage() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="price">Price (₱) - Optional</Label>
-                      <Input
-                        id="price"
-                        type="number"
-                        value={formData.price}
-                        onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
-                        placeholder="1500"
-                      />
-                      <p className="text-xs text-text-muted">Leave empty or set to 0 to hide price</p>
-                    </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="price">Price (₱) - Optional</Label>
+                        <Input
+                          id="price"
+                          type="number"
+                          value={formData.price}
+                          onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
+                          placeholder="1500"
+                        />
+                        <p className="text-xs text-text-muted">Leave empty or set to 0 to hide price</p>
+                      </div>
                       <div className="space-y-2">
                         <Label htmlFor="duration">Duration (minutes) *</Label>
                         <div className="relative">
@@ -415,6 +415,30 @@ export default function AdminServicesPage() {
                             className="pl-9"
                           />
                         </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="slug">URL Slug (Optional)</Label>
+                        <Input
+                          id="slug"
+                          value={formData.slug}
+                          onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') }))}
+                          placeholder="e.g., japanese-nuru-massage"
+                        />
+                        <p className="text-xs text-text-muted">For custom landing page URLs</p>
+                      </div>
+                      <div className="flex items-end pb-2">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="checkbox"
+                            checked={formData.is_featured}
+                            onChange={(e) => setFormData(prev => ({ ...prev, is_featured: e.target.checked }))}
+                            className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
+                          />
+                          <span className="text-sm text-text-secondary">Mark as Featured (Premium styling)</span>
+                        </label>
                       </div>
                     </div>
 
@@ -570,6 +594,11 @@ export default function AdminServicesPage() {
                             <span className={`text-xs px-2 py-0.5 rounded-full ${service.is_active ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400'}`}>
                               {service.is_active ? 'Active' : 'Inactive'}
                             </span>
+                            {service.is_featured && (
+                              <span className="text-xs px-2 py-0.5 rounded-full bg-primary/20 text-primary">
+                                Featured
+                              </span>
+                            )}
                           </div>
                           <div className="flex items-center gap-4 mt-2 text-sm text-text-secondary">
                             {service.price && service.price > 0 && (

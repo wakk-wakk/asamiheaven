@@ -17,6 +17,8 @@ interface Service {
   image_url: string
   image_path: string
   is_active: boolean
+  is_featured: boolean
+  slug: string
 }
 
 // Validate image URL to prevent infinite loop errors
@@ -120,51 +122,6 @@ export default function ServicesPage() {
       <section className="py-12 px-4 pb-24">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Featured Nuru Massage Card */}
-            <Card 
-              className="group glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out flex flex-col h-full cursor-pointer"
-              onClick={() => router.push('/services/japanese-nuru-massage')}
-            >
-              <div className="w-full h-48 overflow-hidden rounded-t-lg bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center relative">
-                <div className="absolute inset-0 opacity-20">
-                  <div className="w-full h-full flex items-center justify-center">
-                    <svg className="h-20 w-20 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                    </svg>
-                  </div>
-                </div>
-                <span className="text-primary font-heading text-2xl z-10">Premium</span>
-              </div>
-              <div className="p-4 flex flex-col gap-2 flex-grow">
-                <div className="flex justify-between items-start">
-                  <h3 className="font-heading text-lg text-foreground">
-                    Japanese Nuru Massage
-                  </h3>
-                  <span className="text-primary font-heading text-lg">
-                    From ₱3,500
-                  </span>
-                </div>
-                <div className="flex items-center gap-2 text-sm text-text-muted">
-                  <Clock size={14} />
-                  <span>60-90 min</span>
-                </div>
-                <p className="text-text-secondary font-light text-sm leading-relaxed">
-                  Authentic Japanese body-to-body massage using traditional seaweed gel. Experience deep relaxation and sensory awakening with our licensed therapists.
-                </p>
-                <Button 
-                  type="button"
-                  className="w-full mt-auto bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    router.push('/services/japanese-nuru-massage');
-                  }}
-                >
-                  Learn More
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                </Button>
-              </div>
-            </Card>
-            
             {services.length === 0 ? (
               <div className="text-center py-12 col-span-full">
                 <p className="text-text-secondary font-light">No services available at the moment.</p>
@@ -175,7 +132,11 @@ export default function ServicesPage() {
                 return (
                   <Card 
                     key={service.id} 
-                    className="glass border-border hover:border-primary/40 hover:-translate-y-1 hover:shadow-glow-card transition-all duration-500 ease-out group flex flex-col h-full"
+                    className={`group flex flex-col h-full transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-glow-card ${
+                      service.is_featured 
+                        ? 'glass border-primary/40 shadow-glow-card' 
+                        : 'glass border-border hover:border-primary/40'
+                    }`}
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     {imageUrl ? (
@@ -188,10 +149,20 @@ export default function ServicesPage() {
                             (e.target as HTMLImageElement).style.display = 'none'
                           }}
                         />
+                        {service.is_featured && (
+                          <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-primary/90 text-background text-xs font-medium">
+                            Premium
+                          </span>
+                        )}
                       </div>
                     ) : (
-                      <div className="h-48 rounded-t-lg flex items-center justify-center bg-secondary/20">
+                      <div className="h-48 rounded-t-lg flex items-center justify-center bg-secondary/20 relative">
                         <ImageIcon className="h-12 w-12 text-text-muted" />
+                        {service.is_featured && (
+                          <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-primary/90 text-background text-xs font-medium">
+                            Premium
+                          </span>
+                        )}
                       </div>
                     )}
                     <div className="p-4 flex flex-col gap-2 flex-grow">
@@ -215,9 +186,15 @@ export default function ServicesPage() {
                       <Button 
                         type="button"
                         className="w-full mt-auto bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
-                        onClick={() => router.push('/contact')}
+                        onClick={() => {
+                          if (service.slug) {
+                            router.push(`/services/${service.slug}`)
+                          } else {
+                            router.push('/contact')
+                          }
+                        }}
                       >
-                        Inquire Now
+                        {service.slug ? 'Learn More' : 'Inquire Now'}
                         <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                       </Button>
                     </div>
