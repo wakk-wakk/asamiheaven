@@ -1,7 +1,46 @@
 import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
-import { Clock, ArrowRight, Phone, CheckCircle2, Shield } from 'lucide-react'
+import { Clock, ArrowRight, Phone, CheckCircle2, Shield, Image as ImageIcon } from 'lucide-react'
 import { createClient } from '@supabase/supabase-js'
+
+// Validate image URL helper
+const isValidImageUrl = (url: string): boolean => {
+  if (!url) return false
+  try {
+    const parsed = new URL(url)
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:'
+  } catch {
+    return false
+  }
+}
+
+// Get therapist image URL
+const getTherapistImageUrl = (therapist: { image_path?: string; image_url?: string }): string | null => {
+  if (therapist.image_path) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    if (supabaseUrl) {
+      return `${supabaseUrl}/storage/v1/object/public/therapists-images/${therapist.image_path}`
+    }
+  }
+  if (therapist.image_url && isValidImageUrl(therapist.image_url)) {
+    return therapist.image_url
+  }
+  return null
+}
+
+// Get service image URL
+const getServiceImageUrl = (service: { image_path?: string; image_url?: string }): string | null => {
+  if (service.image_path) {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    if (supabaseUrl) {
+      return `${supabaseUrl}/storage/v1/object/public/services-images/${service.image_path}`
+    }
+  }
+  if (service.image_url && isValidImageUrl(service.image_url)) {
+    return service.image_url
+  }
+  return null
+}
 
 export const metadata = {
   title: {
@@ -105,7 +144,8 @@ const benefits = [
 
 export default async function JapaneseNuruMassagePage() {
   // Server-side data fetch
-  let therapists: Array<{ id: string | number; nickname: string }> = []
+  let therapists: Array<{ id: string | number; nickname: string; image_url?: string; image_path?: string }> = []
+  let services: Array<{ id: string | number; name: string; description: string; price: number; duration: number; image_url?: string; image_path?: string; slug?: string }> = []
   let serviceData: { name: string; description: string; price: number; duration: number; is_active: boolean } | null = null
   
   try {
@@ -115,16 +155,27 @@ export default async function JapaneseNuruMassagePage() {
     if (supabaseUrl && supabaseAnonKey) {
       const supabase = createClient(supabaseUrl, supabaseAnonKey)
       
-      // Fetch therapists
+      // Fetch therapists with images
       const { data: therapistData, error: therapistError } = await supabase
         .from('therapists')
-        .select('*')
+        .select('id, nickname, image_url, image_path')
         .eq('is_active', true)
         .order('nickname')
         .limit(8)
       
       if (therapistData && !therapistError) {
         therapists = therapistData
+      }
+      
+      // Fetch all active services for packages section
+      const { data: servicesData, error: servicesError } = await supabase
+        .from('services')
+        .select('id, name, description, price, duration, image_url, image_path, slug')
+        .eq('is_active', true)
+        .order('name')
+      
+      if (servicesData && !servicesError) {
+        services = servicesData
       }
       
       // Fetch service data for dynamic pricing
@@ -178,9 +229,9 @@ export default async function JapaneseNuruMassagePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link
                 href="/contact?service=Japanese+Nuru+Massage"
-                className={`inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-lg font-light ${!isAvailable ? 'opacity-50 pointer-events-none' : ''}`}
+                className={`inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-foreground hover:shadow-lg transition-all duration-300 rounded-lg font-light ${!isAvailable ? 'opacity-50 pointer-events-none' : ''}`}
               >
-                Book Now
+                Inquire Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
               <a
@@ -312,88 +363,56 @@ export default async function JapaneseNuruMassagePage() {
               Choose Your Experience
             </h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="glass border-border hover:border-primary/40 transition-all duration-300">
-              <CardContent className="p-8">
-                <div className="text-center mb-6">
-                  <h3 className="font-heading text-2xl text-foreground mb-2">Classic Nuru</h3>
-                  <div className="flex items-baseline justify-center gap-2">
-                    <span className="text-4xl font-heading text-primary">₱{displayPrice.toLocaleString()}</span>
-                    <span className="text-text-muted">/60 min</span>
-                  </div>
-                </div>
-                <ul className="space-y-4 mb-8">
-                  <li className="flex items-center gap-3 text-text-secondary">
-                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span>Body-to-body technique with seaweed gel</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-text-secondary">
-                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span>Licensed therapist</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-text-secondary">
-                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span>Shower before and after</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-text-secondary">
-                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span>Premium spa environment</span>
-                  </li>
-                </ul>
-                <Link
-                  href="/contact?service=Classic+Nuru"
-                  className={`inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl font-medium ${!isAvailable ? 'opacity-50 pointer-events-none' : ''}`}
-                >
-                  Book Classic Nuru
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </CardContent>
-            </Card>
-            <Card className="glass border-border hover:border-primary/40 transition-all duration-300">
-              <CardContent className="p-8">
-                <div className="text-center mb-6">
-                  <h3 className="font-heading text-2xl text-foreground mb-2">Premium Nuru</h3>
-                  <div className="flex items-baseline justify-center gap-2">
-                    <span className="text-4xl font-heading text-primary">₱{Math.round(displayPrice * 1.43).toLocaleString()}</span>
-                    <span className="text-text-muted">/90 min</span>
-                  </div>
-                </div>
-                <ul className="space-y-4 mb-8">
-                  <li className="flex items-center gap-3 text-text-secondary">
-                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span>Extended body-to-body technique</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-text-secondary">
-                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span>Licensed therapist</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-text-secondary">
-                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span>Shower before and after</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-text-secondary">
-                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span>Hot stone therapy add-on</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-text-secondary">
-                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span>Aromatherapy enhancement</span>
-                  </li>
-                  <li className="flex items-center gap-3 text-text-secondary">
-                    <CheckCircle2 className="h-5 w-5 text-primary flex-shrink-0" />
-                    <span>Premium spa environment</span>
-                  </li>
-                </ul>
-                <Link
-                  href="/contact?service=Premium+Nuru"
-                  className={`inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl font-medium ${!isAvailable ? 'opacity-50 pointer-events-none' : ''}`}
-                >
-                  Book Premium Nuru
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
-              </CardContent>
-            </Card>
-          </div>
+          {services.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-text-secondary font-light">No services available at the moment.</p>
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              {services.map((service) => {
+                const imageUrl = getServiceImageUrl(service)
+                return (
+                  <Card key={service.id} className="glass border-border hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+                    {/* Service Image */}
+                    {imageUrl ? (
+                      <div className="w-full h-48 overflow-hidden bg-secondary/20">
+                        <img
+                          src={imageUrl}
+                          alt={service.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-full h-48 flex items-center justify-center bg-secondary/20">
+                        <ImageIcon className="h-12 w-12 text-text-muted" />
+                      </div>
+                    )}
+                    <CardContent className="p-6">
+                      <div className="text-center mb-4">
+                        <h3 className="font-heading text-xl text-foreground mb-2">{service.name}</h3>
+                        <div className="flex items-baseline justify-center gap-2">
+                          {service.price && service.price > 0 && (
+                            <span className="text-3xl font-heading text-primary">₱{service.price.toLocaleString()}</span>
+                          )}
+                          <span className="text-text-muted">/{service.duration} min</span>
+                        </div>
+                      </div>
+                      <p className="text-text-secondary font-light text-sm leading-relaxed mb-6 text-center">
+                        {service.description}
+                      </p>
+                      <Link
+                        href="/contact"
+                        className="inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-primary to-primary-hover text-foreground hover:shadow-lg transition-all duration-300 rounded-xl font-medium"
+                      >
+                        Inquire Now
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </Link>
+                    </CardContent>
+                  </Card>
+                )
+              })}
+            </div>
+          )}
         </div>
       </section>
 
@@ -411,19 +430,30 @@ export default async function JapaneseNuruMassagePage() {
           </div>
           {therapists.length > 0 && (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-              {therapists.map((therapist) => (
-                <Card key={therapist.id} className="glass border-border hover:border-primary/40 transition-all duration-300">
-                  <CardContent className="p-4 text-center">
-                    <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4">
-                      <span className="text-2xl font-heading text-primary">
-                        {therapist.nickname.charAt(0)}
-                      </span>
-                    </div>
-                    <h3 className="font-heading text-base text-foreground mb-1">{therapist.nickname}</h3>
-                    <p className="text-xs text-text-muted">Licensed Therapist</p>
-                  </CardContent>
-                </Card>
-              ))}
+              {therapists.map((therapist) => {
+                const therapistImageUrl = getTherapistImageUrl(therapist)
+                return (
+                  <Card key={therapist.id} className="glass border-border hover:border-primary/40 transition-all duration-300">
+                    <CardContent className="p-4 text-center">
+                      <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 overflow-hidden">
+                        {therapistImageUrl ? (
+                          <img
+                            src={therapistImageUrl}
+                            alt={therapist.nickname}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-2xl font-heading text-primary">
+                            {therapist.nickname.charAt(0)}
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="font-heading text-base text-foreground mb-1">{therapist.nickname}</h3>
+                      <p className="text-xs text-text-muted">Licensed Therapist</p>
+                    </CardContent>
+                  </Card>
+                )
+              })}
             </div>
           )}
           {therapists.length === 0 && (
@@ -481,9 +511,9 @@ export default async function JapaneseNuruMassagePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact?service=Japanese+Nuru+Massage"
-                className="inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-lg font-light"
+                className="inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-foreground hover:shadow-lg transition-all duration-300 rounded-lg font-light"
               >
-                Book Now
+                Inquire Now
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
               <a
