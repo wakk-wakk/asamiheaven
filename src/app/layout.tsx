@@ -52,8 +52,8 @@ export const metadata: Metadata = {
      description: "Experience tranquility and rejuvenation at Asami Heaven. Premium massage and spa services for your ultimate relaxation.",
      images: [
        {
-         url: "https://asamiheaven.vercel.app/icon.png",
-         secureUrl: "https://asamiheaven.vercel.app/icon.png",
+         url: "https://asamiheaven.vercel.app/og-image-v5.jpg",
+         secureUrl: "https://asamiheaven.vercel.app/og-image-v5.jpg",
          width: 1200,
          height: 630,
          alt: "Asami Heaven - Premium Spa & Massage",
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
      card: "summary_large_image",
      title: "Asami Heaven - Premium Spa & Massage",
      description: "Experience tranquility and rejuvenation at Asami Heaven. Premium massage and spa services.",
-     images: ["https://asamiheaven.vercel.app/icon.png"],
+     images: ["https://asamiheaven.vercel.app/og-image-v5.jpg"],
      creator: "@asamiheaven",
    },
   alternates: {
