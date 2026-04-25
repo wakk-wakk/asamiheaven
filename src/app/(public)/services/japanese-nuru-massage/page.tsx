@@ -229,7 +229,7 @@ export default async function JapaneseNuruMassagePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link
                 href="/contact?service=Japanese+Nuru+Massage"
-                className={`inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-foreground hover:shadow-lg transition-all duration-300 rounded-lg font-light ${!isAvailable ? 'opacity-50 pointer-events-none' : ''}`}
+                className={`inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-lg font-light ${!isAvailable ? 'opacity-50 pointer-events-none' : ''}`}
               >
                 Inquire Now
                 <ArrowRight className="ml-2 h-5 w-5" />
@@ -402,7 +402,7 @@ export default async function JapaneseNuruMassagePage() {
                       </p>
                       <Link
                         href="/contact"
-                        className="inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-primary to-primary-hover text-foreground hover:shadow-lg transition-all duration-300 rounded-xl font-medium"
+                        className="inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl font-medium"
                       >
                         Inquire Now
                         <ArrowRight className="ml-2 h-4 w-4" />
@@ -511,7 +511,7 @@ export default async function JapaneseNuruMassagePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact?service=Japanese+Nuru+Massage"
-                className="inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-foreground hover:shadow-lg transition-all duration-300 rounded-lg font-light"
+                className="inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-lg font-light"
               >
                 Inquire Now
                 <ArrowRight className="ml-2 h-5 w-5" />

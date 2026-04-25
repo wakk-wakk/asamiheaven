@@ -418,30 +418,6 @@ export default function AdminServicesPage() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="slug">URL Slug (Optional)</Label>
-                        <Input
-                          id="slug"
-                          value={formData.slug}
-                          onChange={(e) => setFormData(prev => ({ ...prev, slug: e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '') }))}
-                          placeholder="e.g., japanese-nuru-massage"
-                        />
-                        <p className="text-xs text-text-muted">For custom landing page URLs</p>
-                      </div>
-                      <div className="flex items-end pb-2">
-                        <label className="flex items-center gap-2 cursor-pointer">
-                          <input
-                            type="checkbox"
-                            checked={formData.is_featured}
-                            onChange={(e) => setFormData(prev => ({ ...prev, is_featured: e.target.checked }))}
-                            className="w-4 h-4 rounded border-border text-primary focus:ring-primary"
-                          />
-                          <span className="text-sm text-text-secondary">Mark as Featured (Premium styling)</span>
-                        </label>
-                      </div>
-                    </div>
-
                     {/* Image Upload Section */}
                     <div className="space-y-2">
                       <Label>Service Image</Label>
