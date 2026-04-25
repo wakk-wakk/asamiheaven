@@ -193,13 +193,9 @@ export default async function JapaneseNuruMassagePage() {
     console.error('Error fetching data:', error)
   }
   
-  // Use dynamic pricing if available, otherwise fall back to static
-  const displayPrice = serviceData?.price && serviceData.price > 0 
-    ? serviceData.price 
-    : 1500
-  const displayDuration = serviceData?.duration 
-    ? `${serviceData.duration}-${Math.round(serviceData.duration * 2)}` 
-    : '90-180'
+  // Hardcoded display values for consistent messaging
+  const displayPrice = 1500
+  const displayDuration = '90-240'
   const isAvailable = !serviceData || serviceData.is_active !== false
 
   return (

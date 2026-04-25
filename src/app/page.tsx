@@ -477,21 +477,19 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               {/* Telegram button - shown on both mobile and desktop */}
               {telegramValue && (
-                <div className="relative inline-block z-10">
-                  <span className="absolute top-1 left-2 text-primary animate-pulse-gold z-20 text-xs" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B' }}>✦</span>
-                  <span className="absolute -top-1.5 right-3 text-primary animate-pulse-gold z-20 text-lg" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B', animationDelay: '0.5s' }}>✦</span>
-                  <span className="absolute bottom-2 right-1/3 text-primary animate-pulse-gold z-20 text-sm" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B', animationDelay: '0.75s' }}>✦</span>
-                  <div className="inline-block">
-                    <Button 
-                      onClick={handleTelegramClick}
-                      variant="outline" 
-                      size="lg" 
-                      className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
-                    >
-                      <MessageCircle className="mr-2 h-5 w-5" />
-                      Message us on Telegram
-                    </Button>
-                  </div>
+                <div className="relative inline-flex z-10 mx-auto sm:mx-0">
+                  <span className="absolute -top-2 left-1 text-primary animate-pulse-gold z-20 text-xs" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B' }}>✦</span>
+                  <span className="absolute -top-2 right-2 text-primary animate-pulse-gold z-20 text-lg" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B', animationDelay: '0.5s' }}>✦</span>
+                  <span className="absolute -bottom-2 right-4 text-primary animate-pulse-gold z-20 text-sm" style={{ textShadow: '0 0 6px #C6A96B, 0 0 12px #C6A96B', animationDelay: '0.75s' }}>✦</span>
+                  <Button 
+                    onClick={handleTelegramClick}
+                    variant="outline" 
+                    size="lg" 
+                    className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-xl font-light backdrop-blur-sm cursor-pointer"
+                  >
+                    <MessageCircle className="mr-2 h-5 w-5" />
+                    Message us on Telegram
+                  </Button>
                 </div>
               )}
               <div className="inline-block">
@@ -726,8 +724,8 @@ export default function HomePage() {
                 </h2>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {services.slice(0, 6).map((service, index) => {
+             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+               {services.slice(0, 6).map((service, index) => {
                 const imageUrl = getServiceImageUrl(service);
                 return (
 <Card 
@@ -781,12 +779,23 @@ export default function HomePage() {
                   </Card>
                 );
               })}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* Reviews Section - Horizontal Scrolling Carousel */}
+             </div>
+             <div className="text-center mt-12">
+               <Link href="/services/japanese-nuru-massage">
+                 <Button 
+                   size="lg"
+                   className="px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group"
+                 >
+                   Japanese Nuru
+                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                 </Button>
+               </Link>
+             </div>
+           </div>
+         </section>
+       )}
+ 
+       {/* Reviews Section - Horizontal Scrolling Carousel */}
       {!isLoadingReviews && reviews.length > 0 && (
         <section className="py-16 md:py-20 px-4 overflow-hidden">
           <div className="max-w-6xl mx-auto">
@@ -923,21 +932,21 @@ export default function HomePage() {
               </p>
 
                <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start pt-4">
-                 <Button 
-                   type="button"
-                   size="lg"
-                   className="px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-full font-light shadow-lg hover:scale-105 group"
-                   onClick={() => router.push('/contact')}
-                 >
-                   Contact Us
-                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                 </Button>
-                 <Link href="/services">
-                  <Button variant="outline" size="lg" className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-full font-light backdrop-blur-sm">
-                    View Services
+                  <Button 
+                    type="button"
+                    size="lg"
+                    className="px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-full font-light shadow-lg hover:scale-105 group"
+                    onClick={() => router.push('/contact')}
+                  >
+                    Contact Us
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
-                </Link>
-              </div>
+                  <Link href="/services/japanese-nuru-massage">
+                   <Button variant="outline" size="lg" className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-full font-light backdrop-blur-sm">
+                     Japanese Nuru
+                   </Button>
+                 </Link>
+               </div>
             </div>
           </div>
         </div>

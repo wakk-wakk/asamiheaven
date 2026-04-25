@@ -196,15 +196,26 @@ export default function ServicesPage() {
               Our team is here to help you choose the perfect treatment for your needs. 
               Contact us for a personalized recommendation.
             </p>
-            <Button 
-              type="button"
-              size="lg"
-              className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-lg font-light"
-              onClick={() => router.push('/contact')}
-            >
-              Contact Us
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                type="button"
+                size="lg"
+                className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-lg font-light"
+                onClick={() => router.push('/contact')}
+              >
+                Contact Us
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Link href="/services/japanese-nuru-massage">
+                <Button 
+                  variant="outline"
+                  size="lg" 
+                  className="px-8 py-6 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-lg font-light"
+                >
+                  Japanese Nuru
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
