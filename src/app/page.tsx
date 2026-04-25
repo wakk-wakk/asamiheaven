@@ -650,27 +650,27 @@ export default function HomePage() {
                 </div>
 ) : (
                 <>
-                  <div className="columns-2 md:columns-3 lg:columns-4 gap-6 md:gap-8 max-w-6xl mx-auto">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 md:gap-8 max-w-6xl mx-auto">
                     {therapists.slice(0, displayedTherapistsCount).map((therapist, index) => {
                       const therapistImageUrl = getTherapistImageUrl(therapist);
                       return (
-                        <div key={therapist.id} className="break-inside-avoid mb-6 md:mb-8">
+                        <div key={therapist.id} className="flex flex-col">
                           <Card 
-                            className="group glass border border-white/10 hover:border-primary/40 transition-all duration-500 ease-out flex flex-col overflow-hidden cursor-pointer bg-black/20"
+                            className="group glass border border-white/10 hover:border-primary/40 transition-all duration-500 ease-out overflow-hidden cursor-pointer bg-black/20"
                             style={{ animationDelay: `${index * 0.1}s` }}
                           >
-                            <div className="relative overflow-hidden bg-secondary/10">
+                            <div className="relative overflow-hidden bg-secondary/10 aspect-[3/4]">
                               {therapistImageUrl ? (
                                 <img 
                                   src={therapistImageUrl} 
                                   alt={therapist.nickname}
-                                  className="w-full h-auto object-cover group-hover:scale-105 transition-all duration-500"
+                                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).style.display = 'none'
                                   }}
                                 />
                               ) : (
-                                <div className="w-full aspect-[3/4] flex items-center justify-center bg-secondary/20">
+                                <div className="absolute inset-0 flex items-center justify-center bg-secondary/20">
                                   <User className="h-20 w-20 text-text-muted" />
                                 </div>
                               )}
@@ -682,6 +682,9 @@ export default function HomePage() {
                               </div>
                             </div>
                           </Card>
+                          <p className="mt-3 text-center text-foreground font-heading text-lg tracking-wide">
+                            {therapist.nickname}
+                          </p>
                         </div>
                       );
                     })}
