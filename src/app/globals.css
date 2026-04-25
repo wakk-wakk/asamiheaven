@@ -114,13 +114,13 @@ p {
   color: var(--text-secondary);
 }
 
-a {
+a:not([class*="text-"]) {
   color: var(--primary);
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-a:hover {
+a:not([class*="text-"]):hover {
   color: var(--primary-hover);
 }
 

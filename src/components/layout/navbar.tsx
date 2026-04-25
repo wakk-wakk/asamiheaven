@@ -20,6 +20,10 @@ const publicNavLinks: NavLink[] = [
   { href: '/contact', label: 'Contacts' },
 ]
 
+const specialNavLinks: NavLink[] = [
+  { href: '/services/japanese-nuru-massage', label: 'Japanese Nuru' },
+]
+
 const adminNavLinks: NavLink[] = [
   { href: '/', label: 'Home', icon: Home },
   { href: '/admin/login', label: 'Logout', icon: LogOut },
@@ -70,7 +74,7 @@ export function Navbar() {
   }, [])
 
   // Filter nav links based on display settings (only for public pages)
-  const navLinks = isAdminPage 
+  const mainNavLinks = isAdminPage 
     ? adminNavLinks 
     : publicNavLinks.filter(link => {
         if (link.label === 'Services') return showServicesLink
@@ -93,7 +97,7 @@ export function Navbar() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navLinks.map((link) => {
+            {mainNavLinks.map((link) => {
               if (link.label === 'Logout') {
                 return (
                   <Link
@@ -130,6 +134,16 @@ export function Navbar() {
                 </Link>
               )
             })}
+            {/* Japanese Nuru - distinct special link */}
+            {!isAdminPage && specialNavLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="flex items-center gap-1.5 px-4 py-2 bg-rose-gold/20 text-rose-gold border border-rose-gold/30 rounded-lg hover:bg-rose-gold/30 hover:border-rose-gold/50 transition-all duration-200 text-sm font-medium"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
           {/* Mobile Menu Button */}
@@ -147,7 +161,7 @@ export function Navbar() {
       {isMobileMenuOpen && (
         <div className="md:hidden glass border-t border-border">
           <div className="px-4 py-4 space-y-3">
-            {navLinks.map((link) => (
+            {mainNavLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
@@ -155,6 +169,17 @@ export function Navbar() {
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {link.icon && <link.icon size={16} />}
+                {link.label}
+              </Link>
+            ))}
+            {/* Japanese Nuru mobile link */}
+            {!isAdminPage && specialNavLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="flex items-center gap-2 py-2 text-rose-gold hover:text-rose-gold/80 transition-colors duration-200 font-medium"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
                 {link.label}
               </Link>
             ))}

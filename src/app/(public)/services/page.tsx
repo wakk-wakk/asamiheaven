@@ -17,7 +17,6 @@ interface Service {
   image_url: string
   image_path: string
   is_active: boolean
-  is_featured: boolean
   slug: string
 }
 
@@ -132,11 +131,7 @@ export default function ServicesPage() {
                 return (
                   <Card 
                     key={service.id} 
-                    className={`group flex flex-col h-full transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-glow-card ${
-                      service.is_featured 
-                        ? 'glass border-primary/40 shadow-glow-card' 
-                        : 'glass border-border hover:border-primary/40'
-                    }`}
+                    className="group flex flex-col h-full glass border-border hover:border-primary/40 transition-all duration-500 ease-out hover:-translate-y-1 hover:shadow-glow-card"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     {imageUrl ? (
@@ -149,20 +144,10 @@ export default function ServicesPage() {
                             (e.target as HTMLImageElement).style.display = 'none'
                           }}
                         />
-                        {service.is_featured && (
-                          <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-primary/90 text-background text-xs font-medium">
-                            Premium
-                          </span>
-                        )}
                       </div>
                     ) : (
                       <div className="h-48 rounded-t-lg flex items-center justify-center bg-secondary/20 relative">
                         <ImageIcon className="h-12 w-12 text-text-muted" />
-                        {service.is_featured && (
-                          <span className="absolute top-3 right-3 px-3 py-1 rounded-full bg-primary/90 text-background text-xs font-medium">
-                            Premium
-                          </span>
-                        )}
                       </div>
                     )}
                     <div className="p-4 flex flex-col gap-2 flex-grow">
