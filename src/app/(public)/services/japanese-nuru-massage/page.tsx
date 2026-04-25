@@ -43,10 +43,7 @@ const getServiceImageUrl = (service: { image_path?: string; image_url?: string }
 }
 
 export const metadata = {
-  title: {
-    default: "Japanese Nuru Massage in Manila",
-    template: "%s | Asami Heaven"
-  },
+  title: "Japanese Nuru Massage Manila | Asami Heaven",
   description: "Experience authentic Japanese Nuru massage in Metro Manila. Premium spa treatment using traditional seaweed gel. Licensed therapists. Book today.",
   keywords: [
     "nuru massage",
@@ -63,7 +60,16 @@ export const metadata = {
     title: "Japanese Nuru Massage Manila",
     description: "Authentic Japanese body-to-body massage using traditional techniques",
     url: "https://asamiheaven.vercel.app/services/japanese-nuru-massage",
-    images: ['/og-nuru-massage.jpg'],
+    images: [
+      {
+        url: "https://asamiheaven.vercel.app/og-image-v5.jpg",
+        secureUrl: "https://asamiheaven.vercel.app/og-image-v5.jpg",
+        width: 1200,
+        height: 630,
+        alt: "Japanese Nuru Massage - Asami Heaven",
+        type: "image/jpeg",
+      },
+    ],
   },
 }
 
