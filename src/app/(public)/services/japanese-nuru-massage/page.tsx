@@ -393,9 +393,6 @@ export default async function JapaneseNuruMassagePage() {
                           src={imageUrl}
                           alt={service.name}
                           className="min-w-full min-h-full max-w-full max-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none'
-                          }}
                         />
                       </div>
                     ) : (

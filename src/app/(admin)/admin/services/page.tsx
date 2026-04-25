@@ -220,7 +220,6 @@ export default function AdminServicesPage() {
         image_url: formData.image_url,
         image_path: formData.image_path,
         is_active: true,
-        is_featured: formData.is_featured,
         slug: formData.slug || null,
         price: formData.price ? parseFloat(formData.price) : 0
       }
@@ -280,7 +279,7 @@ export default function AdminServicesPage() {
       duration: service.duration.toString(),
       image_url: service.image_url || '',
       image_path: service.image_path || '',
-      is_featured: service.is_featured || false,
+      is_featured: false,
       slug: service.slug || ''
     })
     setShowDialog(true)
