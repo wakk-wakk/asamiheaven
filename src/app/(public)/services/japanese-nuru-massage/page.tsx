@@ -388,15 +388,18 @@ export default async function JapaneseNuruMassagePage() {
                   <Card key={service.id} className="glass border-border hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col h-full">
                     {/* Service Image */}
                     {imageUrl ? (
-                      <div className="w-full h-48 overflow-hidden bg-secondary/20">
+                      <div className="w-full h-48 overflow-hidden rounded-t-lg bg-secondary/20 relative flex items-center justify-center">
                         <img
                           src={imageUrl}
                           alt={service.name}
-                          className="w-full h-full object-cover"
+                          className="min-w-full min-h-full max-w-full max-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).style.display = 'none'
+                          }}
                         />
                       </div>
                     ) : (
-                      <div className="w-full h-48 flex items-center justify-center bg-secondary/20">
+                      <div className="w-full h-48 rounded-t-lg flex items-center justify-center bg-secondary/20">
                         <ImageIcon className="h-12 w-12 text-text-muted" />
                       </div>
                     )}
