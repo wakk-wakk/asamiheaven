@@ -196,10 +196,10 @@ export default async function JapaneseNuruMassagePage() {
   // Use dynamic pricing if available, otherwise fall back to static
   const displayPrice = serviceData?.price && serviceData.price > 0 
     ? serviceData.price 
-    : 3500
+    : 1500
   const displayDuration = serviceData?.duration 
-    ? `${serviceData.duration}-${Math.round(serviceData.duration * 1.5)}` 
-    : '60-90'
+    ? `${serviceData.duration}-${Math.round(serviceData.duration * 2)}` 
+    : '90-180'
   const isAvailable = !serviceData || serviceData.is_active !== false
 
   return (
@@ -307,13 +307,30 @@ export default async function JapaneseNuruMassagePage() {
               </ul>
             </div>
             <div className="relative">
-              <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  <div className="w-20 h-20 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
-                    <Shield className="h-10 w-10 text-primary" />
+              <div className="aspect-[4/5] rounded-2xl overflow-hidden relative">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-primary/10 to-background"></div>
+                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-60"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+                <div className="relative h-full flex flex-col justify-end p-8">
+                  <span className="inline-block px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-medium mb-4 w-fit border border-primary/20">
+                    Authentic Experience
+                  </span>
+                  <h3 className="font-heading text-2xl text-foreground mb-3">
+                    Traditional Japanese Nuru
+                  </h3>
+                  <p className="text-text-secondary font-light leading-relaxed mb-6">
+                    Our therapists are trained in authentic Japanese techniques, using premium organic seaweed gel imported directly from Japan for the truest Nuru experience.
+                  </p>
+                  <div className="flex items-center gap-4 text-sm">
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-primary" />
+                      <span className="text-text-secondary">Certified Therapists</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CheckCircle2 className="h-4 w-4 text-primary" />
+                      <span className="text-text-secondary">Imported Gel</span>
+                    </div>
                   </div>
-                  <p className="text-foreground font-medium">Professional Setting</p>
-                  <p className="text-text-muted text-sm">All treatments provided in our premium spa environment with strict hygiene standards.</p>
                 </div>
               </div>
             </div>
@@ -372,7 +389,7 @@ export default async function JapaneseNuruMassagePage() {
               {services.map((service) => {
                 const imageUrl = getServiceImageUrl(service)
                 return (
-                  <Card key={service.id} className="glass border-border hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+                  <Card key={service.id} className="glass border-border hover:border-primary/40 hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col h-full">
                     {/* Service Image */}
                     {imageUrl ? (
                       <div className="w-full h-48 overflow-hidden bg-secondary/20">
@@ -387,7 +404,7 @@ export default async function JapaneseNuruMassagePage() {
                         <ImageIcon className="h-12 w-12 text-text-muted" />
                       </div>
                     )}
-                    <CardContent className="p-6">
+                    <CardContent className="p-6 flex flex-col flex-grow">
                       <div className="text-center mb-4">
                         <h3 className="font-heading text-xl text-foreground mb-2">{service.name}</h3>
                         <div className="flex items-baseline justify-center gap-2">
@@ -397,12 +414,12 @@ export default async function JapaneseNuruMassagePage() {
                           <span className="text-text-muted">/{service.duration} min</span>
                         </div>
                       </div>
-                      <p className="text-text-secondary font-light text-sm leading-relaxed mb-6 text-center">
+                      <p className="text-text-secondary font-light text-sm leading-relaxed mb-6 text-center flex-grow">
                         {service.description}
                       </p>
                       <Link
                         href="/contact"
-                        className="inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl font-medium"
+                        className="inline-flex items-center justify-center w-full py-3 bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl font-medium mt-auto"
                       >
                         Inquire Now
                         <ArrowRight className="ml-2 h-4 w-4" />
