@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Cormorant_Garamond } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { AdSense } from "@/components/adsense";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -77,6 +79,14 @@ export const metadata: Metadata = {
   other: {
     "robots": "index, follow",
   },
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/iconwoutline.png", sizes: "32x32", type: "image/png" },
+    ],
+    shortcut: "/favicon.svg",
+    apple: "/iconwoutline.png",
+  },
 }
 
 const paths = {
@@ -98,15 +108,6 @@ const paths = {
   },
 }
 
-function AdSense() {
-  return (
-    <script
-      async
-      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1702672979918686"
-      crossOrigin="anonymous"
-    />
-  )
-}
 
 export default function RootLayout({
   children,
@@ -116,10 +117,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${cormorant.variable} h-full antialiased`}>
       <head>
-        <script
+        <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1702672979918686"
           crossOrigin="anonymous"
+          strategy="afterInteractive"
         />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
@@ -127,20 +129,8 @@ export default function RootLayout({
         <main className="flex-1 pt-16 md:pt-20">
           {children}
         </main>
-        <ins
-          className="adsbygoogle"
-          style={{ display: "block" }}
-          data-ad-client="ca-pub-1702672979918686"
-          data-ad-slot="6958170524"
-          data-ad-format="auto"
-          data-full-width-responsive="true"
-        />
+        <AdSense />
         <Footer />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(adsbygoogle = window.adsbygoogle || []).push({})`,
-          }}
-        />
       </body>
     </html>
   );

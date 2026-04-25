@@ -309,7 +309,7 @@ export default async function JapaneseNuruMassagePage() {
             <div className="relative">
               <div className="aspect-[4/5] rounded-2xl overflow-hidden relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-primary/10 to-background"></div>
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1544161515-4ab6ce6db874?q=80&w=1000&auto=format&fit=crop')] bg-cover bg-center opacity-60"></div>
+                <div className="absolute inset-0 bg-[url('https://i.pinimg.com/1200x/3c/b9/ef/3cb9ef1d212dfaa7ddb18e812cc59dca.jpg')] bg-cover bg-center opacity-60"></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
                 <div className="relative h-full flex flex-col justify-end p-8">
                   <span className="inline-block px-3 py-1 rounded-full bg-primary/20 text-primary text-xs font-medium mb-4 w-fit border border-primary/20">
@@ -498,18 +498,20 @@ export default async function JapaneseNuruMassagePage() {
           </div>
           <div className="space-y-4">
             {faqData.map((faq, index) => (
-              <details
+              <div
                 key={index}
                 className="group glass rounded-xl border border-border hover:border-primary/40 transition-all duration-300"
               >
-                <summary className="flex items-center justify-between p-6 cursor-pointer hover:text-primary transition-colors">
-                  <span className="font-heading text-lg">{faq.question}</span>
-                  <ArrowRight className="h-5 w-5 transition-transform duration-300 group-open:rotate-90" />
-                </summary>
-                <div className="px-6 pb-6 text-text-secondary">
-                  {faq.answer}
-                </div>
-              </details>
+                <details className="group/details">
+                  <summary className="flex items-center justify-between p-6 cursor-pointer hover:text-primary transition-colors list-none">
+                    <span className="font-heading text-lg">{faq.question}</span>
+                    <ArrowRight className="h-5 w-5 transition-transform duration-300 group-open/details:rotate-90" />
+                  </summary>
+                  <div className="px-6 pb-6 text-text-secondary">
+                    {faq.answer}
+                  </div>
+                </details>
+              </div>
             ))}
           </div>
         </div>
