@@ -664,7 +664,7 @@ export default function HomePage() {
                                 <img 
                                   src={therapistImageUrl} 
                                   alt={therapist.nickname}
-                                  className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500"
+                                  className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover object-center group-hover:scale-105 transition-all duration-500"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).style.display = 'none'
                                   }}

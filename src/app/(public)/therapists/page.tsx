@@ -121,7 +121,7 @@ export default async function TherapistsPage() {
                           <img 
                             src={imageUrl} 
                             alt={therapist.nickname}
-                            className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500"
+                            className="absolute inset-0 w-full h-full min-w-full min-h-full object-cover object-center group-hover:scale-105 transition-all duration-500"
                           />
                         ) : (
                           <div className="absolute inset-0 flex items-center justify-center bg-secondary/20">
