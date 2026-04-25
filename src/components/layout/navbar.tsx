@@ -110,19 +110,6 @@ export function Navbar() {
                   </Link>
                 )
               }
-              // Make "Contacts" stand out as a button
-              if (link.label === 'Contacts') {
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="flex items-center gap-1.5 px-4 py-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-all duration-200 text-sm font-medium"
-                  >
-                    {link.icon && <link.icon size={14} />}
-                    {link.label}
-                  </Link>
-                )
-              }
               return (
                 <Link
                   key={link.href}
@@ -134,12 +121,12 @@ export function Navbar() {
                 </Link>
               )
             })}
-            {/* Japanese Nuru - distinct special link */}
+            {/* Japanese Nuru - gold button style */}
             {!isAdminPage && specialNavLinks.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="flex items-center gap-1.5 px-4 py-2 bg-rose-gold/20 text-rose-gold border border-rose-gold/30 rounded-lg hover:bg-rose-gold/30 hover:border-rose-gold/50 transition-all duration-200 text-sm font-medium"
+                className="flex items-center gap-1.5 px-4 py-2 bg-primary/20 text-primary rounded-lg hover:bg-primary/30 transition-all duration-200 text-sm font-medium"
               >
                 {link.label}
               </Link>
@@ -177,7 +164,7 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="flex items-center gap-2 py-2 text-rose-gold hover:text-rose-gold/80 transition-colors duration-200 font-medium"
+                className="flex items-center gap-2 py-2 text-primary hover:text-primary-hover transition-colors duration-200 font-medium"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 {link.label}

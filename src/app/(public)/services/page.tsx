@@ -171,15 +171,9 @@ export default function ServicesPage() {
                       <Button 
                         type="button"
                         className="w-full mt-auto bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
-                        onClick={() => {
-                          if (service.slug) {
-                            router.push(`/services/${service.slug}`)
-                          } else {
-                            router.push('/contact')
-                          }
-                        }}
+                        onClick={() => router.push('/contact')}
                       >
-                        {service.slug ? 'Learn More' : 'Inquire Now'}
+                        Inquire Now
                         <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                       </Button>
                     </div>
