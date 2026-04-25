@@ -112,28 +112,33 @@ export default async function TherapistsPage() {
                 return (
                   <div 
                     key={therapist.id} 
-                    className="group relative overflow-hidden cursor-pointer"
+                    className="flex flex-col group"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
-                    <div className="aspect-[3/4] overflow-hidden bg-secondary/10">
-                      {imageUrl ? (
-                        <img 
-                          src={imageUrl} 
-                          alt={therapist.nickname}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-secondary/20">
-                          <User className="h-16 w-16 text-text-muted" />
+                    <Card className="group glass border border-white/10 hover:border-primary/40 transition-all duration-500 ease-out overflow-hidden cursor-pointer bg-black/20">
+                      <div className="aspect-[3/4] overflow-hidden bg-secondary/10 relative">
+                        {imageUrl ? (
+                          <img 
+                            src={imageUrl} 
+                            alt={therapist.nickname}
+                            className="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-all duration-500"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center bg-secondary/20">
+                            <User className="h-16 w-16 text-text-muted" />
+                          </div>
+                        )}
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500" />
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
+                          <span className="bg-background/80 backdrop-blur-sm px-4 py-2 text-primary font-heading text-xl tracking-widest uppercase">
+                            {therapist.nickname}
+                          </span>
                         </div>
-                      )}
-                      <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500" />
-                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500">
-                        <span className="bg-background/80 backdrop-blur-sm px-4 py-2 text-primary font-heading text-xl tracking-widest uppercase">
-                          {therapist.nickname}
-                        </span>
                       </div>
-                    </div>
+                    </Card>
+                    <p className="mt-3 text-center text-foreground font-heading text-lg tracking-wide">
+                      {therapist.nickname}
+                    </p>
                   </div>
                 )
               })}
