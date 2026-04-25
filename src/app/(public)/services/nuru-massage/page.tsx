@@ -43,30 +43,32 @@ const getServiceImageUrl = (service: { image_path?: string; image_url?: string }
 }
 
 export const metadata = {
-  title: "Japanese Nuru Massage Manila | Asami Heaven",
-  description: "Experience authentic Japanese Nuru massage in Metro Manila. Premium spa treatment using traditional seaweed gel. Licensed therapists. Book today.",
+  title: "Nuru Massage Manila | Asami Heaven",
+  description: "Experience premium Nuru massage in Metro Manila at Asami Heaven. Sensory body-to-body massage using premium seaweed gel. Licensed therapists. Inquire today.",
   keywords: [
     "nuru massage",
-    "japanese nuru",
     "nuru massage manila",
+    "nuru spa",
+    "body to body massage",
     "seaweed massage",
-    "traditional japanese massage",
-    "body massage Philippines"
+    "nuru Philippines",
+    "Asami Heaven nuru",
+    "premium nuru massage"
   ],
   alternates: {
-    canonical: "/services/japanese-nuru-massage",
+    canonical: "/services/nuru-massage",
   },
   openGraph: {
-    title: "Japanese Nuru Massage Manila",
-    description: "Authentic Japanese body-to-body massage using traditional techniques",
-    url: "https://asamiheaven.vercel.app/services/japanese-nuru-massage",
+    title: "Nuru Massage Manila | Asami Heaven",
+    description: "Premium Nuru body-to-body massage at Asami Heaven spa in Metro Manila",
+    url: "https://asamiheaven.vercel.app/services/nuru-massage",
     images: [
       {
         url: "https://asamiheaven.vercel.app/og-image-v5.jpg",
         secureUrl: "https://asamiheaven.vercel.app/og-image-v5.jpg",
         width: 1200,
         height: 630,
-        alt: "Japanese Nuru Massage - Asami Heaven",
+        alt: "Nuru Massage at Asami Heaven - Metro Manila",
         type: "image/jpeg",
       },
     ],
@@ -76,8 +78,8 @@ export const metadata = {
 // FAQ Data for schema
 const faqData = [
   {
-    question: "What is Japanese Nuru Massage?",
-    answer: "Japanese Nuru massage is a traditional body-to-body massage technique from Japan using seaweed-derived gel. Our licensed therapists provide this premium wellness treatment in a professional spa environment. The word 'nuru' means 'slippery' in Japanese, referring to the smooth, gliding sensation created by the special gel."
+    question: "What is Nuru Massage?",
+    answer: "Nuru massage is a premium body-to-body massage technique using a special seaweed-derived gel that creates a smooth, gliding sensation. Our licensed therapists at Asami Heaven provide this immersive wellness treatment in a professional spa environment. The word 'nuru' means 'slippery,' referring to the unique texture of the gel."
   },
   {
     question: "Is Nuru massage legal in Manila?",
@@ -85,7 +87,7 @@ const faqData = [
   },
   {
     question: "How much does Nuru massage cost?",
-    answer: "Our Japanese Nuru massage starts at P3,500 for a 60-minute session. We also offer 90-minute sessions for P5,000. All sessions include shower facilities and use premium organic seaweed gel."
+    answer: "Our Nuru massage sessions start at competitive rates. Contact Asami Heaven directly for current pricing, session durations, and package options. All sessions include shower facilities and use premium organic seaweed gel."
   },
   {
     question: "What is the difference between Nuru and traditional massage?",
@@ -93,35 +95,7 @@ const faqData = [
   },
   {
     question: "What should I expect during a Nuru massage session?",
-    answer: "Your session begins with a shower to prepare for the treatment. Our therapist will apply warm, organic seaweed gel to create the signature slippery texture. Using smooth, flowing body-to-body movements, the therapist provides deep relaxation and stress relief. The session concludes with a cleansing shower. Total time is 60-90 minutes."
-  }
-]
-
-// Service packages
-const packages = [
-  {
-    name: "Classic Nuru",
-    duration: 60,
-    price: 3500,
-    features: [
-      "Body-to-body technique with seaweed gel",
-      "Licensed therapist",
-      "Shower before and after",
-      "Premium spa environment"
-    ]
-  },
-  {
-    name: "Premium Nuru",
-    duration: 90,
-    price: 5000,
-    features: [
-      "Extended body-to-body technique",
-      "Licensed therapist",
-      "Shower before and after",
-      "Hot stone therapy add-on",
-      "Aromatherapy enhancement",
-      "Premium spa environment"
-    ]
+    answer: "Your session begins with a shower to prepare for the treatment. Our therapist will apply warm, organic seaweed gel to create the signature slippery texture. Using smooth, flowing body-to-body movements, the therapist provides deep relaxation and stress relief. The session concludes with a cleansing shower."
   }
 ]
 
@@ -148,19 +122,19 @@ const benefits = [
   }
 ]
 
-export default async function JapaneseNuruMassagePage() {
+export default async function NuruMassagePage() {
   // Server-side data fetch
   let therapists: Array<{ id: string | number; nickname: string; image_url?: string; image_path?: string }> = []
   let services: Array<{ id: string | number; name: string; description: string; price: number; duration: number; image_url?: string; image_path?: string; slug?: string }> = []
   let serviceData: { name: string; description: string; price: number; duration: number; is_active: boolean } | null = null
-  
+
   try {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
     if (supabaseUrl && supabaseAnonKey) {
       const supabase = createClient(supabaseUrl, supabaseAnonKey)
-      
+
       // Fetch therapists with images
       const { data: therapistData, error: therapistError } = await supabase
         .from('therapists')
@@ -168,29 +142,29 @@ export default async function JapaneseNuruMassagePage() {
         .eq('is_active', true)
         .order('nickname')
         .limit(8)
-      
+
       if (therapistData && !therapistError) {
         therapists = therapistData
       }
-      
+
       // Fetch all active services for packages section
       const { data: servicesData, error: servicesError } = await supabase
         .from('services')
         .select('id, name, description, price, duration, image_url, image_path, slug')
         .eq('is_active', true)
         .order('name')
-      
+
       if (servicesData && !servicesError) {
         services = servicesData
       }
-      
+
       // Fetch service data for dynamic pricing
       const { data: serviceResult, error: serviceError } = await supabase
         .from('services')
         .select('name, description, price, duration, is_active')
-        .eq('slug', 'japanese-nuru-massage')
+        .eq('slug', 'nuru-massage')
         .single()
-      
+
       if (serviceResult && !serviceError) {
         serviceData = serviceResult
       }
@@ -198,7 +172,7 @@ export default async function JapaneseNuruMassagePage() {
   } catch (error) {
     console.error('Error fetching data:', error)
   }
-  
+
   // Hardcoded display values for consistent messaging
   const displayPrice = 1500
   const displayDuration = '90-240'
@@ -217,10 +191,10 @@ export default async function JapaneseNuruMassagePage() {
               </span>
             </div>
             <h1 className="font-heading text-4xl md:text-6xl text-foreground leading-tight">
-              Japanese Nuru<br />Massage
+              Nuru Massage
             </h1>
             <p className="text-text-secondary font-light text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
-              Experience authentic Japanese body-to-body massage using traditional seaweed gel.<br />
+              Experience premium body-to-body massage at Asami Heaven.<br />
               <span className="text-text-muted">Licensed therapists • Premium wellness • Deep relaxation</span>
             </p>
             {!isAvailable && (
@@ -230,7 +204,7 @@ export default async function JapaneseNuruMassagePage() {
             )}
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link
-                href="/contact?service=Japanese+Nuru+Massage"
+                href="/contact?service=Nuru+Massage"
                 className={`inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-lg font-light ${!isAvailable ? 'opacity-50 pointer-events-none' : ''}`}
               >
                 Inquire Now
@@ -279,12 +253,12 @@ export default async function JapaneseNuruMassagePage() {
         <div className="max-w-6xl mx-auto">
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
-              <span className="text-primary font-medium mb-4 inline-block">Traditional Japanese Technique</span>
+              <span className="text-primary font-medium mb-4 inline-block">Premium Body-to-Body Technique</span>
               <h2 className="font-heading text-3xl md:text-4xl text-foreground mb-6">
                 Authentic Nuru Experience
               </h2>
               <p className="text-text-secondary font-light text-lg leading-relaxed mb-6">
-                Nuru massage originates from Japan — the word nuru translates to slippery in Japanese. This unique body-to-body technique uses a special seaweed-derived gel to create a smooth, gliding sensation that promotes deep relaxation and sensory awakening.
+                Nuru massage is a premium body-to-body technique using a special seaweed-derived gel that creates a smooth, gliding sensation. This unique approach promotes deep relaxation, sensory awakening, and full-body tension release.
               </p>
               <p className="text-text-secondary font-light text-lg leading-relaxed mb-8">
                 Unlike traditional massage, Nuru focuses on full-body contact and fluid movement, providing an immersive wellness experience that releases tension and restores balance.
@@ -318,10 +292,10 @@ export default async function JapaneseNuruMassagePage() {
                     Authentic Experience
                   </span>
                   <h3 className="font-heading text-2xl text-foreground mb-3">
-                    Traditional Japanese Nuru
+                    Premium Nuru
                   </h3>
                   <p className="text-text-secondary font-light leading-relaxed mb-6">
-                    Our therapists are trained in authentic Japanese techniques, using premium organic seaweed gel imported directly from Japan for the truest Nuru experience.
+                    Our therapists are trained in authentic techniques, using premium organic seaweed gel for the truest Nuru experience at Asami Heaven.
                   </p>
                   <div className="flex items-center gap-4 text-sm">
                     <div className="flex items-center gap-2">
@@ -330,7 +304,7 @@ export default async function JapaneseNuruMassagePage() {
                     </div>
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-primary" />
-                      <span className="text-text-secondary">Imported Gel</span>
+                      <span className="text-text-secondary">Premium Gel</span>
                     </div>
                   </div>
                 </div>
@@ -349,7 +323,7 @@ export default async function JapaneseNuruMassagePage() {
               Why Choose Nuru Massage?
             </h2>
             <p className="text-text-secondary font-light text-lg max-w-2xl mx-auto">
-              Experience the unique benefits of Japanese Nuru technique for your body and mind.
+              Experience the unique benefits of Nuru technique for your body and mind at Asami Heaven.
             </p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -411,7 +385,7 @@ export default async function JapaneseNuruMassagePage() {
                         <h3 className="font-heading text-xl text-foreground mb-2">{service.name}</h3>
                         <div className="flex items-baseline justify-center gap-2">
                           {service.price && service.price > 0 && (
-                            <span className="text-3xl font-heading text-primary">₱{service.price.toLocaleString()}</span>
+                            <span className="text-3xl font-heading text-primary">P{service.price.toLocaleString()}</span>
                           )}
                           <span className="text-text-muted">/{service.duration} min</span>
                         </div>
@@ -444,7 +418,7 @@ export default async function JapaneseNuruMassagePage() {
               Licensed Professionals
             </h2>
             <p className="text-text-secondary font-light text-lg max-w-2xl mx-auto">
-              Our certified therapists are trained in traditional Japanese techniques to provide an authentic Nuru experience.
+              Our certified therapists are trained in traditional techniques to provide an authentic Nuru experience at Asami Heaven.
             </p>
           </div>
           {therapists.length > 0 && (
@@ -481,7 +455,7 @@ export default async function JapaneseNuruMassagePage() {
                 href="/therapists"
                 className="inline-flex items-center justify-center px-8 py-4 bg-primary/10 hover:bg-primary/20 text-primary rounded-xl transition-all duration-300"
               >
-                View All Therapists
+                View All Models
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </div>
@@ -524,14 +498,14 @@ export default async function JapaneseNuruMassagePage() {
         <div className="max-w-4xl mx-auto">
           <div className="glass rounded-3xl p-8 md:p-16 text-center space-y-8">
             <h2 className="font-heading text-3xl md:text-4xl text-foreground">
-              Ready to Experience Authentic Japanese Nuru?
+              Ready to Experience Nuru Massage?
             </h2>
             <p className="text-text-secondary font-light text-lg max-w-xl mx-auto">
-              Book your session today and discover the unique relaxation of traditional Japanese body-to-body massage.
+              Inquire today and discover the unique relaxation of premium Nuru body-to-body massage at Asami Heaven.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
-                href="/contact?service=Japanese+Nuru+Massage"
+                href="/contact?service=Nuru+Massage"
                 className="inline-flex items-center justify-center px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-lg font-light"
               >
                 Inquire Now
@@ -577,13 +551,13 @@ export default async function JapaneseNuruMassagePage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Service",
-            "serviceType": "Japanese Nuru Massage",
+            "serviceType": "Nuru Massage",
             "provider": {
               "@type": "HealthSpa",
               "name": "Asami Heaven",
               "areaServed": "Metro Manila, Philippines"
             },
-            "description": "Authentic Japanese body-to-body massage using traditional seaweed gel for deep relaxation and stress relief.",
+            "description": "Premium Nuru body-to-body massage using seaweed gel for deep relaxation and stress relief.",
             "areaServed": "Metro Manila, Philippines"
           })
         }}

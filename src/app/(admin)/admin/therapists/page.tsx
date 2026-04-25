@@ -266,36 +266,14 @@ export default function AdminTherapistsPage() {
 
   const handleDelete = async (id: string) => {
     try {
-      // Check if therapist has associated bookings
-      const { data: bookings, error: bookingsError } = await supabase
-        .from('bookings')
-        .select('id')
-        .eq('service_id', id)
-        .limit(1)
+      if (!confirm('Are you sure you want to permanently delete this therapist? This action cannot be undone.')) return
+
+      const { error } = await supabase
+        .from('therapists')
+        .delete()
+        .eq('id', id)
       
-      if (bookingsError) throw bookingsError
-
-      if (bookings && bookings.length > 0) {
-        // Has bookings - soft delete (deactivate)
-        if (!confirm('This therapist has associated bookings. Deactivating will hide them from customers but preserve booking history. Continue?')) return
-
-        const { error } = await supabase
-          .from('therapists')
-          .update({ is_active: false })
-          .eq('id', id)
-        
-        if (error) throw error
-      } else {
-        // No bookings - hard delete
-        if (!confirm('Are you sure you want to permanently delete this therapist? This action cannot be undone.')) return
-
-        const { error } = await supabase
-          .from('therapists')
-          .delete()
-          .eq('id', id)
-        
-        if (error) throw error
-      }
+      if (error) throw error
       
       fetchTherapists()
     } catch (error) {

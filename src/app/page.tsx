@@ -469,7 +469,7 @@ export default function HomePage() {
             {/* About Us Content */}
             <div className="max-w-2xl mx-auto px-4">
               <p className="text-base md:text-xl leading-relaxed drop-shadow-lg" style={{ textShadow: '0 2px 4px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.6)' }}>
-                Step into a world of luxury and indulgence. We offer an exclusive selection of Metro Manilas most captivating and refined companions, chosen for their elegance and presence. Experience satisfaction as the standard—proudly recognized as the No. 1 Japanese Nuru in the Philippines.
+                Step into a world of luxury and indulgence. We offer an exclusive selection of Metro Manilas most captivating and refined companions, chosen for their elegance and presence. Experience satisfaction as the standard—proudly recognized as the No. 1 Nuru Massage destination in the Philippines.
               </p>
             </div>
 
@@ -781,12 +781,12 @@ export default function HomePage() {
               })}
              </div>
              <div className="text-center mt-12">
-               <Link href="/services/japanese-nuru-massage">
+               <Link href="/services/nuru-massage">
                  <Button 
                    size="lg"
                    className="px-8 py-6 text-base bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-xl font-light shadow-lg hover:scale-105 group"
                  >
-                   Japanese Nuru
+                   Nuru Massage
                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                  </Button>
                </Link>
@@ -941,9 +941,9 @@ export default function HomePage() {
                     Contact Us
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
-                  <Link href="/services/japanese-nuru-massage">
+                  <Link href="/services/nuru-massage">
                    <Button variant="outline" size="lg" className="px-8 py-6 text-base border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-full font-light backdrop-blur-sm">
-                     Japanese Nuru
+                     Nuru Massage
                    </Button>
                  </Link>
                </div>

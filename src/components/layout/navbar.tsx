@@ -21,7 +21,7 @@ const publicNavLinks: NavLink[] = [
 ]
 
 const specialNavLinks: NavLink[] = [
-  { href: '/services/japanese-nuru-massage', label: 'Japanese Nuru' },
+  { href: '/services/nuru-massage', label: 'Nuru Massage' },
 ]
 
 const adminNavLinks: NavLink[] = [

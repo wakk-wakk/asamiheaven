@@ -1,11 +1,7 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { ArrowLeft, User, Loader2 } from 'lucide-react'
-import { createClient } from '@supabase/supabase-js'
+import { ArrowLeft, User } from 'lucide-react'
+import { createServerClient } from '@/lib/supabase/server'
 
 interface Therapist {
   id: string
@@ -18,6 +14,9 @@ interface Therapist {
 interface DisplaySettings {
   therapists_mode: 'static' | 'dynamic'
 }
+
+// Revalidate every 60 seconds (ISR)
+export const revalidate = 60
 
 const isValidImageUrl = (url: string): boolean => {
   if (!url) return false
@@ -42,74 +41,39 @@ const getTherapistImageUrl = (therapist: Therapist): string | null => {
   return null
 }
 
-export default function TherapistsPage() {
-  const [therapists, setTherapists] = useState<Therapist[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [displaySettings, setDisplaySettings] = useState<DisplaySettings>({
-    therapists_mode: 'dynamic'
-  })
+export default async function TherapistsPage() {
+  const supabase = createServerClient()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-        
-        if (!supabaseUrl || !supabaseAnonKey) {
-          setIsLoading(false)
-          return
-        }
+  // Fetch display settings
+  const { data: settingsData } = await supabase
+    .from('display_settings')
+    .select('therapists_mode')
+    .single()
 
-        const supabase = createClient(supabaseUrl, supabaseAnonKey)
+  const therapistsMode = settingsData?.therapists_mode || 'dynamic'
+  const displaySettings: DisplaySettings = { therapists_mode: therapistsMode }
 
-        const { data: settingsData } = await supabase
-          .from('display_settings')
-          .select('therapists_mode')
-          .single()
-        
-        const therapistsMode = settingsData?.therapists_mode || 'dynamic'
-        setDisplaySettings({ therapists_mode: therapistsMode })
-
-        if (therapistsMode === 'static') {
-          const { data, error } = await supabase
-            .from('static_therapists')
-            .select('*')
-            .eq('is_active', true)
-            .single()
-          
-          if (data && !error) {
-            setTherapists([data])
-          }
-        } else {
-          const { data, error } = await supabase
-            .from('therapists')
-            .select('*')
-            .eq('is_active', true)
-            .order('nickname')
-          
-          if (data && !error) {
-            setTherapists(data)
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching therapists:', error)
-      } finally {
-        setIsLoading(false)
-      }
+  // Fetch therapists based on mode
+  let therapists: Therapist[] = []
+  
+  if (therapistsMode === 'static') {
+    const { data } = await supabase
+      .from('static_therapists')
+      .select('*')
+      .eq('is_active', true)
+      .single()
+    
+    if (data) {
+      therapists = [data]
     }
-
-    fetchData()
-  }, [])
-
-  if (isLoading) {
-    return (
-      <div className="min-h-[80vh] flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-          <p className="text-text-secondary font-light">Loading models...</p>
-        </div>
-      </div>
-    )
+  } else {
+    const { data } = await supabase
+      .from('therapists')
+      .select('*')
+      .eq('is_active', true)
+      .order('nickname')
+    
+    therapists = data ?? []
   }
 
   return (
@@ -157,9 +121,6 @@ export default function TherapistsPage() {
                           src={imageUrl} 
                           alt={therapist.nickname}
                           className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none'
-                          }}
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center bg-secondary/20">

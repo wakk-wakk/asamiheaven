@@ -1,14 +1,8 @@
-'use client'
-
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Textarea } from '@/components/ui/textarea'
-import { Label } from '@/components/ui/label'
-import { Phone, Mail, Clock, ArrowLeft, CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
-import { createClient } from '@supabase/supabase-js'
+import { Phone, Mail, Clock, ArrowLeft } from 'lucide-react'
+import { createServerClient } from '@/lib/supabase/server'
+import ContactForm from './contact-form'
 
 interface ContactSettings {
   phone: string
@@ -24,12 +18,8 @@ interface ContactSettings {
   website: string
 }
 
-interface FormErrors {
-  name?: string
-  email?: string
-  subject?: string
-  message?: string
-}
+// Revalidate every 60 seconds (ISR)
+export const revalidate = 60
 
 // Social media icon components
 const InstagramIcon = () => (
@@ -88,265 +78,41 @@ const defaultContact: ContactSettings = {
   website: ''
 }
 
-export default function ContactPage() {
-  const [contact, setContact] = useState<ContactSettings>(defaultContact)
-  const [isLoading, setIsLoading] = useState(true)
-  const [whatsappValue, setWhatsappValue] = useState<string>('')
-  const [viberValue, setViberValue] = useState<string>('')
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  })
-  const [errors, setErrors] = useState<FormErrors>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+// Helper function to check if a value is a URL
+const isUrl = (value: string): boolean => {
+  return value.startsWith('http://') || value.startsWith('https://') || value.startsWith('www.')
+}
 
-  useEffect(() => {
-    const loadContact = async () => {
-      try {
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-        
-        if (supabaseUrl && supabaseAnonKey) {
-          const supabase = createClient(supabaseUrl, supabaseAnonKey)
-          const { data, error } = await supabase
-            .from('contact_settings')
-            .select('*')
-            .single()
-          
-          if (data && !error) {
-            setContact(data)
-            setWhatsappValue(data.whatsapp || '')
-            setViberValue(data.viber || '')
-          }
-        }
-      } catch (error) {
-        console.error('Error loading contact settings:', error)
-      } finally {
-        setIsLoading(false)
-      }
-    }
+// Helper function to format URL if it doesn't have protocol
+const formatUrl = (value: string): string => {
+  if (value.startsWith('http://') || value.startsWith('https://')) {
+    return value
+  }
+  if (value.startsWith('www.')) {
+    return `https://${value}`
+  }
+  return `https://${value}`
+}
 
-    loadContact()
+export default async function ContactPage() {
+  const supabase = createServerClient()
 
-    // Listen for storage events to refresh contact info when admin updates it
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'contact_settings_updated') {
-        loadContact()
-      }
-    }
-    
-    window.addEventListener('storage', handleStorageChange)
-    
-    // Also listen for custom event (same-tab updates)
-    const handleCustomEvent = () => {
-      loadContact()
-    }
-    
-    window.addEventListener('contactSettingsUpdated', handleCustomEvent)
-    
-    return () => {
-      window.removeEventListener('storage', handleStorageChange)
-      window.removeEventListener('contactSettingsUpdated', handleCustomEvent)
-    }
-  }, [])
+  const { data } = await supabase
+    .from('contact_settings')
+    .select('*')
+    .single()
+
+  const contact: ContactSettings = data ?? defaultContact
 
   const socialLinks = [
-    { href: contact.viber, icon: ViberIcon, label: 'Viber' },
     { href: contact.whatsapp, icon: WhatsAppIcon, label: 'WhatsApp' },
+    { href: contact.viber, icon: ViberIcon, label: 'Viber' },
     { href: contact.telegram, icon: TelegramIcon, label: 'Telegram' },
     { href: contact.youtube, icon: YoutubeIcon, label: 'YouTube' },
     { href: contact.instagram, icon: InstagramIcon, label: 'Instagram' },
     { href: contact.facebook, icon: FacebookIcon, label: 'Facebook' },
     { href: contact.twitter, icon: TwitterIcon, label: 'Twitter' },
   ].filter(link => link.href)
-
-  // Helper function to check if a value is a URL
-  const isUrl = (value: string): boolean => {
-    return value.startsWith('http://') || value.startsWith('https://') || value.startsWith('www.')
-  }
-
-  // Helper function to format URL if it doesn't have protocol
-  const formatUrl = (value: string): string => {
-    if (value.startsWith('http://') || value.startsWith('https://')) {
-      return value
-    }
-    if (value.startsWith('www.')) {
-      return `https://${value}`
-    }
-    return `https://${value}`
-  }
-
-  // Clean phone number for messaging apps
-  const cleanPhoneNumber = (phone: string): string => {
-    return phone.replace(/[^0-9+]/g, '')
-  }
-
-  // Handle WhatsApp click
-  const handleWhatsAppClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    if (!whatsappValue) return
-    
-    const message = encodeURIComponent("Hello! I'm interested in your services. Could you please provide more information?")
-    
-    if (isUrl(whatsappValue)) {
-      window.open(formatUrl(whatsappValue), '_blank', 'noopener,noreferrer')
-    } else {
-      const phoneNumber = cleanPhoneNumber(whatsappValue)
-      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`
-      window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
-    }
-  }
-
-  // Handle Viber click - open app on mobile, copy on desktop
-  const handleViberClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    if (!viberValue) return
-    
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent)
-    let phoneNumber = cleanPhoneNumber(viberValue).replace(/^\+/, '').replace(/^63/, '').replace(/^0/, '')
-    phoneNumber = '63' + phoneNumber
-    
-    if (isMobile) {
-      // Open Viber app on mobile with correct format
-      const viberAppUrl = `viber://chat?number=${phoneNumber}`
-      window.location.href = viberAppUrl
-    } else {
-      // Copy to clipboard on desktop
-      copyToClipboard(viberValue, 'Viber')
-    }
-  }
-
-  // Handle Telegram click - open Telegram
-  const handleTelegramClick = (e: React.MouseEvent) => {
-    e.preventDefault()
-    if (!contact.telegram) return
-    
-    if (isUrl(contact.telegram)) {
-      window.open(formatUrl(contact.telegram), '_blank', 'noopener,noreferrer')
-    } else {
-      const telegramUrl = `https://t.me/${contact.telegram.replace('@', '')}`
-      window.open(telegramUrl, '_blank', 'noopener,noreferrer')
-    }
-  }
-
-  // Copy to clipboard function
-  const copyToClipboard = async (text: string, label: string) => {
-    try {
-      await navigator.clipboard.writeText(text)
-      alert(`${label} copied to clipboard: ${text}`)
-    } catch (err) {
-      console.error('Failed to copy:', err)
-      window.prompt(`Copy ${label} to clipboard:`, text)
-    }
-  }
-
-  // Handle social link click
-  const handleSocialClick = (href: string, label: string, e: React.MouseEvent) => {
-    e.preventDefault()
-    
-    if (isUrl(href)) {
-      const url = formatUrl(href)
-      window.open(url, '_blank', 'noopener,noreferrer')
-    } else {
-      copyToClipboard(href, label)
-    }
-  }
-
-  const validateForm = (): boolean => {
-    const newErrors: FormErrors = {}
-    
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required'
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Name must be at least 2 characters'
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required'
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'Please enter a valid email address'
-    }
-
-    if (!formData.subject.trim()) {
-      newErrors.subject = 'Subject is required'
-    } else if (formData.subject.trim().length < 3) {
-      newErrors.subject = 'Subject must be at least 3 characters'
-    }
-
-    if (!formData.message.trim()) {
-      newErrors.message = 'Message is required'
-    } else if (formData.message.trim().length < 10) {
-      newErrors.message = 'Message must be at least 10 characters'
-    }
-
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target
-    setFormData(prev => ({ ...prev, [id]: value }))
-    
-    if (errors[id as keyof FormErrors]) {
-      setErrors(prev => ({ ...prev, [id]: undefined }))
-    }
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    
-    if (!validateForm()) {
-      return
-    }
-
-    setIsSubmitting(true)
-    setSubmitStatus('idle')
-
-    try {
-      const endpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT
-      
-      if (!endpoint) {
-        throw new Error('Formspree endpoint not configured')
-      }
-
-      const response = await fetch(endpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message
-        })
-      })
-
-      if (response.ok) {
-        setSubmitStatus('success')
-        setFormData({ name: '', email: '', subject: '', message: '' })
-        setErrors({})
-      } else {
-        setSubmitStatus('error')
-      }
-    } catch (error) {
-      console.error('Form submission error:', error)
-      setSubmitStatus('error')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  if (isLoading) {
-    return (
-      <div className="min-h-[60vh] flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    )
-  }
 
   return (
     <div className="animate-fade-in">
@@ -373,7 +139,7 @@ export default function ContactPage() {
             {/* Contact Info - Left Side */}
             <div className="space-y-6">
               {/* Social Media */}
-              {(contact.whatsapp || contact.viber || contact.instagram || contact.facebook || contact.twitter) && (
+              {socialLinks.length > 0 && (
                 <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.2s' }}>
                   <CardHeader>
                     <CardTitle className="font-heading text-2xl text-foreground">Contact Us</CardTitle>
@@ -383,78 +149,24 @@ export default function ContactPage() {
                   </CardHeader>
                   <CardContent>
                     <div className="flex flex-wrap gap-3">
-                      {/* WhatsApp */}
-                      {contact.whatsapp && (
-                        <button
-                          onClick={handleWhatsAppClick}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`WhatsApp: ${contact.whatsapp}`}
-                          aria-label="Contact via WhatsApp"
-                        >
-                          <WhatsAppIcon />
-                          <span className="text-sm font-light">WhatsApp</span>
-                        </button>
-                      )}
-                      {/* Viber */}
-                      {contact.viber && (
-                        <button
-                          onClick={handleViberClick}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`Viber: ${contact.viber}`}
-                          aria-label="Contact via Viber"
-                        >
-                          <ViberIcon />
-                          <span className="text-sm font-light">Viber</span>
-                        </button>
-                      )}
-                      {/* Telegram */}
-                      {contact.telegram && (
-                        <button
-                          onClick={handleTelegramClick}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`Telegram: ${contact.telegram}`}
-                          aria-label="Contact via Telegram"
-                        >
-                          <TelegramIcon />
-                          <span className="text-sm font-light">Telegram</span>
-                        </button>
-                      )}
-                      {/* Instagram */}
-                      {contact.instagram && (
-                        <button
-                          onClick={(e) => handleSocialClick(contact.instagram, 'Instagram', e)}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`Instagram: ${contact.instagram}`}
-                          aria-label="View Instagram"
-                        >
-                          <InstagramIcon />
-                          <span className="text-sm font-light">Instagram</span>
-                        </button>
-                      )}
-                      {/* Facebook */}
-                      {contact.facebook && (
-                        <button
-                          onClick={(e) => handleSocialClick(contact.facebook, 'Facebook', e)}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`Facebook: ${contact.facebook}`}
-                          aria-label="View Facebook"
-                        >
-                          <FacebookIcon />
-                          <span className="text-sm font-light">Facebook</span>
-                        </button>
-                      )}
-                      {/* Twitter */}
-                      {contact.twitter && (
-                        <button
-                          onClick={(e) => handleSocialClick(contact.twitter, 'Twitter', e)}
-                          className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
-                          title={`Twitter: ${contact.twitter}`}
-                          aria-label="View Twitter"
-                        >
-                          <TwitterIcon />
-                          <span className="text-sm font-light">Twitter</span>
-                        </button>
-                      )}
+                      {socialLinks.map((link) => {
+                        const Icon = link.icon
+                        const href = isUrl(link.href) ? formatUrl(link.href) : link.href
+                        return (
+                          <a
+                            key={link.label}
+                            href={href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 hover:bg-primary/20 transition-all duration-300 text-primary"
+                            title={`${link.label}: ${link.href}`}
+                            aria-label={`Contact via ${link.label}`}
+                          >
+                            <Icon />
+                            <span className="text-sm font-light">{link.label}</span>
+                          </a>
+                        )
+                      })}
                     </div>
                   </CardContent>
                 </Card>
@@ -510,110 +222,8 @@ export default function ContactPage() {
               </Card>
             </div>
 
-            {/* Contact Form */}
-            <Card className="glass border-border animate-slide-up">
-              <CardHeader>
-                <CardTitle className="font-heading text-2xl text-foreground">Email Us</CardTitle>
-                <CardDescription className="text-text-secondary font-light">
-                  Fill out the form below and we will get back to you shortly.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                {submitStatus === 'success' && (
-                  <div className="p-4 bg-success/10 border border-success/20 rounded-lg flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-success flex-shrink-0" />
-                    <p className="text-success text-sm font-light">
-                      Thank you! Your message has been sent successfully. We ll get back to you soon.
-                    </p>
-                  </div>
-                )}
-
-                {submitStatus === 'error' && (
-                  <div className="p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-3">
-                    <AlertCircle className="h-5 w-5 text-destructive flex-shrink-0" />
-                    <p className="text-destructive text-sm font-light">
-                      Oops! Something went wrong. Please try again or contact us directly via email.
-                    </p>
-                  </div>
-                )}
-
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="name" className="text-text-secondary font-light">Name *</Label>
-                      <Input 
-                        id="name" 
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="Your name" 
-                        className={`bg-background-alt border-border focus:border-primary/50 transition-colors ${errors.name ? 'border-destructive' : ''}`}
-                      />
-                      {errors.name && (
-                        <p className="text-destructive text-xs font-light">{errors.name}</p>
-                      )}
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="email" className="text-text-secondary font-light">Email *</Label>
-                      <Input 
-                        id="email" 
-                        type="email" 
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="your@email.com" 
-                        className={`bg-background-alt border-border focus:border-primary/50 transition-colors ${errors.email ? 'border-destructive' : ''}`}
-                      />
-                      {errors.email && (
-                        <p className="text-destructive text-xs font-light">{errors.email}</p>
-                      )}
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="subject" className="text-text-secondary font-light">Subject *</Label>
-                    <Input 
-                      id="subject" 
-                      value={formData.subject}
-                      onChange={handleChange}
-                      placeholder="How can we help?" 
-                      className={`bg-background-alt border-border focus:border-primary/50 transition-colors ${errors.subject ? 'border-destructive' : ''}`}
-                    />
-                    {errors.subject && (
-                      <p className="text-destructive text-xs font-light">{errors.subject}</p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="message" className="text-text-secondary font-light">Message *</Label>
-                    <Textarea 
-                      id="message" 
-                      value={formData.message}
-                      onChange={handleChange}
-                      placeholder="Tell us more about your inquiry..." 
-                      rows={5}
-                      className={`bg-background-alt border-border focus:border-primary/50 transition-colors resize-none ${errors.message ? 'border-destructive' : ''}`}
-                    />
-                    {errors.message && (
-                      <p className="text-destructive text-xs font-light">{errors.message}</p>
-                    )}
-                  </div>
-                  <Button 
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-lg font-light cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Sending...
-                      </>
-                    ) : (
-                      <>
-                        <Mail className="mr-2 h-4 w-4" />
-                        Send Email
-                      </>
-                    )}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
+            {/* Contact Form - Right Side */}
+            <ContactForm />
           </div>
         </div>
       </section>

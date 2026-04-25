@@ -86,6 +86,30 @@ export const metadata: Metadata = {
   },
 }
 
+// Organization Schema JSON-LD
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Asami Heaven",
+  "url": "https://asamiheaven.vercel.app",
+  "logo": "https://asamiheaven.vercel.app/icon.png",
+  "description": "Premium spa and massage services in Metro Manila, Philippines. Specializing in Nuru massage and wellness treatments.",
+  "areaServed": {
+    "@type": "City",
+    "name": "Metro Manila",
+    "containedInPlace": {
+      "@type": "Country",
+      "name": "Philippines"
+    }
+  },
+  "sameAs": [],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Service",
+    "areaServed": "PH"
+  }
+}
+
 const paths = {
   '/services': {
     title: 'Our Services',
@@ -95,13 +119,9 @@ const paths = {
     title: 'Our Models',
     description: 'Meet our team of skilled professionals at Asami Heaven. Metro Manilas most captivating top-tier models.',
   },
-  '/booking': {
-    title: 'Book Now',
-    description: 'Book your spa appointment at Asami Heaven. Easy online booking for premium massage and spa services in Metro Manila.',
-  },
   '/contact': {
     title: 'Contact Us',
-    description: 'Get in touch with Asami Heaven. Contact us for bookings, inquiries, or any questions about our spa services.',
+    description: 'Get in touch with Asami Heaven. Contact us for inquiries or any questions about our spa services.',
   },
 }
 
@@ -113,6 +133,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${inter.variable} ${cormorant.variable} h-full antialiased`}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <Navbar />
         <main className="flex-1 pt-16 md:pt-20">

@@ -1,12 +1,8 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Clock, ArrowRight, Image as ImageIcon, Loader2, ArrowLeft } from 'lucide-react'
-import { createClient } from '@supabase/supabase-js'
+import { Clock, ArrowRight, Image as ImageIcon, ArrowLeft } from 'lucide-react'
+import { createServerClient } from '@/lib/supabase/server'
 
 interface Service {
   id: string
@@ -19,6 +15,9 @@ interface Service {
   is_active: boolean
   slug: string
 }
+
+// Revalidate every 60 seconds (ISR)
+export const revalidate = 60
 
 // Validate image URL to prevent infinite loop errors
 const isValidImageUrl = (url: string): boolean => {
@@ -38,65 +37,32 @@ const getSupabaseImageUrl = (imagePath: string): string => {
   return `${supabaseUrl}/storage/v1/object/public/services-images/${imagePath}`
 }
 
-export default function ServicesPage() {
-  const [services, setServices] = useState<Service[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const router = useRouter()
-
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-        
-        if (supabaseUrl && supabaseAnonKey) {
-          const supabase = createClient(supabaseUrl, supabaseAnonKey)
-          const { data, error } = await supabase
-            .from('services')
-            .select('*')
-            .eq('is_active', true)
-            .order('name')
-            .limit(20)
-          
-          if (data && !error) {
-            setServices(data)
-          }
-        }
-      } catch (error) {
-        console.error('Error fetching services:', error)
-      } finally {
-        setIsLoading(false)
-      }
+// Get the display image URL for a service
+const getServiceImageUrl = (service: Service): string | null => {
+  // Priority: image_path (Supabase Storage) > image_url (external)
+  if (service.image_path && typeof service.image_path === 'string') {
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    if (supabaseUrl) {
+      return `${supabaseUrl}/storage/v1/object/public/services-images/${service.image_path}`
     }
-
-    fetchServices()
-  }, [])
-
-   // Get the display image URL for a service
-   const getServiceImageUrl = (service: Service): string | null => {
-    // Priority: image_path (Supabase Storage) > image_url (external)
-    if (service.image_path && typeof service.image_path === 'string') {
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-      if (supabaseUrl) {
-        return `${supabaseUrl}/storage/v1/object/public/services-images/${service.image_path}`
-      }
-    }
-    if (service.image_url && typeof service.image_url === 'string' && isValidImageUrl(service.image_url)) {
-      return service.image_url
-    }
-    return null
   }
+  if (service.image_url && typeof service.image_url === 'string' && isValidImageUrl(service.image_url)) {
+    return service.image_url
+  }
+  return null
+}
 
-    if (isLoading) {
-     return (
-       <div className="min-h-[60vh] flex items-center justify-center">
-         <div className="text-center space-y-4">
-           <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-           <p className="text-text-secondary font-light">Loading services...</p>
-         </div>
-       </div>
-     )
-   }
+export default async function ServicesPage() {
+  const supabase = createServerClient()
+  
+  const { data } = await supabase
+    .from('services')
+    .select('*')
+    .eq('is_active', true)
+    .order('name')
+    .limit(20)
+  
+  const services = data ?? []
 
   return (
     <div className="animate-fade-in">
@@ -140,9 +106,6 @@ export default function ServicesPage() {
                           src={imageUrl} 
                           alt={service.name}
                           className="min-w-full min-h-full max-w-full max-h-full object-cover transition-all duration-500 ease-out group-hover:scale-105 group-hover:brightness-90"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none'
-                          }}
                         />
                       </div>
                     ) : (
@@ -168,14 +131,15 @@ export default function ServicesPage() {
                       <p className="text-text-secondary font-light text-sm leading-relaxed">
                         {service.description}
                       </p>
-                      <Button 
-                        type="button"
-                        className="w-full mt-auto bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
-                        onClick={() => router.push('/contact')}
-                      >
-                        Inquire Now
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                      </Button>
+                      <Link href="/contact" className="mt-auto">
+                        <Button 
+                          type="button"
+                          className="w-full bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-lg transition-all duration-300 rounded-xl group/btn"
+                        >
+                          Inquire Now
+                          <ArrowRight className="ml-2 h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                        </Button>
+                      </Link>
                     </div>
                   </Card>
                 )
@@ -197,22 +161,23 @@ export default function ServicesPage() {
               Contact us for a personalized recommendation.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                type="button"
-                size="lg"
-                className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-lg font-light"
-                onClick={() => router.push('/contact')}
-              >
-                Contact Us
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-              <Link href="/services/japanese-nuru-massage">
+              <Link href="/contact">
+                <Button 
+                  type="button"
+                  size="lg"
+                  className="px-8 py-6 text-lg bg-gradient-to-r from-primary to-primary-hover text-background hover:shadow-glow transition-all duration-300 rounded-lg font-light"
+                >
+                  Contact Us
+                  <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              </Link>
+              <Link href="/services/nuru-massage">
                 <Button 
                   variant="outline"
                   size="lg" 
                   className="px-8 py-6 text-lg border-primary/30 hover:border-primary hover:text-primary hover:bg-primary/5 transition-all duration-300 rounded-lg font-light"
                 >
-                  Japanese Nuru
+                  Nuru Massage
                 </Button>
               </Link>
             </div>

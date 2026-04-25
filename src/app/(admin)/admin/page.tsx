@@ -63,21 +63,6 @@ const TelegramIcon = () => (
   </svg>
 )
 
-type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled'
-
-interface Booking {
-  id: string
-  name: string
-  email: string
-  phone: string
-  service_name: string
-  appointment_date: string
-  appointment_time: string
-  status: BookingStatus
-  notes?: string
-  created_at: string
-}
-
 interface ContactSettings {
   phone: string
   email: string
@@ -110,10 +95,7 @@ interface Review {
 }
 
 export default function AdminDashboardPage() {
-  const [bookings, setBookings] = useState<Booking[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [isUpdating, setIsUpdating] = useState<string | null>(null)
-  const [filter, setFilter] = useState<BookingStatus | 'all'>('all')
   const [showContactEditor, setShowContactEditor] = useState(false)
   const [showDisplaySettingsEditor, setShowDisplaySettingsEditor] = useState(false)
   const [contactSettings, setContactSettings] = useState<ContactSettings>({
@@ -143,32 +125,16 @@ export default function AdminDashboardPage() {
 
   useEffect(() => {
     checkAuth()
-    fetchBookings()
     loadContactSettings()
     loadDisplaySettings()
     fetchReviews()
+    setIsLoading(false)
   }, [])
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession()
     if (!session) {
       router.push('/admin/login')
-    }
-  }
-
-  const fetchBookings = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('bookings')
-        .select('*')
-        .order('created_at', { ascending: false })
-      
-      if (error) throw error
-      setBookings(data || [])
-    } catch (error) {
-      console.error('Error fetching bookings:', error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -329,71 +295,6 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const updateBookingStatus = async (bookingId: string, newStatus: BookingStatus) => {
-    setIsUpdating(bookingId)
-    try {
-      const { error } = await supabase
-        .from('bookings')
-        .update({ status: newStatus })
-        .eq('id', bookingId)
-      
-      if (error) throw error
-      
-      setBookings(prev => 
-        prev.map(booking => 
-          booking.id === bookingId 
-            ? { ...booking, status: newStatus } 
-            : booking
-        )
-      )
-    } catch (error) {
-      console.error('Error updating booking:', error)
-    } finally {
-      setIsUpdating(null)
-    }
-  }
-
-  const filteredBookings = filter === 'all' 
-    ? bookings 
-    : bookings.filter(b => b.status === filter)
-
-  // Pagination
-  const totalPages = Math.ceil(filteredBookings.length / itemsPerPage)
-  const paginatedBookings = filteredBookings.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  )
-
-  const handlePageChange = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
-      setCurrentPage(page)
-    }
-  }
-
-  const stats = {
-    total: bookings.length,
-    pending: bookings.filter(b => b.status === 'pending').length,
-    confirmed: bookings.filter(b => b.status === 'confirmed').length,
-    completed: bookings.filter(b => b.status === 'completed').length,
-  }
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      weekday: 'short',
-      month: 'short',
-      day: 'numeric',
-    })
-  }
-
-  const getStatusColor = (status: BookingStatus) => {
-    switch (status) {
-      case 'pending': return 'text-warning bg-warning/10 border-warning/20'
-      case 'confirmed': return 'text-info bg-info/10 border-info/20'
-      case 'completed': return 'text-success bg-success/10 border-success/20'
-      case 'cancelled': return 'text-error bg-error/10 border-error/20'
-      default: return 'text-text-secondary bg-secondary border-border'
-    }
-  }
 
   if (isLoading) {
     return (
@@ -414,7 +315,7 @@ export default function AdminDashboardPage() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className="font-heading text-3xl md:text-4xl text-foreground">Admin Dashboard</h1>
-              <p className="text-text-secondary font-light mt-2">Manage your spa bookings and contact info</p>
+              <p className="text-text-secondary font-light mt-2">Manage your spa contact info and reviews</p>
             </div>
             <div className="flex items-center gap-4 flex-wrap">
               <Button
