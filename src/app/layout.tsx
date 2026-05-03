@@ -3,6 +3,7 @@ import { Inter, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import PhoneCaptureDialog from "@/components/PhoneCaptureDialog";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -147,6 +148,7 @@ export default function RootLayout({
           {children}
         </main>
         <Footer />
+        <PhoneCaptureDialog />
       </body>
     </html>
   );

@@ -122,6 +122,19 @@ export default function AdminDashboardPage() {
   const itemsPerPage = 10
   const [reviews, setReviews] = useState<Review[]>([])
   const [showReviewsEditor, setShowReviewsEditor] = useState(false)
+  interface VisitorContact {
+    id: string
+    phone: string
+    consent: boolean
+    status: string
+    created_at: string
+    user_agent?: string
+  }
+
+  const [leads, setLeads] = useState<VisitorContact[]>([])
+  const [leadsLoading, setLeadsLoading] = useState(true)
+  const [leadsPage, setLeadsPage] = useState(1)
+  const leadsPerPage = 10
   const router = useRouter()
 
   useEffect(() => {
@@ -129,8 +142,9 @@ export default function AdminDashboardPage() {
     loadContactSettings()
     loadDisplaySettings()
     fetchReviews()
+    fetchLeads()
     setIsLoading(false)
-  }, [])
+  }, [leadsPage])
 
   const checkAuth = async () => {
     const { data: { session } } = await supabase.auth.getSession()
@@ -255,6 +269,26 @@ export default function AdminDashboardPage() {
     } catch (error) {
       console.error('Error deleting review:', error)
       alert('Error deleting review')
+    }
+  }
+
+  const fetchLeads = async () => {
+    setLeadsLoading(true)
+    try {
+      const from = (leadsPage - 1) * leadsPerPage
+      const to = from + leadsPerPage - 1
+      const { data, error } = await supabase
+        .from('visitor_contacts')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .range(from, to)
+
+      if (error) throw error
+      setLeads(data || [])
+    } catch (error) {
+      console.error('Error fetching leads:', error)
+    } finally {
+      setLeadsLoading(false)
     }
   }
 
@@ -617,6 +651,99 @@ export default function AdminDashboardPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Leads Section */}
+      <div className="px-4 pb-8">
+        <div className="max-w-7xl mx-auto">
+          <Card className="glass border-border">
+            <CardHeader>
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                  <CardTitle className="font-heading text-xl text-foreground">Lead Captures</CardTitle>
+                  <CardDescription className="text-text-secondary font-light">
+                    Visitor phone submissions for callbacks
+                  </CardDescription>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent>
+              {leadsLoading ? (
+                <div className="flex justify-center py-8">
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                </div>
+              ) : leads.length === 0 ? (
+                <div className="text-center py-8">
+                  <p className="text-text-secondary font-light">No leads captured yet</p>
+                </div>
+              ) : (
+                <>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm">
+                      <thead>
+                        <tr className="border-b border-border">
+                          <th className="text-left py-3 px-4 font-medium text-foreground">Phone</th>
+                          <th className="text-left py-3 px-4 font-medium text-foreground">Status</th>
+                          <th className="text-left py-3 px-4 font-medium text-foreground">Submitted</th>
+                          <th className="text-left py-3 px-4 font-medium text-foreground">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {leads.map((lead) => (
+                          <tr key={lead.id} className="border-b border-border/50">
+                            <td className="py-3 px-4 text-foreground">{lead.phone}</td>
+                            <td className="py-3 px-4">
+                              <span className={`px-2 py-1 rounded-full text-xs ${
+                                lead.status === 'new' ? 'bg-blue-100 text-blue-800' :
+                                lead.status === 'contacted' ? 'bg-green-100 text-green-800' :
+                                'bg-gray-100 text-gray-800'
+                              }`}>
+                                {lead.status}
+                              </span>
+                            </td>
+                            <td className="py-3 px-4 text-text-secondary">
+                              {new Date(lead.created_at).toLocaleString()}
+                            </td>
+                            <td className="py-3 px-4">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => console.log('Mark contacted:', lead.id)}
+                              >
+                                Mark Contacted
+                              </Button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Pagination */}
+                  <div className="flex justify-between items-center mt-6">
+                    <Button
+                      variant="outline"
+                      onClick={() => setLeadsPage(prev => Math.max(1, prev - 1))}
+                      disabled={leadsPage === 1}
+                    >
+                      Previous
+                    </Button>
+                    <span className="text-sm text-text-secondary">
+                      Page {leadsPage}
+                    </span>
+                    <Button
+                      variant="outline"
+                      onClick={() => setLeadsPage(prev => prev + 1)}
+                      disabled={leads.length < leadsPerPage}
+                    >
+                      Next
+                    </Button>
+                  </div>
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
       {/* Reviews Section */}
       <div className="px-4 pb-16">
