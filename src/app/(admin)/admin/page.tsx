@@ -121,6 +121,14 @@ export default function AdminDashboardPage() {
   const itemsPerPage = 10
   const [reviews, setReviews] = useState<Review[]>([])
   const [showReviewsEditor, setShowReviewsEditor] = useState(false)
+  const [newEmail, setNewEmail] = useState('')
+  const [currentPassword, setCurrentPassword] = useState('')
+  const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [isUpdatingEmail, setIsUpdatingEmail] = useState(false)
+  const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
+  const [accountError, setAccountError] = useState('')
+  const [accountSuccess, setAccountSuccess] = useState('')
   const router = useRouter()
 
   useEffect(() => {
@@ -271,6 +279,53 @@ export default function AdminDashboardPage() {
     }
   }
 
+  const updateEmail = async () => {
+    setIsUpdatingEmail(true)
+    setAccountError('')
+    setAccountSuccess('')
+    try {
+      const { error } = await supabase.auth.updateUser({ email: newEmail })
+      if (error) throw error
+      setAccountSuccess('Confirmation email sent to new address. Please check your email to confirm the change.')
+      setNewEmail('')
+    } catch (error) {
+      setAccountError((error as Error).message)
+    } finally {
+      setIsUpdatingEmail(false)
+    }
+  }
+
+  const updatePassword = async () => {
+    if (newPassword !== confirmPassword) {
+      setAccountError('New passwords do not match')
+      return
+    }
+    setIsUpdatingPassword(true)
+    setAccountError('')
+    setAccountSuccess('')
+    try {
+      // Re-authenticate first
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) throw new Error('No active session')
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: session.user.email!,
+        password: currentPassword
+      })
+      if (authError) throw authError
+      // Now update password
+      const { error } = await supabase.auth.updateUser({ password: newPassword })
+      if (error) throw error
+      setAccountSuccess('Password updated successfully')
+      setCurrentPassword('')
+      setNewPassword('')
+      setConfirmPassword('')
+    } catch (error) {
+      setAccountError((error as Error).message)
+    } finally {
+      setIsUpdatingPassword(false)
+    }
+  }
+
   const saveDisplaySettings = async () => {
     setIsSavingDisplaySettings(true)
     try {
@@ -334,6 +389,7 @@ export default function AdminDashboardPage() {
                 <User className="h-4 w-4 mr-2" />
                 Manage Models
               </Button>
+
               <Dialog open={showContactEditor} onOpenChange={setShowContactEditor}>
                 <DialogTrigger asChild>
                   <Button
@@ -607,6 +663,92 @@ export default function AdminDashboardPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Account Settings Section */}
+      <div className="px-4 pb-8">
+        <div className="max-w-7xl mx-auto">
+          <Card className="glass border-border">
+            <CardHeader>
+              <CardTitle className="font-heading text-xl text-foreground">Account Settings</CardTitle>
+              <CardDescription className="text-text-secondary font-light">
+                Update your email address and password
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              {accountError && (
+                <div className="mb-4 p-4 bg-error/10 border border-error/20 rounded-lg">
+                  <p className="text-error text-sm">{accountError}</p>
+                </div>
+              )}
+              {accountSuccess && (
+                <div className="mb-4 p-4 bg-primary/10 border border-primary/20 rounded-lg">
+                  <p className="text-primary text-sm">{accountSuccess}</p>
+                </div>
+              )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <Label className="text-base font-medium">Change Email</Label>
+                  <Input
+                    type="email"
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                    placeholder="Enter new email address"
+                  />
+                  <Button
+                    onClick={updateEmail}
+                    disabled={isUpdatingEmail || !newEmail}
+                    className="w-full bg-primary hover:bg-primary-hover"
+                  >
+                    {isUpdatingEmail ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Updating...
+                      </>
+                    ) : (
+                      'Update Email'
+                    )}
+                  </Button>
+                </div>
+                <div className="space-y-4">
+                  <Label className="text-base font-medium">Change Password</Label>
+                  <Input
+                    type="password"
+                    value={currentPassword}
+                    onChange={(e) => setCurrentPassword(e.target.value)}
+                    placeholder="Current password"
+                  />
+                  <Input
+                    type="password"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
+                    placeholder="New password"
+                  />
+                  <Input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Confirm new password"
+                  />
+                  <Button
+                    onClick={updatePassword}
+                    disabled={isUpdatingPassword || !currentPassword || !newPassword || !confirmPassword}
+                    className="w-full bg-primary hover:bg-primary-hover"
+                  >
+                    {isUpdatingPassword ? (
+                      <>
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                        Updating...
+                      </>
+                    ) : (
+                      'Update Password'
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
 
       {/* Reviews Section */}
       <div className="px-4 pb-16">
