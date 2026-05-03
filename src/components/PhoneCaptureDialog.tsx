@@ -64,6 +64,13 @@ export default function PhoneCaptureDialog() {
       return
     }
 
+    // Client-side phone validation
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/
+    if (!phoneRegex.test(phone.trim())) {
+      setErrorMessage('Please enter a valid phone number (e.g., +1234567890)')
+      return
+    }
+
     setIsSubmitting(true)
     setSubmitStatus('idle')
     setErrorMessage('')
@@ -88,10 +95,10 @@ export default function PhoneCaptureDialog() {
       setTimeout(() => {
         setIsOpen(false)
       }, 2000)
-    } catch (error) {
+    } catch (error: any) {
       console.error('Submission error:', error)
       setSubmitStatus('error')
-      setErrorMessage('Failed to submit. Please try again.')
+      setErrorMessage(error.message || 'Failed to submit. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
