@@ -11,14 +11,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog'
 import { supabase } from '@/lib/supabase/client'
 import { ReviewDialog } from '@/components/admin/review-dialog'
-import { 
-  Calendar, 
-  Clock, 
-  User, 
-  Phone, 
-  Mail, 
-  LogOut, 
-  RefreshCw, 
+import {
+  Calendar,
+  Clock,
+  User,
+  Phone,
+  Mail,
+  LogOut,
+  RefreshCw,
   Filter,
   CheckCircle,
   AlertCircle,
@@ -29,7 +29,8 @@ import {
   Globe,
   Award,
   LayoutGrid,
-  Database
+  Database,
+  Shield
 } from 'lucide-react'
 
 // Social media icon components using SVG
@@ -129,6 +130,7 @@ export default function AdminDashboardPage() {
   const [isUpdatingPassword, setIsUpdatingPassword] = useState(false)
   const [accountError, setAccountError] = useState('')
   const [accountSuccess, setAccountSuccess] = useState('')
+  const [currentView, setCurrentView] = useState<'reviews' | 'account'>('reviews')
   const router = useRouter()
 
   useEffect(() => {
@@ -286,7 +288,7 @@ export default function AdminDashboardPage() {
     try {
       const { error } = await supabase.auth.updateUser({ email: newEmail })
       if (error) throw error
-      setAccountSuccess('Confirmation email sent to new address. Please check your email to confirm the change.')
+      setAccountSuccess(`Confirmation email sent to ${newEmail}. Please check ${newEmail} to confirm the change.`)
       setNewEmail('')
     } catch (error) {
       setAccountError((error as Error).message)
@@ -388,6 +390,14 @@ export default function AdminDashboardPage() {
               >
                 <User className="h-4 w-4 mr-2" />
                 Manage Models
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setCurrentView('account')}
+                className="border-border hover:border-primary/50 hover:text-primary"
+              >
+                <Shield className="h-4 w-4 mr-2" />
+                Account
               </Button>
 
               <Dialog open={showContactEditor} onOpenChange={setShowContactEditor}>
@@ -676,13 +686,21 @@ export default function AdminDashboardPage() {
             </CardHeader>
             <CardContent>
               {accountError && (
-                <div className="mb-4 p-4 bg-error/10 border border-error/20 rounded-lg">
-                  <p className="text-error text-sm">{accountError}</p>
+                <div className="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-start gap-3">
+                  <AlertCircle className="h-5 w-5 text-red-500 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-red-800 text-sm font-medium">Error</p>
+                    <p className="text-red-700 text-sm">{accountError}</p>
+                  </div>
                 </div>
               )}
               {accountSuccess && (
-                <div className="mb-4 p-4 bg-primary/10 border border-primary/20 rounded-lg">
-                  <p className="text-primary text-sm">{accountSuccess}</p>
+                <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-start gap-3">
+                  <CheckCircle className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="text-green-800 text-sm font-medium">Success</p>
+                    <p className="text-green-700 text-sm">{accountSuccess}</p>
+                  </div>
                 </div>
               )}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
