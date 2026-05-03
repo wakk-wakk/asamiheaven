@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Phone, Mail, Clock, ArrowLeft } from 'lucide-react'
 import { createServerClient } from '@/lib/supabase/server'
-import ContactForm from './contact-form'
 
 interface ContactSettings {
   phone: string
@@ -134,10 +133,8 @@ export default async function ContactPage() {
 
       {/* Contact Content */}
       <section className="py-12 px-4 pb-24">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12">
-            {/* Contact Info - Left Side */}
-            <div className="space-y-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="space-y-6">
               {/* Social Media */}
               {socialLinks.length > 0 && (
                 <Card className="glass border-border animate-slide-up" style={{ animationDelay: '0.2s' }}>
@@ -220,10 +217,6 @@ export default async function ContactPage() {
                   </div>
                 </CardContent>
               </Card>
-            </div>
-
-            {/* Contact Form - Right Side */}
-            <ContactForm />
           </div>
         </div>
       </section>
