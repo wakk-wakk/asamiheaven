@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useRef, ChangeEvent } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -9,16 +10,17 @@ import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogDescription } from '@/components/ui/dialog'
 import { supabase } from '@/lib/supabase/client'
-import { 
-  Plus, 
-  Edit3, 
-  Trash2, 
+import {
+  Plus,
+  Edit3,
+  Trash2,
   Loader2,
   Clock,
   Image as ImageIcon,
   Upload,
   X,
-  AlertCircle
+  AlertCircle,
+  ArrowLeft
 } from 'lucide-react'
 
 interface Service {
@@ -334,6 +336,10 @@ export default function AdminServicesPage() {
 
   return (
     <div className="animate-fade-in">
+      <Link href="/" className="flex items-center gap-2 text-text-secondary hover:text-primary mb-8 px-4">
+        <ArrowLeft className="h-4 w-4" />
+        Back to Home
+      </Link>
       {/* Header */}
       <div className="px-4 py-8 md:py-12">
         <div className="max-w-7xl mx-auto">

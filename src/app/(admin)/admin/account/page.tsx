@@ -1,12 +1,13 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { supabase } from '@/lib/supabase/client'
-import { CheckCircle, AlertCircle, Loader2 } from 'lucide-react'
+import { CheckCircle, AlertCircle, Loader2, ArrowLeft } from 'lucide-react'
 
 export default function AccountSettingsPage() {
   const [newEmail, setNewEmail] = useState('')
@@ -67,6 +68,10 @@ export default function AccountSettingsPage() {
 
   return (
     <div className="animate-fade-in">
+      <Link href="/" className="flex items-center gap-2 text-text-secondary hover:text-primary mb-8 px-4">
+        <ArrowLeft className="h-4 w-4" />
+        Back to Home
+      </Link>
       <div className="px-4 py-8 md:py-12">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
