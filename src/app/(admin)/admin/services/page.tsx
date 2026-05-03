@@ -336,13 +336,13 @@ export default function AdminServicesPage() {
 
   return (
     <div className="animate-fade-in">
-      <Link href="/" className="flex items-center gap-2 text-text-secondary hover:text-primary mb-8 px-4">
-        <ArrowLeft className="h-4 w-4" />
-        Back to Home
-      </Link>
       {/* Header */}
       <div className="px-4 py-8 md:py-12">
         <div className="max-w-7xl mx-auto">
+          <Link href="/admin" className="flex items-center gap-2 text-text-secondary hover:text-primary mb-8">
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Link>
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <h1 className="font-heading text-3xl md:text-4xl text-foreground">Manage Services</h1>
